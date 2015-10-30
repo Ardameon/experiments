@@ -17,8 +17,14 @@ int main(void)
 {
     int semid;
     key_t key;
-    char c;
+    char c[32];
     int cycle = 1;
+
+    union semun {
+        int val;
+    } sm;
+
+    sm.val = 1;
 
     key = ftok(SEMPATH, 's');
 
@@ -38,9 +44,12 @@ int main(void)
 	while(cycle)
 	{
 		printf("> ");
-		scanf("%c", &c);
+		scanf("%s", c);
 
-		switch(c)
+		fflush(stdin);
+		fflush(stdout);
+
+		switch(c[0])
 		{
 			case 'q':
 				cycle = 0;
@@ -58,11 +67,23 @@ int main(void)
 				printf("Sem unlocked\n");
 				break;
 
+			case 'r':
+				printf("Reseting semaphore\n");
+				semctl(semid, 0, SETVAL, sm.val);
+				break;
+
+			case 's':
+				printf("Current semaphore value: %d\n",
+					   semctl(semid, 0, GETVAL));
+				break;
+
 			default:
 				printf("\n"
 					   "q - exit\n"
 					   "l - blocking lock\n"
-					   "u - blocking unlock\n\n");
+					   "u - blocking unlock\n"
+					   "s - show current semaphore value\n"
+					   "r - reset semaphore\n\n");
 				break;
 		}
 	}
