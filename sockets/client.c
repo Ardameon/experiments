@@ -6,6 +6,7 @@
 #include <sys/un.h>
 #include <unistd.h>
 #include <signal.h>
+#include <fcntl.h>
 
 #define  CLT_SOCK_PATH "client_socket"
 #define  SRV_SOCK_PATH "server_socket"
@@ -28,6 +29,7 @@ int main()
     int reuse = 1;
     char buf[1024] = {0};
     int len;
+    char cmd[1024];
 
     client_addr.sun_family = AF_UNIX;
     strcpy(client_addr.sun_path, CLT_SOCK_PATH);
@@ -77,12 +79,26 @@ int main()
         goto _exit;
     }
 
-    if ((len = recv(sock, buf, sizeof(buf), 0)) != -1) {
+    if ((len = recv(sock, buf, 5, 0)) != -1) {
         printf("Data received  <<<<<: len=%d buf='%s'\n", len, buf);
     } else {
         perror("recv() failed");
         ret_status = EXIT_FAILURE;
         goto _exit;
+    }
+
+    fcntl(sock, F_SETFL, O_NONBLOCK);
+
+    while(1) {
+        printf(">> ");
+        scanf("%s", cmd);
+
+        if (cmd[0] == 'q') break;
+
+        if ((len = recv(sock, buf, sizeof(buf), 0)) == -1) {
+            perror("Sock reaceive failed");
+        }
+        printf("len = %d\n", len);
     }
 
 _exit:

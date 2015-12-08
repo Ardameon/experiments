@@ -93,6 +93,8 @@ int main()
         goto _exit;
     }
 
+    sleep(30);
+
 _exit:
     if (sock > -1) {
         shutdown(sock, SHUT_RDWR);
