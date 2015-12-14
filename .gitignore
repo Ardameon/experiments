@@ -1,4 +1,5 @@
 experiments.*
 *.o
+*.out
 server
 client
