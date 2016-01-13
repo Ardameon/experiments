@@ -77,12 +77,18 @@ int main(void)
 					   semctl(semid, 0, GETVAL));
 				break;
 
+			case 'c':
+				printf("Last changing pid: %d\n",
+					   semctl(semid, 0, GETPID));
+				break;
+
 			default:
 				printf("\n"
 					   "q - exit\n"
 					   "l - blocking lock\n"
 					   "u - blocking unlock\n"
 					   "s - show current semaphore value\n"
+					   "c - get last changing pid\n"
 					   "r - reset semaphore\n\n");
 				break;
 		}

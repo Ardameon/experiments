@@ -2,7 +2,7 @@ CC = gcc
 SMG1016_CC = arm-mv5sft-linux-gnueabi-$(CC)
 CFLAGS = -Wall -g
 
-all: semtester_host
+all: semtester_host semtester_arm
 
 semtester_host: semtester.c
 	$(CC) $(CFLAGS) $< -o $@
