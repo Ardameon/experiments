@@ -1,2 +1,3 @@
 all:
-	gcc -DARR_SIZE=7 compiletime.c -o compiletime
+	gcc -DNDEBUG -DARR_SIZE=7 compiletime.c -o compiletime
+	g++ -std=c++0x string_test.cpp -o string_test
