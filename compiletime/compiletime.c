@@ -2,6 +2,7 @@
 #include <linux/types.h>
 #include <sys/types.h>
 #include <assert.h>
+#include <string.h>
 
 #ifndef ARR_SIZE
 #define ARR_SIZE 5
@@ -27,12 +28,24 @@ int func_with_static()
 	if(initial) initial = 0;
 }
 
+typedef enum {
+	MODE_1,
+	MODE_2,
+	MODE_3
+} mode_e;
+
 int main(void)
 {
 	struct st str;
 	struct st_one str1 = {0};
+	struct st_one **pp;
 	int a, b, c;
 	int i;
+	char ch_arr[64] = "SETUP 12300123 192.168.23.22:5555 GG";
+	char msg[10], ip[30], mode[5];
+	int call_id;
+	int len;
+	mode_e me;
 
 	printf("Arr size: %lu\n", sizeof(str.array));
 
@@ -62,6 +75,21 @@ int main(void)
 
 	for(i = 0; i < 4; i++)
 		func_with_static();
+
+	len = strlen(ch_arr);
+	ch_arr[len] = '\r';
+	ch_arr[len + 1] = '\n';
+
+	printf("ch_arr: '%s'\n", ch_arr);
+	len = sscanf(ch_arr, "%s %d %s %s", msg, &call_id, ip, mode);
+	printf("msg:'%s' id:'%d' ip:'%s' mode:'%s' len %d\n", msg, call_id, ip, mode, len);
+	printf("mode_len: %d\n", (int)strlen(mode));
+
+	printf("sizeof pp:%d p:%d s:%d struct:%d\n", sizeof(pp), sizeof(*pp), sizeof(*pp[0]), sizeof(struct st_one));
+
+	me = 244;
+
+	printf("me: %d\n", me);
 
 	return 0;
 }
