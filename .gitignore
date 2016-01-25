@@ -4,3 +4,7 @@ experiments.*
 *.test
 server
 client
+compiletime
+client_dgram
+server_dgram
+
