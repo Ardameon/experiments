@@ -91,5 +91,9 @@ int main(void)
 
 	printf("me: %d\n", me);
 
+	printf("sizeof: char*:%d int*:%d short*:%d char:%d int:%d short:%d long:%d long long:%d size_t:%d\n",
+	sizeof(char *), sizeof(int *), sizeof(short *), sizeof(char), sizeof(int),
+	sizeof(short), sizeof(long), sizeof(long long), sizeof(size_t));
+
 	return 0;
 }
