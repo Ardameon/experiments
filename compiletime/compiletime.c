@@ -3,6 +3,7 @@
 #include <sys/types.h>
 #include <assert.h>
 #include <string.h>
+#include <pthread.h>
 
 #ifndef ARR_SIZE
 #define ARR_SIZE 5
@@ -34,18 +35,46 @@ typedef enum {
 	MODE_3
 } mode_e;
 
+
+void thread_cleanup_func(void *arg)
+{
+	(void)arg;
+	printf("Cleanup func!\n");
+}
+
+void *thread_routine(void *arg)
+{
+	(void)arg;
+	int a = 1;
+	printf("thread start\n");
+
+	pthread_cleanup_push(&thread_cleanup_func, NULL);
+
+	while(a)
+	{
+		usleep(100000);
+	}
+
+	pthread_cleanup_pop(1);
+
+	return NULL;
+}
+
 int main(void)
 {
 	struct st str;
 	struct st_one str1 = {0};
 	struct st_one **pp;
 	int a, b, c;
-	int i;
+	int i, j;
 	char ch_arr[64] = "SETUP 12300123 192.168.23.22:5555 GG";
 	char msg[10], ip[30], mode[5];
 	int call_id;
 	int len;
+	int sw = 3;
+	char *carr[] = {"aaaaa", "bbbbb"};
 	mode_e me;
+	pthread_t thread;
 
 	printf("Arr size: %lu\n", sizeof(str.array));
 
@@ -94,6 +123,39 @@ int main(void)
 	printf("sizeof: char*:%d int*:%d short*:%d char:%d int:%d short:%d long:%d long long:%d size_t:%d\n",
 	sizeof(char *), sizeof(int *), sizeof(short *), sizeof(char), sizeof(int),
 	sizeof(short), sizeof(long), sizeof(long long), sizeof(size_t));
+
+	sw = 4;
+	switch(sw)
+	{
+		default: printf("sw setting default\n");
+		case 1: printf("sw == 1\n"); break;
+		case 2: printf("sw == 2\n"); break;
+		case 3: printf("sw == 3\n"); break;
+	}
+
+	for(i = 0; i < 3; i++)
+	{
+		printf("cycle i = %d\n", i);
+		for(j = 0; j < 3; j++)
+		{
+			printf("cycle j = %d\n", j);
+			if(j == 2 && i == 1) goto _exit;
+		}
+	}
+_exit:
+
+
+	pthread_create(&thread, NULL, &thread_routine, NULL);
+
+	sleep(3);
+
+	pthread_cancel(thread);
+
+	printf("CANCEL\n");
+
+	sleep(1);
+
+	printf("%s %s\n", carr[0], carr[1]);
 
 	return 0;
 }
