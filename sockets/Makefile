@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Werror
 DEBUG = -g
 
-all: server client client_dgram server_dgram
+all: server client client_dgram server_dgram server_tcp
 
 server: server.o
 	$(CC) -o $@ $<
@@ -26,6 +26,12 @@ server_dgram: server_dgram.o
 	$(CC) -o $@ $<
 
 server_dgram.o: server_dgram.c
+	$(CC) $(CFLAGS) $(DEBUG) -c -o $@ $<
+
+server_tcp: server_tcp.o
+	$(CC) -o $@ $<
+
+server_tcp.o: server_tcp.c
 	$(CC) $(CFLAGS) $(DEBUG) -c -o $@ $<
 
 cleanall: clean
