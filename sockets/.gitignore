@@ -1,3 +1,4 @@
 client_dgram
 server_dgram
+client_tcp
 server_tcp

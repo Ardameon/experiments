@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -Werror
 DEBUG = -g
 
-all: server client client_dgram server_dgram server_tcp
+all: server client client_dgram server_dgram server_tcp client_tcp
 
 server: server.o
 	$(CC) -o $@ $<
@@ -34,9 +34,15 @@ server_tcp: server_tcp.o
 server_tcp.o: server_tcp.c
 	$(CC) $(CFLAGS) $(DEBUG) -c -o $@ $<
 
-cleanall: clean
-	rm server client client_dgram
+client_tcp: client_tcp.o
+	$(CC) -o $@ $<
 
-clean:
+client_tcp.o: client_tcp.c
+	$(CC) $(CFLAGS) $(DEBUG) -c -o $@ $<
+
+clean_bin:
+	rm server client client_dgram server_dgram client_tcp server_tcp
+
+clean: clean_bin
 	rm *.o
 
