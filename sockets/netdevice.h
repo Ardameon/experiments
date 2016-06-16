@@ -18,6 +18,7 @@
 int rt_add_gw(uint32_t gw, int allow_existing);
 int rt_del_gw(int allow_nonexisting);
 int if_set_ip(const char *if_name, uint32_t addr, uint32_t mask, uint32_t bcast);
+int if_set_ip6(const char *if_name, char *str_addr, int prefixlen);
 int if_del_ip(const char *if_name);
 //int if_get_mac_ip(const char *if_name, unsigned char * mac, int mac_size, unsigned char * ip, int ip_size);
 //int if_get_mac_ip(const char *if_name, unsigned char * mac, int mac_size, unsigned char * ip, int ip_size, unsigned char *netmask);

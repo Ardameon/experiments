@@ -8,6 +8,7 @@
 #include <linux/if_vlan.h>
 #include <linux/sockios.h>
 #include <fcntl.h>
+#include <linux/ipv6.h>
 
 #include <errno.h>
 #include <stdlib.h>
@@ -124,6 +125,22 @@ static int set_ip_using(int sock, const char *if_name, int c, uint32_t ip)
 	return 0;
 }
 
+static int set_ip_using6(int sock, int ifidx, int c, struct in6_addr *addr,
+						 int prefixlen)
+{
+	struct in6_ifreq ifr6;
+
+	if(!addr) return -1;
+
+	memcpy(&ifr6.ifr6_addr, addr, sizeof(struct in6_ifreq));
+	ifr6.ifr6_ifindex = ifidx;
+	ifr6.ifr6_prefixlen = prefixlen;
+
+	if (ioctl(sock, c, &ifr6) < 0)
+		return -1;
+	return 0;
+}
+
 int if_set_ip(const char *if_name, uint32_t addr, uint32_t mask, uint32_t bcast)
 {
 	if (init_socket()) return -1;
@@ -149,6 +166,38 @@ int if_set_ip(const char *if_name, uint32_t addr, uint32_t mask, uint32_t bcast)
 		}
 	}
 	
+	return 0;
+}
+
+int if_set_ip6(const char *if_name, char *str_addr, int prefixlen)
+{
+	struct ifreq ifr;
+	struct in6_addr addr;
+
+	if (!str_addr) {
+		log_dev_perror(if_name, "str_addr is NULL");
+		return -1;
+	}
+
+	if (init_socket6()) return -1;
+
+	if (inet_pton(AF_INET6, str_addr, &addr) <= 0) {
+		log_dev_perror(if_name, "Bad address!");
+		return -1;
+	}
+
+	strncpy(ifr.ifr_name, if_name, IFNAMSIZ);
+
+	if (ioctl(skfd6, SIOGIFINDEX, &ifr) < 0) {
+		log_dev_perror(if_name,"SIOGIFINDEX");
+		return -1;
+	}
+
+	if (set_ip_using6(skfd6, ifr.ifr_ifindex, SIOCSIFADDR, &addr, prefixlen)) {
+		log_dev_perror(if_name, "SIOCSIFADDR");
+		return -1;
+	}
+
 	return 0;
 }
 
@@ -426,6 +475,7 @@ int if_str2mac(const char *src, unsigned char *mac, size_t size)
 {
 	int i = 0;
 	int rc = -1;
+	unsigned int _mac[size];
 
 	if (size < 6)
 		goto out_err;
@@ -437,9 +487,11 @@ int if_str2mac(const char *src, unsigned char *mac, size_t size)
 		goto out_err;
 
 	memset(mac, 0, size);
-	for (i = 0; i < 6; i++, mac++)
-		if (1 != sscanf(&src[i * 3], "%02X", mac))
+	for (i = 0; i < 6; i++, mac++) {
+		if (1 != sscanf(&src[i * 3], "%02X", _mac))
 			goto out_err;
+		mac[i] = _mac[i];
+	}
 	rc = 0;
 out_err:
 	return rc;
