@@ -17,6 +17,7 @@
 
 #define  IP4_MAX_LEN 15
 #define  PORT_NUM 23232
+#define  POLL_TIMEOUT 5000
 
 int gl_sock;
 int loop = 1;
@@ -69,6 +70,7 @@ int main(int argc, char **argv)
     if(argc < 2)
     {
         printf("Not enough arguments: [PORT] [IS_SENDER]\n");
+        goto _exit;
     }
 
     local_port = strtoul(argv[1], NULL, 10);
@@ -82,7 +84,7 @@ int main(int argc, char **argv)
     {
 
     strcpy(local_ip, getLocalIP("eth0"));
-    printf("Local IP is '%s:%d'\n", local_ip, PORT_NUM);
+    printf("Local IP is '%s:%d'\n", local_ip, local_port);
 
     local_addr.sin_family = AF_INET;
     local_addr.sin_addr.s_addr = inet_addr(local_ip);
@@ -160,7 +162,7 @@ int main(int argc, char **argv)
 
         tick++;
 
-        res = poll(fds, 1, 1000);
+        res = poll(fds, 1, POLL_TIMEOUT);
 
         if(res < 0) {
             perror("poll()");
@@ -168,8 +170,26 @@ int main(int argc, char **argv)
             break;
         }
 
+        printf("revents: %04x%s\n", fds[0].revents, !res ? " (timeout)" : "");
+
         if(res == 0 || !(fds[0].revents & POLLIN)) {
             printf("No input data on socket\n");
+
+            if ((len = send(client_sock, buf, 1, MSG_PEEK | MSG_DONTWAIT)) != -1) {
+                if(len == 0)
+                {
+                    printf("send len is 0\n");
+                } else {
+                    printf("Data sent to client len=%d buf='%s'\n",
+                           len, buf);
+                }
+
+            } else {
+                perror("send() failed");
+    //            ret_status = EXIT_FAILURE;
+    //            break;
+            }
+
             continue;
         }
 

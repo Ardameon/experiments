@@ -19,6 +19,7 @@
 
 #define  IP4_MAX_LEN 15
 #define  PORT_NUM 44444
+#define  SEND_ATTEMPTS 200
 
 int gl_sock;
 
@@ -26,6 +27,7 @@ void sigint_handler(int sig) {
     printf("SIGINT handler: close socket.\n");
     shutdown(gl_sock, SHUT_RDWR);
     close(gl_sock);
+//    exit(0);
 }
 
 static const char *getLocalIP(const char *iface)
@@ -143,7 +145,7 @@ int main(int argc, char *argv[])
 
     strcpy(buf, "Test message from client.");
 
-    for(i = 0; i < 5; i++)
+    for(i = 0; i < SEND_ATTEMPTS; i++)
     {
         if ((len = send(sock, buf, strlen(buf), 0)) != -1) {
             printf("Data sent to %s:%d: len=%d buf='%s'\n", remote_ip, remote_port,
