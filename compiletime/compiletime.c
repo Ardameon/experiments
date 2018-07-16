@@ -157,5 +157,10 @@ _exit:
 
 	printf("%s %s\n", carr[0], carr[1]);
 
+	char buf1[15] = "111234567890";
+	long long *l = (long long *)&buf1[2];
+
+	printf("HEX: %016llx\n", *l);
+
 	return 0;
 }

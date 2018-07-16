@@ -170,7 +170,7 @@ int main(int argc, char **argv)
             break;
         }
 
-        printf("revents: %04x%s\n", fds[0].revents, !res ? " (timeout)" : "");
+        printf("Poll revents: %04x%s\n", fds[0].revents, !res ? " (timeout)" : "");
 
         if(res == 0 || !(fds[0].revents & POLLIN)) {
             printf("No input data on socket\n");
