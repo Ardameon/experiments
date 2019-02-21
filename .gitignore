@@ -7,4 +7,5 @@ client
 compiletime
 client_dgram
 server_dgram
+__pycache__
 
