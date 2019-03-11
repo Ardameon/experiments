@@ -8,4 +8,6 @@ compiletime
 client_dgram
 server_dgram
 __pycache__
+*.tar.gz
+*.egg-info
 
