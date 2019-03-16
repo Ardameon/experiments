@@ -1,0 +1,3 @@
+ImmutableMultiDict([('phrase', 'This is a text string'), ('letters', 'aeiou')])|127.0.0.1|Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:65.0) Gecko/20100101 Firefox/65.0|{'e', 'i', 'a'}
+ImmutableMultiDict([('phrase', 'random random unicode'), ('letters', 'aeiou')])|127.0.0.1|Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:65.0) Gecko/20100101 Firefox/65.0|{'a', 'o', 'e', 'i', 'u'}
+ImmutableMultiDict([('phrase', 'Ramones pedros ignasios'), ('letters', 'rp itbm')])|127.0.0.1|Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:65.0) Gecko/20100101 Firefox/65.0|{' ', 'p', 'm', 'i', 'r'}
