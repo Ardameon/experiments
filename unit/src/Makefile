@@ -13,7 +13,7 @@ BIN = $(BIN_DIR)/increaser
 
 all: $(BIN)
 
-$(BIN): $(OBJ) $(BIN_DIR)
+$(BIN): $(BIN_DIR) $(OBJ_DIR) $(OBJ)
 	$(CC) $(CFLAGS) -o $(BIN) $(OBJ)
 
 $(BIN_DIR): $(BUILD_DIR)
@@ -25,7 +25,7 @@ $(OBJ_DIR): $(BUILD_DIR)
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
-$(OBJ_DIR)/%.o: %.c $(OBJ_DIR)
+$(OBJ_DIR)/%.o: %.c $(INCLUDE_DIR)/*.h
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
