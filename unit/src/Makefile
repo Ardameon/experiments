@@ -5,6 +5,7 @@ BUILD_DIR = ./build
 BIN_DIR = $(BUILD_DIR)/bin
 OBJ_DIR = $(BUILD_DIR)/obj
 INCLUDE = -I$(INCLUDE_DIR)
+TESTS_DIR = ./tests
 
 CFLAGS += $(INCLUDE)
 
@@ -31,4 +32,7 @@ $(OBJ_DIR)/%.o: %.c $(INCLUDE_DIR)/*.h
 clean:
 	rm -r $(BUILD_DIR)
 
-.PHONY: all clean
+test:
+	make -C $(TESTS_DIR)
+
+.PHONY: all clean test
