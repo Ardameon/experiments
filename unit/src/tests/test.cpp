@@ -12,14 +12,19 @@ TEST_GROUP(FirstTestGroup)
 {
     void setup()
     {
-    	printf("\nTestSetup!");
+    	// printf("\nTestSetup!");
     }
 
     void teardown()
     {
-    	printf("\nTestTearDown!");
+    	// printf("\nTestTearDown!");
     }
 };
+
+TEST(FirstTestGroup, ThirdTest)
+{
+    STRCMP_EQUAL("hello", "world");
+}
 
 TEST(FirstTestGroup, SecondTest)
 {
@@ -29,3 +34,4 @@ TEST(FirstTestGroup, SecondTest)
 TEST(FirstTestGroup, FirstTest)
 {
 }
+
