@@ -1,1 +1,2 @@
 $ apt-get install cpputest
+$ apt-get install gcovr

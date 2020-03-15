@@ -16,7 +16,7 @@ all: $(BIN)
 
 $(BIN): $(BIN_DIR) $(OBJ_DIR) $(OBJ)
 	$(CC) $(CFLAGS) -o $(BIN) $(OBJ)
-
+	
 $(BIN_DIR): $(BUILD_DIR)
 	mkdir -p $(BIN_DIR)
 
@@ -30,9 +30,9 @@ $(OBJ_DIR)/%.o: %.c $(INCLUDE_DIR)/*.h
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
-	rm -r $(BUILD_DIR)
+	rm -rf $(BUILD_DIR)
 
 test:
 	make -C $(TESTS_DIR)
-
+	
 .PHONY: all clean test
