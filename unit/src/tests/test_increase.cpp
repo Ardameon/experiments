@@ -3,8 +3,8 @@
 
 extern "C"
 {
-    #include <stdio.h>
-    #include "increase.h"
+#include <stdio.h>
+#include "increase.h"
 #include "lib.h"
 }
 
@@ -21,39 +21,54 @@ TEST_GROUP(TestIncreaseGrp)
     }
 };
 
-TEST(TestIncreaseGrp, ThirdTest)
-{
-}
-
-TEST(TestIncreaseGrp, SecondTest)
+TEST(TestIncreaseGrp, _4_invoke_increase_check_return_is_6)
 {
     int num = 1;
     int result;
 
-//    mock().expectOneCall("mod");
-    mock().expectNCalls(1, "mod");
-
+    mock().expectOneCall("mod").ignoreOtherParameters().andReturnValue(0);
+    
     result = increase(num);
+    
+    mock().checkExpectations();
+    
+    CHECK_EQUAL(6, result)
+}
 
+TEST(TestIncreaseGrp, _3_invoke_increase_check_return_is_11)
+{
+    int num = 1;
+    int result;
+
+    mock().expectOneCall("mod").ignoreOtherParameters().andReturnValue(1);
+    
+    result = increase(num);
+    
+    mock().checkExpectations();
+    
+    CHECK_EQUAL(11, result)
+}
+
+TEST(TestIncreaseGrp, _2_invoke_increase_check_mod_call_with_params)
+{
+    int num = 1;
+    int result;
+
+    mock().expectOneCall("mod").withIntParameter("number", 1).withIntParameter("delim", 2);
+    
+    result = increase(num);
+    
     mock().checkExpectations();
 }
 
-int mod(int number, int delim)
+TEST(TestIncreaseGrp, _1_invoke_increase_check_one_call_mod)
 {
-    mock().actualCall("mod");
-    return mock().returnIntValueOrDefault(0);
-}
-
-TEST(TestIncreaseGrp, invok_increase_check_result_is_true)
-{
-    int num = 1;
     int result;
+    int num = 1;
 
-    mock().disable();
-
+    mock().expectOneCall("mod").ignoreOtherParameters();       
+    
     result = increase(num);
 
-    mock().enable();
-
-    CHECK(result);
+    mock().checkExpectations();
 }

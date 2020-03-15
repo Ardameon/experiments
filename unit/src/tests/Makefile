@@ -4,7 +4,7 @@ CFLAGS += $(INCLUDE)
 
 
 all:
-	g++ $(CFLAGS) -o tests tests_main.cpp test_increase.cpp $(OBJ_DIR)/increase.o -lCppUTest -lCppUTestExt
+	g++ $(CFLAGS) -o tests tests_main.cpp test_increase.cpp increase_moc.cpp $(OBJ_DIR)/increase.o -lCppUTest -lCppUTestExt
 
 test:
 	g++ -o tests tests_main.cpp test.cpp -lCppUTest -lCppUTestExt
