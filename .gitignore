@@ -1,6 +1,7 @@
 experiments.*
 *.o
 *.out
+*.exe
 *.test
 server
 client
@@ -10,4 +11,10 @@ server_dgram
 __pycache__
 *.tar.gz
 *.egg-info
-
+.vscode
+*.config
+*.creator*
+*.cxxflags
+*.files
+*.includes
+*.cflags
