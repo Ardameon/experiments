@@ -5,9 +5,19 @@ using namespace std;
 
 int main()
 {
-    Set set;
+    Set setA;
+    Set setB;
 
-    cout << "Hello set: " << set << endl;
+    setA.Add('a');
+    setA.Add('b');
+    setA.Add('c');
+
+    setB.Add('0');
+    setB.Add('1');
+
+    setA.Add(setB);
+
+    cout << "Hello set: '" << setA << '\'' << endl;
 
     return 0;
 }
