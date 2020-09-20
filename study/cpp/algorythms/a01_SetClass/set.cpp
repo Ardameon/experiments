@@ -48,41 +48,39 @@ Set Set::operator=(const Set &set) const
 
 //====================================================================================================================//
 
-int Set::Add(const char &element)
+template <typename T>
+int Set::AddGen(const T &element, std::vector<T> &vector)
 {
     int res = 0;
 
     if (size_ < eMaxSetSize)
     {
-        elements_.push_back(element);
+        vector.push_back(element);
         size_++;
     } else {
         res = -1;
     }
 
     return res;
+}
+
+//====================================================================================================================//
+
+int Set::Add(const char &element)
+{
+    return AddGen(element, elements_);
 }
 
 //====================================================================================================================//
 
 int Set::Add(const Set &set)
 {
-    int res = 0;
-
-    if (size_ < eMaxSetSize)
-    {
-        sets_.push_back(set);
-        size_++;
-    } else {
-        res = -1;
-    }
-
-    return res;
+    return AddGen(set, sets_);
 }
 
 //====================================================================================================================//
 
-int Set::Rem(const char element)
+int Set::Rem(const char &element)
 {
     (void)element;
     int res = 0;
@@ -151,3 +149,4 @@ std::ostream & operator<<(std::ostream &os, const Set &set)
 {
     return os << set.ToString();
 }
+

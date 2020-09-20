@@ -12,6 +12,9 @@ class Set
     std::vector<Set> sets_;
     int size_;
 
+    template <typename T>
+    int AddGen(const T &element, std::vector<T> &vector);
+
 public:
     enum {eMaxSetSize = 50};
 
@@ -29,7 +32,7 @@ public:
     int Add(const char &element);
     int Add(const Set &set);
 
-    int Rem(const char element);
+    int Rem(const char &element);
     int Rem(const Set &set);
 
     Set Union(const Set &set) const;
