@@ -15,6 +15,9 @@ class Set
     template <typename T>
     int AddGen(const T &element, std::vector<T> &vector);
 
+    template <typename T>
+    bool ContainGen(const T &element, const std::vector<T> &vector) const;
+
 public:
     enum {eMaxSetSize = 50};
 
@@ -26,6 +29,8 @@ public:
     Set operator +(const Set &set) const;
     Set operator -(const Set &set) const;
     Set operator =(const Set &set) const;
+    bool operator ==(const Set &set) const;
+    bool operator !=(const Set &set) const;
 
     int Size() const {return size_;}
 
@@ -34,6 +39,9 @@ public:
 
     int Rem(const char &element);
     int Rem(const Set &set);
+
+    bool Contain(const char &element) const;
+    bool Contain(const Set &set) const;
 
     Set Union(const Set &set) const;
     Set Intersection(const Set &set) const;

@@ -21,7 +21,7 @@ Set::Set(const char *str)
 
 //====================================================================================================================//
 
-Set Set::operator+(const Set &set) const
+Set Set::operator +(const Set &set) const
 {
     (void)set;
     Set result;
@@ -30,7 +30,7 @@ Set Set::operator+(const Set &set) const
 
 //====================================================================================================================//
 
-Set Set::operator-(const Set &set) const
+Set Set::operator -(const Set &set) const
 {
     (void)set;
     Set result;
@@ -39,11 +39,51 @@ Set Set::operator-(const Set &set) const
 
 //====================================================================================================================//
 
-Set Set::operator=(const Set &set) const
+Set Set::operator =(const Set &set) const
 {
     (void)set;
     Set result;
     return result;
+}
+
+//====================================================================================================================//
+
+bool Set::operator ==(const Set &set) const
+{
+    /* Very UNOPTIMIZED decision (TODO: find faster algorithm) */
+
+    /* Check if instance contains all elements of set */
+    for (auto el : set.elements_)
+    {
+        if (!Contain(el)) return false;
+    }
+
+    /* Check if set contains all elements of instance */
+    for (auto el : elements_)
+    {
+        if (!set.Contain(el)) return false;
+    }
+
+    /* Check if instance contains all subsets of set */
+    for (auto el : set.sets_)
+    {
+        if (!Contain(el)) return false;
+    }
+
+    /* Check if set contains all subsets of instance */
+    for (auto el : sets_)
+    {
+        if (!set.Contain(el)) return false;
+    }
+
+    return true;
+}
+
+//====================================================================================================================//
+
+bool Set::operator !=(const Set &set) const
+{
+    return !(*this == set);
 }
 
 //====================================================================================================================//
@@ -53,7 +93,7 @@ int Set::AddGen(const T &element, std::vector<T> &vector)
 {
     int res = 0;
 
-    if (size_ < eMaxSetSize)
+    if (size_ < eMaxSetSize && !Contain(element))
     {
         vector.push_back(element);
         size_++;
@@ -148,5 +188,35 @@ std::string Set::ToString() const
 std::ostream & operator<<(std::ostream &os, const Set &set)
 {
     return os << set.ToString();
+}
+
+//====================================================================================================================//
+
+template<typename T>
+bool Set::ContainGen(const T &element, const std::vector<T> &vector) const
+{
+    for (auto el : vector)
+    {
+        if (element == el)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+//====================================================================================================================//
+
+bool Set::Contain(const char &element) const
+{
+    return ContainGen(element, elements_);
+}
+
+//====================================================================================================================//
+
+bool Set::Contain(const Set &set) const
+{
+    return ContainGen(set, sets_);
 }
 
