@@ -34,12 +34,36 @@ int main()
 
     /* List initializing */
     Stonewt arr[6] = {21.2, 216.347, Stonewt(2, 77, StonewtMode::eLbs)};
+    Stonewt min, max, threshold(11, 0.0);
+    int i;
 
-    for (int i = 0; i < 6; i++)
+    for (i = 3; i < 6; i++)
+    {
+        cout << "Enter weight[" << i << "]: ";
+        cin >> arr[i];
+    }
+
+    for (i = 0; i < 6; i++)
     {
         cout << "arr[" << i << "] = " << arr[i] << endl;
     }
 
+    for (i = 1, min = arr[0], max = arr[0]; i < 6; i++)
+    {
+        if (arr[i] < min) min = arr[i];
+        if (arr[i] > max) max = arr[i];
+    }
+
+    cout << "Min: " << min << endl;
+    cout << "Max: " << max << endl;
+    cout << "More or equal 11 stones:" << endl;
+    for (i = 0; i < 6; i++)
+    {
+        if (arr[i] >= threshold)
+        {
+            cout << "arr[" << i << "] = " << arr[i] << endl;
+        }
+    }
 
     return 0;
 }

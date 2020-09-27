@@ -55,6 +55,36 @@ Stonewt Stonewt::operator *(double mult) const
     return Stonewt(pounds_ * mult);
 }
 
+bool Stonewt::operator >(const Stonewt &obj) const
+{
+    return pounds_ > obj.pounds_;
+}
+
+bool Stonewt::operator <(const Stonewt &obj) const
+{
+    return pounds_ < obj.pounds_;
+}
+
+bool Stonewt::operator ==(const Stonewt &obj) const
+{
+    return pounds_ == obj.pounds_;
+}
+
+bool Stonewt::operator !=(const Stonewt &obj) const
+{
+    return !(*this == obj);
+}
+
+bool Stonewt::operator >=(const Stonewt &obj) const
+{
+    return (*this == obj) || (*this > obj);
+}
+
+bool Stonewt::operator <=(const Stonewt &obj) const
+{
+    return (*this == obj) || (*this < obj);
+}
+
 Stonewt operator +(double lbs, const Stonewt &obj)
 {
     return obj + lbs;
@@ -70,7 +100,7 @@ Stonewt operator *(double lbs, const Stonewt &obj)
     return obj * lbs;
 }
 
-std::ostream & operator <<(std::ostream &os, const Stonewt &obj)
+std::ostream &operator <<(std::ostream &os, const Stonewt &obj)
 {
     if (obj.mode_ == StonewtMode::eStone)
     {
@@ -80,4 +110,15 @@ std::ostream & operator <<(std::ostream &os, const Stonewt &obj)
     }
 
     return os;
+}
+
+std::istream &operator >>(std::istream &is, Stonewt &obj)
+{
+    double lbs;
+
+    is >> lbs;
+
+    obj = Stonewt(lbs, obj.mode_);
+
+    return is;
 }

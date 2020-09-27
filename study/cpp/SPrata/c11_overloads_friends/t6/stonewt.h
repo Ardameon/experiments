@@ -2,6 +2,7 @@
 #define STONEWT_H
 
 #include <ostream>
+#include <istream>
 
 enum class StonewtMode
 {
@@ -31,11 +32,19 @@ public:
     Stonewt operator -(const Stonewt &obj) const;
     Stonewt operator *(double mult) const;
 
+    bool operator >(const Stonewt &obj) const;
+    bool operator <(const Stonewt &obj) const;
+    bool operator ==(const Stonewt &obj) const;
+    bool operator !=(const Stonewt &obj) const;
+    bool operator >=(const Stonewt &obj) const;
+    bool operator <=(const Stonewt &obj) const;
+
     friend Stonewt operator +(double lbs, const Stonewt &obj);
     friend Stonewt operator -(double lbs, const Stonewt &obj);
     friend Stonewt operator *(double lbs, const Stonewt &obj);
 
     friend std::ostream &operator <<(std::ostream &os, const Stonewt &obj);
+    friend std::istream &operator >>(std::istream &is, Stonewt &obj);
 };
 
 #endif // STONEWT_H
