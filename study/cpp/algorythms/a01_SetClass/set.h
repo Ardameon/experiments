@@ -16,6 +16,9 @@ class Set
     int AddGen(const T &element, std::vector<T> &vector);
 
     template <typename T>
+    int RemGen(const T &element, std::vector<T> &vector);
+
+    template <typename T>
     bool ContainGen(const T &element, const std::vector<T> &vector) const;
 
 public:
@@ -25,10 +28,11 @@ public:
     Set();
     Set(const std::string &str);
     Set(const char *str);
+    Set(const char &c);
 
     Set operator +(const Set &set) const;
     Set operator -(const Set &set) const;
-    Set operator =(const Set &set) const;
+    Set &operator =(const Set &set);
     bool operator ==(const Set &set) const;
     bool operator !=(const Set &set) const;
 
@@ -44,7 +48,9 @@ public:
     bool Contain(const Set &set) const;
 
     Set Union(const Set &set) const;
+    Set Complement(const Set &set) const;
     Set Intersection(const Set &set) const;
+    Set SymDiff(const Set &set) const;
 
     std::string ToString() const;
 

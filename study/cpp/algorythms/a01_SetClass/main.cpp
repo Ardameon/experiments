@@ -5,7 +5,7 @@ using namespace std;
 
 int main()
 {
-    Set set_a, set_b, set_c, set_d, set_e;
+    Set set_a, set_b, set_c, set_d, set_e, set_f;
 
     set_a.Add('a');
     set_a.Add('b');
@@ -29,6 +29,8 @@ int main()
     set_e.Add('c');
     set_e.Add('b');
 
+    set_f = set_e;
+
     /* Show bool as false/true */
     cout << std::boolalpha;
 
@@ -37,6 +39,7 @@ int main()
     cout << "Set C: '" << set_c << '\'' << endl;
     cout << "Set D: '" << set_d << '\'' << endl;
     cout << "Set E: '" << set_e << '\'' << endl;
+    cout << "Set F: '" << set_f << '\'' << endl;
 
     cout << "A contains B: " << set_a.Contain(set_b) << endl;
     cout << "A contains C: " << set_a.Contain(set_c) << endl;
@@ -46,6 +49,32 @@ int main()
     cout << "C == D: " << (set_c == set_d) << endl;
     cout << "A == E: " << (set_a == set_e ) << endl;
     cout << "A != E: " << (set_a != set_e ) << endl;
+
+    cout << "Remove 'a' from A:" << endl;
+    set_a.Rem('a');
+    cout << "Set A: '" << set_a << '\'' << endl;
+
+    cout << "Remove 'c' from E:" << endl;
+    set_e.Rem('c');
+    cout << "Set E: '" << set_e << '\'' << endl;
+
+    cout << "Remove " << set_b << " from F:" << endl;
+    set_f.Rem(set_b);
+    cout << "Set F: '" << set_f << '\'' << endl;
+
+    cout << "Intersection of A and E: " << set_a.Intersection(set_e) << endl;
+    cout << "Union of A and F: " << set_a.Union(set_f) << endl;
+    cout << "A + F:            " << set_a + set_f << endl;
+    cout << "Complement of F in A: " << set_a.Complement(set_f) << endl;
+    cout << "A - F:                " << set_a - set_f << endl;
+    cout << "SymDiff of A and A:   " << set_a.SymDiff(set_a) << endl;
+    cout << "SymDiff of A and F:   " << set_a.SymDiff(set_f) << endl;
+    cout << "SymDiff of A and E:   " << set_a.SymDiff(set_e) << endl;
+
+    Set set_g = Set(set_a);
+    cout << "G = A:     " << set_g << endl;
+
+    cout << "'1' + '2': " << Set('1') + Set('2') << endl;
 
     /* Show bool as 0/1 */
     cout << std::noboolalpha;

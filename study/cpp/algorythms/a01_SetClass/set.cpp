@@ -21,29 +21,44 @@ Set::Set(const char *str)
 
 //====================================================================================================================//
 
+Set::Set(const char &c) : Set()
+{
+    Add(c);
+}
+
+//====================================================================================================================//
+
 Set Set::operator +(const Set &set) const
 {
-    (void)set;
-    Set result;
-    return result;
+    return Union(set);
 }
 
 //====================================================================================================================//
 
 Set Set::operator -(const Set &set) const
 {
-    (void)set;
-    Set result;
-    return result;
+    return Complement(set);
 }
 
 //====================================================================================================================//
 
-Set Set::operator =(const Set &set) const
+Set &Set::operator =(const Set &set)
 {
-    (void)set;
-    Set result;
-    return result;
+    elements_.clear();
+    sets_.clear();
+    size_ = 0;
+
+    for (auto &el : set.elements_)
+    {
+        Add(el);
+    }
+
+    for (auto &st : set.sets_)
+    {
+        Add(st);
+    }
+
+    return *this;
 }
 
 //====================================================================================================================//
@@ -53,25 +68,25 @@ bool Set::operator ==(const Set &set) const
     /* Very UNOPTIMIZED decision (TODO: find faster algorithm) */
 
     /* Check if instance contains all elements of set */
-    for (auto el : set.elements_)
+    for (auto &el : set.elements_)
     {
         if (!Contain(el)) return false;
     }
 
     /* Check if set contains all elements of instance */
-    for (auto el : elements_)
+    for (auto &el : elements_)
     {
         if (!set.Contain(el)) return false;
     }
 
     /* Check if instance contains all subsets of set */
-    for (auto el : set.sets_)
+    for (auto &el : set.sets_)
     {
         if (!Contain(el)) return false;
     }
 
     /* Check if set contains all subsets of instance */
-    for (auto el : sets_)
+    for (auto &el : sets_)
     {
         if (!set.Contain(el)) return false;
     }
@@ -120,27 +135,89 @@ int Set::Add(const Set &set)
 
 //====================================================================================================================//
 
+template<typename T>
+int Set::RemGen(const T &element, std::vector<T> &vector)
+{
+    int res = -1;
+
+    if (Contain(element))
+    {
+        for (auto el = vector.begin(); el != vector.end(); el++)
+        {
+            if (*el == element)
+            {
+                vector.erase(el);
+                size_--;
+                res = 0;
+                break;
+            }
+        }
+    }
+
+    return res;
+}
+
+//====================================================================================================================//
+
 int Set::Rem(const char &element)
 {
-    (void)element;
-    int res = 0;
-    return res;
+    return RemGen(element, elements_);
 }
 
 //====================================================================================================================//
 
 int Set::Rem(const Set &set)
 {
-    (void)set;
-    return 0;
+    return RemGen(set, sets_);
 }
 
 //====================================================================================================================//
 
 Set Set::Union(const Set &set) const
 {
-    (void)set;
-    Set result;
+    Set result = *this;
+
+    for (auto &el : set.elements_)
+    {
+        if (!result.Contain(el))
+        {
+            result.Add(el);
+        }
+    }
+
+    for (auto &st : set.sets_)
+    {
+        if (!result.Contain(st))
+        {
+            result.Add(st);
+        }
+    }
+
+    return result;
+}
+
+//====================================================================================================================//
+
+Set Set::Complement(const Set &set) const
+{
+    Set result = *this;
+
+    for (auto &el : set.elements_)
+    {
+        if (result.Contain(el))
+        {
+            result.Rem(el);
+        }
+    }
+
+    for (auto &st : set.sets_)
+    {
+        if (result.Contain(st))
+        {
+            result.Rem(st);
+        }
+    }
+
     return result;
 }
 
@@ -148,9 +225,32 @@ Set Set::Union(const Set &set) const
 
 Set Set::Intersection(const Set &set) const
 {
-    (void)set;
     Set result;
+
+    for (auto &el : elements_)
+    {
+        if (set.Contain(el))
+        {
+            result.Add(el);
+        }
+    }
+
+    for (auto &st : sets_)
+    {
+        if (set.Contain(st))
+        {
+            result.Add(st);
+        }
+    }
+
     return result;
+}
+
+//====================================================================================================================//
+
+Set Set::SymDiff(const Set &set) const
+{
+    return Union(set) - Intersection(set);
 }
 
 //====================================================================================================================//
@@ -163,12 +263,12 @@ std::string Set::ToString() const
     {
         ss << '{';
 
-        for (auto element : elements_)
+        for (auto &element : elements_)
         {
             ss << element << ", ";
         }
 
-        for (auto set : sets_)
+        for (auto &set : sets_)
         {
             ss << set << ", ";
         }
@@ -178,6 +278,8 @@ std::string Set::ToString() const
 
         // here we replace ',' sybmol to '}', but ' ' symbol is still left (TODO: remove trailing ' ')
         ss << '}';
+    } else {
+        ss << "{}";
     }
 
     return ss.str();
@@ -219,4 +321,3 @@ bool Set::Contain(const Set &set) const
 {
     return ContainGen(set, sets_);
 }
-
