@@ -261,7 +261,39 @@ std::string Set::ToString() const
 
     if (size_)
     {
+        unsigned int i;
+
         ss << '{';
+
+        if (elements_.size())
+        {
+            for (i = 0; i < elements_.size() - 1; i++)
+            {
+                ss << elements_[i] << ", ";
+            }
+
+            ss << elements_[i];
+
+            if (sets_.size())
+            {
+                ss << ", ";
+            }
+        }
+
+        if (sets_.size())
+        {
+            for (i = 0; i < sets_.size() - 1; i++)
+            {
+                ss << sets_[i] << ", ";
+            }
+
+            ss << sets_[i];
+        }
+
+        ss << '}';
+
+#if 0
+        /* Not suitable code, output Set strings always contan trailing spaces (e. g. '{a, b, {0, 1} } ') */
 
         for (auto &element : elements_)
         {
@@ -278,6 +310,7 @@ std::string Set::ToString() const
 
         // here we replace ',' sybmol to '}', but ' ' symbol is still left (TODO: remove trailing ' ')
         ss << '}';
+#endif
     } else {
         ss << "{}";
     }
