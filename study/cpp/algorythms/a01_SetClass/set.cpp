@@ -48,14 +48,17 @@ Set &Set::operator =(const Set &set)
     sets_.clear();
     size_ = 0;
 
-    for (auto &el : set.elements_)
+    if (set != *this)
     {
-        Add(el);
-    }
+        for (auto &el : set.elements_)
+        {
+            Add(el);
+        }
 
-    for (auto &st : set.sets_)
-    {
-        Add(st);
+        for (auto &st : set.sets_)
+        {
+            Add(st);
+        }
     }
 
     return *this;
