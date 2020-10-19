@@ -323,6 +323,24 @@ std::string Set::ToString() const
 
 //====================================================================================================================//
 
+int Set::FromString(const std::string &str)
+{
+    (void)str;
+    size_ = 0;
+
+    return 0;
+}
+
+//====================================================================================================================//
+
+std::string::iterator Set::ParseSet(std::string::iterator start, Set &set)
+{
+    (void)set;
+    return start;
+}
+
+//====================================================================================================================//
+
 std::ostream & operator<<(std::ostream &os, const Set &set)
 {
     return os << set.ToString();
