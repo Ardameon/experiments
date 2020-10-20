@@ -21,8 +21,10 @@ class Set
     template <typename T>
     bool ContainGen(const T &element, const std::vector<T> &vector) const;
 
-    int FromString(const std::string &str);
-    std::string::iterator ParseSet(std::string::iterator start, Set &set);
+    int FromString(std::string &str);
+    bool StrSetIsValid(const std::string &str) const;
+    int GetNextToken(std::string::iterator &it, std::string::iterator end);
+    int ParseSet(std::string::iterator &it, std::string::iterator end, Set &set);
 
 public:
     enum {eMaxSetSize = 50};

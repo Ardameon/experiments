@@ -79,5 +79,9 @@ int main()
     /* Show bool as 0/1 */
     cout << std::noboolalpha;
 
+    Set set_h("{a, {b, c}, {    }   , {1, {2, }, 3, 4}}");
+
+    cout << "Set H: " << set_h << endl;
+
     return 0;
 }

@@ -1,5 +1,6 @@
 #include "set.h"
 #include <sstream>
+#include <cctype>
 
 Set::Set() : size_(0)
 {
@@ -9,14 +10,14 @@ Set::Set() : size_(0)
 
 Set::Set(const std::string &str)
 {
-    (void)str;
+    std::string new_str = str;
+    FromString(new_str);
 }
 
 //====================================================================================================================//
 
-Set::Set(const char *str)
+Set::Set(const char *str) : Set(std::string(str))
 {
-    Set(std::string(str));
 }
 
 //====================================================================================================================//
@@ -323,20 +324,118 @@ std::string Set::ToString() const
 
 //====================================================================================================================//
 
-int Set::FromString(const std::string &str)
+int Set::FromString(std::string &str)
 {
-    (void)str;
+    Set set;
+    int res = -1;
+
     size_ = 0;
 
-    return 0;
+    if (StrSetIsValid(str))
+    {
+        std::string::iterator start = str.begin();
+
+        if (!ParseSet(start, str.end(), set))
+        {
+            *this = set;
+            res = 0;
+        }
+    }
+
+    return res;
 }
 
 //====================================================================================================================//
 
-std::string::iterator Set::ParseSet(std::string::iterator start, Set &set)
+bool Set::StrSetIsValid(const std::string &str) const
 {
-    (void)set;
-    return start;
+    int brace_cnt = 0;
+    bool is_valid = false;
+
+    auto it = str.begin();
+
+    if (*it != '{') goto _exit;
+
+    for (;it != str.end(); it++)
+    {
+        if (*it == '{') brace_cnt++;
+        if (*it == '}') brace_cnt--;
+
+        if (brace_cnt < 0) goto _exit;
+    }
+
+    if (brace_cnt) goto _exit;
+
+    is_valid = true;
+
+_exit:
+    return is_valid;
+}
+
+//====================================================================================================================//
+
+int Set::GetNextToken(std::string::iterator &it, std::string::iterator end)
+{
+    int res = -1;
+
+    while (it != end)
+    {
+        if (*it == ' ') { it++; continue;}
+
+        if (*it == ',' || *it == '}')
+        {
+            res = 0;
+        }
+
+        break;
+    }
+
+    return res;
+}
+
+//====================================================================================================================//
+
+int Set::ParseSet(std::string::iterator &it, std::string::iterator end, Set &set)
+{
+    char element;
+    int res = -1;
+
+    if (*it != '{') return res;
+
+    it++;
+
+    while (it != end)
+    {
+        if (*it == ' ') { it++; continue; }
+        if (*it == ',') { it++; continue; }
+
+        if (*it == '}')
+        {
+            res = 0;
+            break;
+        }
+
+        if (isalnum(*it))
+        {
+            element = *it;
+
+            if (GetNextToken(++it, end)) break;
+
+            set.Add(element);
+        }
+
+        if (*it == '{')
+        {
+            Set tmp_set;
+
+            if (ParseSet(it, end, tmp_set)) break;
+            if (GetNextToken(++it, end)) break;
+
+            set.Add(tmp_set);
+        }
+    }
+
+    return res;
 }
 
 //====================================================================================================================//
