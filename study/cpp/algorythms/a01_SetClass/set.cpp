@@ -49,7 +49,7 @@ Set &Set::operator =(const Set &set)
     sets_.clear();
     size_ = 0;
 
-    if (set != *this)
+    if (&set != this)
     {
         for (auto &el : set.elements_)
         {
