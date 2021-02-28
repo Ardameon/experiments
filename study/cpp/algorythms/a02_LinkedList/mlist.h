@@ -91,6 +91,7 @@ MList<T>::MList(const MList<T> &list) : head_(nullptr)
     while (cur)
     {
         PushBack(cur->data);
+        cur = cur->next;
     }
 }
 

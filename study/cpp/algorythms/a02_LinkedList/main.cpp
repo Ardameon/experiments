@@ -1,14 +1,17 @@
 #include <iostream>
 #include <cstdlib>
+#include <ctime>
 #include "mlist.h"
 
-using namespace std;
+using std::cout;
+using std::endl;
 
 int main()
 {
     MList<int> l = {1, 2, 3, 4, 5};
     MList<int> l1 = MList<int>(10);
     MList<int> l2;
+    MList<int> l3 = l1;
 
     srand(time(0));
 
@@ -27,6 +30,8 @@ int main()
     cout << l << " mid: " << l.GetMiddle() << endl;
     l.Erase(5);
     cout << l << " mid: " << l.GetMiddle() << endl;
+
+    cout << "=== l1 ===" << endl;
 
     cout << l1 << " mid: " << l1.GetMiddle() << endl;
     cout << l1.Reverse() << " mid: " << l1.GetMiddle() << endl;
