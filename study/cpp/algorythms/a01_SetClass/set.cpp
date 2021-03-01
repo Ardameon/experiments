@@ -259,6 +259,43 @@ Set Set::SymDiff(const Set &set) const
 
 //====================================================================================================================//
 
+Set Set::PowerSet() const
+{
+    /* Find set of all subsets of current set */
+    Set result;
+
+    /* Add empty set */
+    result.Add(result);
+
+    for (auto &el : elements_)
+    {
+        Set tmp_set = result;
+
+        for (auto &tmp_st : tmp_set.sets_)
+        {
+            tmp_st.Add(el);
+        }
+
+        result = result + tmp_set;
+    }
+
+    for (auto &st : sets_)
+    {
+        Set tmp_set = result;
+
+        for (auto &tmp_st : tmp_set.sets_)
+        {
+            tmp_st.Add(st);
+        }
+
+        result = result + tmp_set;
+    }
+
+    return result;
+}
+
+//====================================================================================================================//
+
 std::string Set::ToString() const
 {
     std::stringstream ss;

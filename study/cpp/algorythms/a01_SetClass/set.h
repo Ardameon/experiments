@@ -56,6 +56,7 @@ public:
     Set Complement(const Set &set) const;
     Set Intersection(const Set &set) const;
     Set SymDiff(const Set &set) const;
+    Set PowerSet() const;
 
     std::string ToString() const;
 

@@ -74,14 +74,33 @@ int main()
     Set set_g = Set(set_a);
     cout << "G = A:     " << set_g << endl;
 
-    cout << "'1' + '2': " << Set('1') + Set('2') << endl;
+    cout << "{1} + {2}: " << Set('1') + Set('2') << endl;
 
     /* Show bool as 0/1 */
     cout << std::noboolalpha;
 
     Set set_h("{a, {b, c}, {    }   , {1, {2, }, 3, 4}}");
 
-    cout << "Set H: " << set_h << endl;
+    cout << "Set H (from string): " << set_h << endl;
+
+    Set set_i;
+
+    set_i.Add(set_i);
+    set_i.Add(set_i);
+
+    cout << "Set I: " << set_i << endl;
+
+    Set set_j = "{a, b, c}";
+    Set power_set;
+
+    cout << "PowerSet of " << set_j << ":\n\t" << (power_set = set_j.PowerSet())
+         << "\n\tsize " << power_set.Size() << endl;
+    set_j = "{1, 2}";
+    cout << "PowerSet of " << set_j << ":\n\t" << (power_set = set_j.PowerSet())
+         << "\n\tsize " << power_set.Size() << endl;
+    set_j = "{1, 2, {3, 4}}";
+    cout << "PowerSet of " << set_j << ":\n\t" << (power_set = set_j.PowerSet())
+         << "\n\tsize " << power_set.Size() << endl;
 
     return 0;
 }
