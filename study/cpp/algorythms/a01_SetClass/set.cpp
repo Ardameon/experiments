@@ -45,12 +45,12 @@ Set Set::operator -(const Set &set) const
 
 Set &Set::operator =(const Set &set)
 {
-    elements_.clear();
-    sets_.clear();
-    size_ = 0;
-
     if (&set != this)
     {
+        elements_.clear();
+        sets_.clear();
+        size_ = 0;
+
         for (auto &el : set.elements_)
         {
             Add(el);
