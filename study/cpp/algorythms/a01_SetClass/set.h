@@ -31,6 +31,7 @@ public:
 
 public:
     Set();
+    Set(const Set &set);
     Set(const std::string &str);
     Set(const char *str);
     Set(const char &c);
