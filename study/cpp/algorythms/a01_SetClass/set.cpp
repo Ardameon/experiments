@@ -10,19 +10,7 @@ Set::Set() : size_(0)
 
 Set::Set(const Set &set)
 {
-    elements_.clear();
-    sets_.clear();
-    size_ = 0;
-
-    for (auto &el : set.elements_)
-    {
-        Add(el);
-    }
-
-    for (auto &st : set.sets_)
-    {
-        Add(st);
-    }
+    *this = set;
 }
 
 //====================================================================================================================//
