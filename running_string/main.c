@@ -38,7 +38,8 @@ int main(void)
         fflush(stdout);
 
         display = RS_StringProc();
-        sleep(1);
+        // sleep(1);
+        usleep(50000);
     }
 
     return 0;
