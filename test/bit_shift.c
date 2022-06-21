@@ -15,7 +15,11 @@ int main(int argc, char const *argv[])
 
 	c = 10;
 
-	printf("~c = %d\n", ~c);
+	printf("c = %d ~c = %d\n", c, ~c);
+	
+	c = 0;
+
+	printf("c = %d ~c = %d\n", c, ~c);
 
     return 0;
 }
