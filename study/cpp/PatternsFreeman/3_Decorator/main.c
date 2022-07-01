@@ -6,8 +6,6 @@
 
 #include "decorator.h"
 
-#define MAX_OBSERVERS 10
-
 /*=========================================================*/
 
 void        str_getter_init(string_getter_t *str_getter);
@@ -29,15 +27,11 @@ int main(int argc, char const *argv[])
     string_getter_sand_t   sand_getter;
 
     str_getter_init(&default_getter);
-    // str_getter_flower_init(&flower_getter, (string_getter_abs_t*)&default_getter);
-    // str_getter_wind_init(&wind_getter, (string_getter_abs_t*)&flower_getter);
-    // str_getter_sand_init(&sand_getter, (string_getter_abs_t*)&wind_getter);
+    str_getter_flower_init(&flower_getter, (string_getter_abs_t*)&default_getter);
+    str_getter_wind_init(&wind_getter, (string_getter_abs_t*)&flower_getter);
+    str_getter_sand_init(&sand_getter, (string_getter_abs_t*)&wind_getter);
 
-    // printf("str: '%s'\n", /*default_getter.str_getter->string_get((string_getter_abs_t*)&default_getter*/"1111");
-    printf("str: '%s'\n", ((string_getter_abs_t*)&default_getter)->string_get((string_getter_abs_t*)&default_getter));
-    fflush(stdout);
-
-    // printf("str: '%s'", ((string_getter_abs_t*)&sand_getter)->string_get((string_getter_abs_t*)&sand_getter));
+    printf("str: '%s'\n", ((string_getter_abs_t*)&sand_getter)->string_get((string_getter_abs_t*)&sand_getter));
     fflush(stdout);
 
     (void)argv;
@@ -51,7 +45,6 @@ int main(int argc, char const *argv[])
 void str_getter_init(string_getter_t *str_getter)
 {
     ((string_getter_abs_t *)str_getter)->string_get = &str_getter_string_get;
-    // str_get->str_getter->string_get = &str_getter_string_get;
 }
 
 const char *str_getter_string_get(string_getter_abs_t *str_getter)
