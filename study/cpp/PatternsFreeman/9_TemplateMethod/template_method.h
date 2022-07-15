@@ -106,6 +106,7 @@ public:
         if (_conn)
         {
             ConnectionCreated();
+            _conn->Open();
         }
     }
 
