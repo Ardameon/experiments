@@ -1,30 +1,28 @@
-#ifndef SET_H
-#define SET_H
+#ifndef SET_IMPROVED_H
+#define SET_IMPROVED_H
 
 #include <iostream>
 #include <vector>
 #include <string>
 
+class Component;
 
 class Set
 {
-    std::vector<char> elements_;
-    std::vector<Set> sets_;
+    std::vector<Component *> components_;
     int size_;
 
     template <typename T>
-    int AddGen(const T &element, std::vector<T> &vector);
+    bool ContainGen(const T &component) const;
 
-    template <typename T>
-    int RemGen(const T &element, std::vector<T> &vector);
-
-    template <typename T>
-    bool ContainGen(const T &element, const std::vector<T> &vector) const;
+    int AddGen(const Component &component);
+    int RemGen(const Component &component);
 
     int FromString(std::string &str);
     bool StrSetIsValid(const std::string &str) const;
     int GetNextToken(std::string::iterator &it, std::string::iterator end);
     int ParseSet(std::string::iterator &it, std::string::iterator end, Set &set);
+    void Clear();
 
 public:
     enum {eMaxSetSize = 50};
@@ -35,6 +33,7 @@ public:
     Set(const std::string &str);
     Set(const char *str);
     Set(const char &c);
+    ~Set();
 
     Set operator +(const Set &set) const;
     Set operator -(const Set &set) const;
@@ -64,4 +63,49 @@ public:
     friend std::ostream &operator<<(std::ostream & os, const Set &set);
 };
 
-#endif // SET_H
+/*===================================================================================================================*/
+
+class Component
+{
+public:
+    Component() {}
+    virtual ~Component() {}
+    virtual bool operator ==(const Set &set) const = 0;
+    virtual bool operator ==(const char &element) const = 0;
+    virtual bool operator ==(const Component &component) const = 0;
+    virtual std::string ToString() const = 0;
+    virtual Component *CreateCopy() const = 0;
+};
+
+/*===================================================================================================================*/
+
+class ComponentElement : public Component
+{
+    char element_;
+public:
+    ComponentElement(const char &element) : element_(element) {}
+
+    bool operator ==(const Set &set) const;
+    bool operator ==(const char &element) const;
+    bool operator ==(const Component &component) const;
+    std::string ToString() const;
+    Component *CreateCopy() const;
+};
+
+/*===================================================================================================================*/
+
+class ComponentSet : public Component
+{
+    friend class Set;
+    Set set_;
+public:
+    ComponentSet(const Set &set) : set_(set) {}
+
+    bool operator ==(const Set &set) const;
+    bool operator ==(const char &element) const;
+    bool operator ==(const Component &component) const;
+    std::string ToString() const;
+    Component *CreateCopy() const;
+};
+
+#endif // SET_IMPROVED_H

@@ -1,4 +1,4 @@
-#include "set.h"
+#include "set_improved.h"
 #include <sstream>
 #include <cctype>
 
@@ -36,6 +36,13 @@ Set::Set(const char &c) : Set()
 
 //====================================================================================================================//
 
+Set::~Set()
+{
+    Clear();
+}
+
+//====================================================================================================================//
+
 Set Set::operator +(const Set &set) const
 {
     return Union(set);
@@ -54,18 +61,13 @@ Set &Set::operator =(const Set &set)
 {
     if (&set != this)
     {
-        elements_.clear();
-        sets_.clear();
+        Clear();
         size_ = 0;
 
-        for (auto &el : set.elements_)
+        for (auto el : set.components_)
         {
-            Add(el);
-        }
-
-        for (auto &st : set.sets_)
-        {
-            Add(st);
+            components_.push_back(el->CreateCopy());
+            size_++;
         }
     }
 
@@ -79,27 +81,15 @@ bool Set::operator ==(const Set &set) const
     /* Very UNOPTIMIZED decision (TODO: find faster algorithm) */
 
     /* Check if instance contains all elements of set */
-    for (auto &el : set.elements_)
+    for (auto el : set.components_)
     {
-        if (!Contain(el)) return false;
+        if (!ContainGen(*el)) return false;
     }
 
     /* Check if set contains all elements of instance */
-    for (auto &el : elements_)
+    for (auto el : components_)
     {
-        if (!set.Contain(el)) return false;
-    }
-
-    /* Check if instance contains all subsets of set */
-    for (auto &el : set.sets_)
-    {
-        if (!Contain(el)) return false;
-    }
-
-    /* Check if set contains all subsets of instance */
-    for (auto &el : sets_)
-    {
-        if (!set.Contain(el)) return false;
+        if (!set.ContainGen(*el)) return false;
     }
 
     return true;
@@ -114,14 +104,13 @@ bool Set::operator !=(const Set &set) const
 
 //====================================================================================================================//
 
-template <typename T>
-int Set::AddGen(const T &element, std::vector<T> &vector)
+int Set::AddGen(const Component &component)
 {
     int res = 0;
 
-    if (size_ < eMaxSetSize && !Contain(element))
+    if (size_ < eMaxSetSize && !ContainGen(component))
     {
-        vector.push_back(element);
+        components_.push_back(component.CreateCopy());
         size_++;
     } else {
         res = -1;
@@ -134,30 +123,30 @@ int Set::AddGen(const T &element, std::vector<T> &vector)
 
 int Set::Add(const char &element)
 {
-    return AddGen(element, elements_);
+    return AddGen(ComponentElement(element));
 }
 
 //====================================================================================================================//
 
 int Set::Add(const Set &set)
 {
-    return AddGen(set, sets_);
+    return AddGen(ComponentSet(set));
 }
 
 //====================================================================================================================//
 
-template<typename T>
-int Set::RemGen(const T &element, std::vector<T> &vector)
+int Set::RemGen(const Component &component)
 {
     int res = -1;
 
-    if (Contain(element))
+    if (ContainGen(component))
     {
-        for (auto el = vector.begin(); el != vector.end(); el++)
+        for (auto el = components_.begin(); el != components_.end(); el++)
         {
-            if (*el == element)
+            if (**el == component)
             {
-                vector.erase(el);
+                delete *el;
+                components_.erase(el);
                 size_--;
                 res = 0;
                 break;
@@ -172,14 +161,14 @@ int Set::RemGen(const T &element, std::vector<T> &vector)
 
 int Set::Rem(const char &element)
 {
-    return RemGen(element, elements_);
+    return RemGen(ComponentElement(element));
 }
 
 //====================================================================================================================//
 
 int Set::Rem(const Set &set)
 {
-    return RemGen(set, sets_);
+    return RemGen(ComponentSet(set));
 }
 
 //====================================================================================================================//
@@ -188,19 +177,11 @@ Set Set::Union(const Set &set) const
 {
     Set result = *this;
 
-    for (auto &el : set.elements_)
+    for (auto el : set.components_)
     {
-        if (!result.Contain(el))
+        if (!result.ContainGen(*el))
         {
-            result.Add(el);
-        }
-    }
-
-    for (auto &st : set.sets_)
-    {
-        if (!result.Contain(st))
-        {
-            result.Add(st);
+            result.AddGen(*el);
         }
     }
 
@@ -213,19 +194,11 @@ Set Set::Complement(const Set &set) const
 {
     Set result = *this;
 
-    for (auto &el : set.elements_)
+    for (auto el : set.components_)
     {
-        if (result.Contain(el))
+        if (result.ContainGen(*el))
         {
-            result.Rem(el);
-        }
-    }
-
-    for (auto &st : set.sets_)
-    {
-        if (result.Contain(st))
-        {
-            result.Rem(st);
+            result.RemGen(*el);
         }
     }
 
@@ -238,19 +211,11 @@ Set Set::Intersection(const Set &set) const
 {
     Set result;
 
-    for (auto &el : elements_)
+    for (auto el : components_)
     {
-        if (set.Contain(el))
+        if (set.ContainGen(*el))
         {
-            result.Add(el);
-        }
-    }
-
-    for (auto &st : sets_)
-    {
-        if (set.Contain(st))
-        {
-            result.Add(st);
+            result.AddGen(*el);
         }
     }
 
@@ -274,25 +239,13 @@ Set Set::PowerSet() const
     /* Add empty set */
     result.Add(result);
 
-    for (auto &el : elements_)
+    for (auto el : components_)
     {
         Set tmp_set = result;
 
-        for (auto &tmp_st : tmp_set.sets_)
+        for (auto tmp_st : tmp_set.components_)
         {
-            tmp_st.Add(el);
-        }
-
-        result = result + tmp_set;
-    }
-
-    for (auto &st : sets_)
-    {
-        Set tmp_set = result;
-
-        for (auto &tmp_st : tmp_set.sets_)
-        {
-            tmp_st.Add(st);
+            dynamic_cast<ComponentSet *>(tmp_st)->set_.AddGen(*el);
         }
 
         result = result + tmp_set;
@@ -313,52 +266,17 @@ std::string Set::ToString() const
 
         ss << '{';
 
-        if (elements_.size())
+        if (components_.size())
         {
-            for (i = 0; i < elements_.size() - 1; i++)
+            for (i = 0; i < components_.size() - 1; i++)
             {
-                ss << elements_[i] << ", ";
+                ss << components_[i]->ToString() << ", ";
             }
 
-            ss << elements_[i];
-
-            if (sets_.size())
-            {
-                ss << ", ";
-            }
-        }
-
-        if (sets_.size())
-        {
-            for (i = 0; i < sets_.size() - 1; i++)
-            {
-                ss << sets_[i] << ", ";
-            }
-
-            ss << sets_[i];
+            ss << components_[i]->ToString();
         }
 
         ss << '}';
-
-#if 0
-        /* Not suitable code, output Set strings always contan trailing spaces (e. g. '{a, b, {0, 1} } ') */
-
-        for (auto &element : elements_)
-        {
-            ss << element << ", ";
-        }
-
-        for (auto &set : sets_)
-        {
-            ss << set << ", ";
-        }
-
-        // here we move stream insert position to skip last ',' and ' ' symbols
-        ss.seekp(ss.tellp() - std::streampos(2));
-
-        // here we replace ',' sybmol to '}', but ' ' symbol is still left (TODO: remove trailing ' ')
-        ss << '}';
-#endif
     } else {
         ss << "{}";
     }
@@ -484,6 +402,18 @@ int Set::ParseSet(std::string::iterator &it, std::string::iterator end, Set &set
 
 //====================================================================================================================//
 
+void Set::Clear()
+{
+    for (auto el : components_)
+    {
+        delete el;
+    }
+
+    components_.clear();
+}
+
+//====================================================================================================================//
+
 std::ostream & operator<<(std::ostream &os, const Set &set)
 {
     return os << set.ToString();
@@ -491,12 +421,12 @@ std::ostream & operator<<(std::ostream &os, const Set &set)
 
 //====================================================================================================================//
 
-template<typename T>
-bool Set::ContainGen(const T &element, const std::vector<T> &vector) const
+template <typename T>
+bool Set::ContainGen(const T &component) const
 {
-    for (auto el : vector)
+    for (auto el : components_)
     {
-        if (element == el)
+        if (*el == component)
         {
             return true;
         }
@@ -509,12 +439,90 @@ bool Set::ContainGen(const T &element, const std::vector<T> &vector) const
 
 bool Set::Contain(const char &element) const
 {
-    return ContainGen(element, elements_);
+    return ContainGen(element);
 }
 
 //====================================================================================================================//
 
 bool Set::Contain(const Set &set) const
 {
-    return ContainGen(set, sets_);
+    return ContainGen(set);
 }
+
+//====================================================================================================================//
+
+bool ComponentElement::operator ==(const Set &set) const
+{
+    (void)set;
+    return false;
+}
+
+//====================================================================================================================//
+
+std::string ComponentElement::ToString() const
+{
+    std::string string;
+
+    string += element_;
+
+    return string;
+}
+
+//====================================================================================================================//
+
+Component *ComponentElement::CreateCopy() const
+{
+    return new ComponentElement(element_);
+}
+
+//====================================================================================================================//
+
+bool ComponentElement::operator ==(const char &element) const
+{
+    return element == element_;
+}
+
+//====================================================================================================================//
+
+bool ComponentElement::operator ==(const Component &component) const
+{
+    return component == element_;
+}
+
+//====================================================================================================================//
+
+bool ComponentSet::operator ==(const Set &set) const
+{
+    return set == set_;
+}
+
+//====================================================================================================================//
+
+std::string ComponentSet::ToString() const
+{
+    return set_.ToString();
+}
+
+//====================================================================================================================//
+
+Component *ComponentSet::CreateCopy() const
+{
+    return new ComponentSet(set_);
+}
+
+//====================================================================================================================//
+
+bool ComponentSet::operator ==(const char &element) const
+{
+    (void)element;
+    return false;
+}
+
+//====================================================================================================================//
+
+bool ComponentSet::operator ==(const Component &component) const
+{
+    return component == set_;
+}
+
+//====================================================================================================================//
