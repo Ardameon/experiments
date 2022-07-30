@@ -196,10 +196,7 @@ Set Set::Complement(const Set &set) const
 
     for (auto el : set.components_)
     {
-        if (result.ContainGen(*el))
-        {
-            result.RemGen(*el);
-        }
+        result.RemGen(*el);
     }
 
     return result;
