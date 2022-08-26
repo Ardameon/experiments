@@ -1,0 +1,25 @@
+@startuml
+participant "SIP Client" as A #fcf477
+participant SMG as B #fcf477
+
+
+header Authentication with Challenge (RFC5090)
+
+title SMG AUTH SUCCESS
+
+group Stage 1
+A -> B: REGISTER
+
+B -> A : 401 Unauthorized
+end
+
+rnote over B #77fcc7
+BREAK
+end note
+
+group Stage 2
+A -> B : REGISTER
+B -> A : 200 OK
+end
+
+@enduml

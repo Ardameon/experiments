@@ -1,0 +1,85 @@
+@startuml
+
+abstract auth_digest_t #PaleGreen
+{
+auth_iface : auth_digest_i
+}
+
+interface auth_digest_i  << interface >> #PaleGreen
+{
+{abstract} auth_init()
+{abstract} auth_destroy()
+{abstract} auth_challenge()
+{abstract} auth_athenticate()
+{abstract} auth_finish()
+}
+
+class auth_digest_reg_t
+{
+reg_data : auth_data_register_t
+}
+
+class auth_digest_sub_t
+{
+sub_data : auth_data_subscribe_t
+}
+
+class auth_digest_seize_t
+{
+seize_data : auth_data_seize_t
+}
+
+class auth_digest_unknown_t
+{
+unknown_data : auth_data_unknown_t
+}
+
+entity auth_reg_iface #fcf477
+{
+auth_digest_init_register()
+auth_digest_destroy_register()
+auth_digest_challenge_register()
+auth_digest_authenticate_register()
+auth_digest_finish_register()
+}
+
+entity auth_sub_iface #fcf477
+{
+auth_digest_init_subscribe()
+auth_digest_destroy_subscribe()
+auth_digest_challenge_subscribe()
+auth_digest_authenticate_rsubscribe()
+auth_digest_finish_subscribe()
+}
+
+entity auth_seize_iface #fcf477
+{
+auth_digest_init_seize()
+auth_digest_destroy_seize()
+auth_digest_challenge_seize()
+auth_digest_authenticate_seize()
+auth_digest_finish_seize()
+}
+
+entity auth_unknown_iface #fcf477
+{
+auth_digest_init_unknown()
+auth_digest_destroy_unknown()
+auth_digest_challenge_unknown()
+auth_digest_authenticate_unknown()
+auth_digest_finish_unknown()
+}
+
+title SMG DIGEST AUTHENTICATION STRATEGY
+
+auth_digest_i ---* auth_digest_t
+auth_digest_t <|-- auth_digest_reg_t
+auth_digest_t <|-- auth_digest_sub_t
+auth_digest_t <|-- auth_digest_seize_t
+auth_digest_t <|-- auth_digest_unknown_t
+
+auth_digest_i <|... auth_reg_iface
+auth_digest_i <|... auth_sub_iface
+auth_digest_i <|... auth_seize_iface
+auth_digest_i <|... auth_unknown_iface
+@enduml

@@ -1,0 +1,35 @@
+@startuml
+participant "SIP Client" as A #fcf477
+participant SMG as B #fcf477
+participant "RADIUS server" as C #fcf477
+
+header Authentication No Challenge (RFC5090)
+
+title RADIUS AUTH SUCCESS
+
+group Stage 1
+A -> B: REGISTER
+B -> A : 401 Unauthorized
+end
+
+rnote over B #77fcc7
+BREAK
+end note
+
+group Stage 2
+A -> B : REGISTER
+
+B -> C : Access-Request
+end
+
+rnote over B #77fcc7
+BREAK
+end note
+
+group Stage 3
+B <- C : Access-Accept
+
+B -> A : 200 OK
+end
+
+@enduml

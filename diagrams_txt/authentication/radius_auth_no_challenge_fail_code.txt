@@ -1,0 +1,65 @@
+@startuml
+participant "SIP Client" as A #fcf477
+participant SMG as B #fcf477
+participant "RADIUS server" as C #fcf477
+
+header Authentication w/o Challenge (RFC5090-no-challange or Draft-sterman)
+
+title RADIUS AUTH FAIL
+
+group Stage 1
+A -> B: REGISTER
+rnote over B #77fcc7
+ reg_table_record_authenticate_register()
+   reg_table_record_authenticate_init_register()
+     auth_digest_create_register()
+     auth_digest_init()
+       auth_digest_init_register()
+         auth_digest_state_set(E_DIGEST_AUTH_STATE_INITED)
+         challenge_local()
+           auth_digest_nonce_create_local()
+           auth_digest_challenge(APPROVED)
+             auth_digest_challenge_register(APPROVED)
+               auth_digest_state_set(E_DIGEST_AUTH_STATE_CHALLENGED)
+                 sip_SendUserRegReply(401, local_nonce)
+             
+end note
+B -> A : 401 Unauthorized
+end
+
+rnote over B #77fcc7
+BREAK
+end note
+
+group Stage 2
+A -> B : REGISTER
+rnote over B #77fcc7
+ reg_table_record_authenticate_register()
+   reg_table_record_authenticate_continue()
+     auth_digest_authenticate()
+       auth_digest_authenticate_register()
+         auth_digest_state_set(E_DIGEST_AUTH_STATE_IN_PROGRESS)
+         authenticate_external()
+           /* TODO: Sending request to RADIUS */
+end note
+B -> C : Access-Request
+end
+
+rnote over B #77fcc7
+BREAK
+end note
+
+group Stage 3
+B <- C : Access-Reject
+rnote over B #77fcc7
+ /* TODO: Receiving Auth Fail response from RADIUS */
+   auth_digest_finish(FAIL)
+     auth_digest_finish_register(FAIL)
+       auth_digest_state_set(E_DIGEST_AUTH_STATE_FINISHED)
+       sip_SendUserRegReply(403)
+end note
+B -> A : 403 Forbidden
+end
+
+
+@enduml
