@@ -2,9 +2,9 @@
 set background=dark
 "set smartindent"
 
+"выход из терминала по Esc"
 tnoremap <Esc> <C-\><C-n>
-
-
+"переходи между окнами по Alt + h, j, k, l"
 tnoremap <A-h> <C-\><C-N><C-w>h
 tnoremap <A-j> <C-\><C-N><C-w>j
 tnoremap <A-k> <C-\><C-N><C-w>k
