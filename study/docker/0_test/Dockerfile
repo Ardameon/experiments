@@ -4,4 +4,6 @@ WORKDIR /app
 
 COPY . .
 
-CMD ["python", "first_test.py"]
+RUN echo "I'm running inly on Image building"
+
+CMD ["python", "docker_test.py"]
