@@ -7,6 +7,8 @@ project(Tutorial VERSION 1.0)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+set(CMAKE_INSTALL_PREFIX "${PROJECT_BINARY_DIR}/install")
+
 # should we use our own math functions
 option(USE_MYMATH "Use tutorial provided math implementation" ON)
 
@@ -64,3 +66,11 @@ do_test(Tutorial 7 "7 is 2.645")
 do_test(Tutorial 25 "25 is 5")
 do_test(Tutorial -25 "-25 is (-nan|nan|0)")
 do_test(Tutorial 0.0001 "0.0001 is 0.01")
+
+include(InstallRequiredSystemLibraries)
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/License.txt")
+set(CPACK_PACKAGE_VERSION_MAJOR "${Tutorial_VERSION_MAJOR}")
+set(CPACK_PACKAGE_VERSION_MINOR "${Tutorial_VERSION_MINOR}")
+set(CPACK_SOURCE_GENERATOR "TGZ")
+include(CPack)
+
