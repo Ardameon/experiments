@@ -1,14 +1,25 @@
 // A simple program that computes the square root of a number
-#include <cmath>
 #include <iostream>
 #include <string>
 
 #include "TutorialConfig.h"
 
 // should we include the MathFunctions header?
-#ifdef USE_MYMATH
-#  include "MathFunctions.h"
+#include "MathFunctions.h"
+
+#if defined(_WIN32)
+#  if defined(EXPORTING_MYMATH)
+#    define DECLSPEC __declspec(dllexport)
+#  else
+#    define DECLSPEC __declspec(dllimport)
+#  endif
+#else // non windows
+#  define DECLSPEC
 #endif
+
+namespace mathfunctions {
+double DECLSPEC sqrt(double x);
+}
 
 int main(int argc, char* argv[])
 {
@@ -27,7 +38,7 @@ int main(int argc, char* argv[])
 #ifdef USE_MYMATH
   const double outputValue = mysqrt(inputValue);
 #else
-  const double outputValue = sqrt(inputValue);
+  const double outputValue = mathfunctions::sqrt(inputValue);
 #endif
 
   std::cout << "The square root of " << inputValue << " is " << outputValue
