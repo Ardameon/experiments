@@ -242,12 +242,42 @@ menu make.make_tags                                     :!ctags -R <CR><CR>:!<CR
 map <F7> :emenu make.<TAB>
 
 
-
 "-------- Подключаем файл настроек проекта -------
 if filereadable("project.vim")
         source project.vim
 endif 
 
+call plug#begin()
+Plug 'vim-airline/vim-airline'
+Plug 'scrooloose/nerdtree'
+"Plug 'cdelledonne/vim-cmake'
+"Plug 'ryanoasis/nerd-fonts'
+"Plug 'ryanoasis/vim-devicons'
+"Plug 'octol/vim-cpp-enhanced-highlight'
+Plug 'bfrg/vim-cpp-modern'
+Plug 'flazz/vim-colorschemes'
+Plug 'tpope/vim-fugitive'
+Plug 'ap/vim-css-color'
+call plug#end()
+
+"set encoding=UTF-8
 
 
+nnoremap <C-n> :NERDTreeToggle<CR>
 
+"set guifont=BitstreamVeraSansMono_NF:h13
+
+"octol/vim-cpp-enhanced-highlight
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
+let g:cpp_posix_standard = 1
+let g:cpp_experimental_simple_template_highlight = 1
+let g:cpp_concepts_highlight = 1
+
+"bfrg/vim-cpp-modern'
+let g:cpp_function_highlight = 0
+let g:cpp_member_highlight = 1
+let g:cpp_simple_highlight = 1
+
+highlight cStructMember ctermfg=lightblue
