@@ -179,7 +179,7 @@ map <F6> :tabnext <CR>
 " открыть файл history
 map <F10> :e history.txt<CR>
 " диалог открытия файла
-nmap <silent> <S-o> :CommandT<CR>
+"nmap <silent> <S-o> :CommandT<CR>
 
 
 " ================== Menu =============================
@@ -249,6 +249,7 @@ endif
 
 call plug#begin()
 Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 "Plug 'cdelledonne/vim-cmake'
 "Plug 'ryanoasis/nerd-fonts'
@@ -258,6 +259,7 @@ Plug 'bfrg/vim-cpp-modern'
 Plug 'flazz/vim-colorschemes'
 Plug 'tpope/vim-fugitive'
 Plug 'ap/vim-css-color'
+Plug 'powerline/fonts'
 call plug#end()
 
 "set encoding=UTF-8
@@ -281,3 +283,19 @@ let g:cpp_member_highlight = 1
 let g:cpp_simple_highlight = 1
 
 highlight cStructMember ctermfg=lightblue
+highlight cFormat ctermfg=green
+highlight cSpecial ctermfg=green
+highlight cLabel ctermfg=red
+highlight cUserLabel ctermfg=red
+highlight cCharacter ctermfg=green
+highlight cCppParen ctermfg=yellow
+highlight cCppBracket ctermfg=yellow
+highlight cBlock ctermfg=yellow
+"highlight cBitField ctermfg=red
+highlight cParen ctermfg=yellow
+highlight cBracket ctermfg=yellow
+
+"sudo apt-get install fonts-powerline
+let g:airline_powerline_fonts=1
+"let g:airline_left_sep = '▶'
+"let g:airline_right_sep = '◀'
