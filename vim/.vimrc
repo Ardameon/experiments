@@ -11,6 +11,7 @@ set langmap=йq,цw,уe,кr,еt,нy,гu,шi,щo,зp,х[,ъ],фa,ыs,вd,аf,пg,
 set autoindent          "включить автоотступы
 set smartindent         "Умные" отступы (например, автоотступ после {)
 set showmatch                   "показывать первую парную скобку после ввода второй ...
+set cindent
 syn on
 
 "включаем автодополнения 
@@ -259,7 +260,7 @@ Plug 'bfrg/vim-cpp-modern'
 Plug 'flazz/vim-colorschemes'
 Plug 'tpope/vim-fugitive'
 Plug 'ap/vim-css-color'
-Plug 'powerline/fonts'
+"Plug 'powerline/fonts'
 call plug#end()
 
 "set encoding=UTF-8
@@ -278,11 +279,11 @@ let g:cpp_experimental_simple_template_highlight = 1
 let g:cpp_concepts_highlight = 1
 
 "bfrg/vim-cpp-modern'
-let g:cpp_function_highlight = 0
+let g:cpp_function_highlight = 1
 let g:cpp_member_highlight = 1
 let g:cpp_simple_highlight = 1
 
-highlight cStructMember ctermfg=lightblue
+highlight cStructMember ctermfg=cyan
 highlight cFormat ctermfg=green
 highlight cSpecial ctermfg=green
 highlight cLabel ctermfg=red
@@ -294,6 +295,11 @@ highlight cBlock ctermfg=yellow
 "highlight cBitField ctermfg=red
 highlight cParen ctermfg=yellow
 highlight cBracket ctermfg=yellow
+highlight cComment ctermfg=grey
+highlight Function ctermfg=lightblue cterm=italic,bold term=italic,bold
+
+nnoremap <S-k> 5k
+nnoremap <S-j> 5j
 
 "sudo apt-get install fonts-powerline
 let g:airline_powerline_fonts=1
