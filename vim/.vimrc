@@ -261,6 +261,7 @@ Plug 'flazz/vim-colorschemes'
 Plug 'tpope/vim-fugitive'
 Plug 'ap/vim-css-color'
 "Plug 'powerline/fonts'
+Plug 'pboettch/vim-cmake-syntax'
 call plug#end()
 
 "set encoding=UTF-8
