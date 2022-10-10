@@ -248,6 +248,13 @@ if filereadable("project.vim")
         source project.vim
 endif 
 
+"VIMPLUG
+"Install for vim
+"curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+"Install for nvim
+"sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+
+
 call plug#begin()
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -301,6 +308,11 @@ highlight Function ctermfg=lightblue cterm=italic,bold term=italic,bold
 
 nnoremap <S-k> 5k
 nnoremap <S-j> 5j
+
+nnoremap <C-h> :tabprev<CR>
+nnoremap <C-l> :tabnext<CR>
+inoremap <C-h> <Esc>:tabprev<CR>
+inoremap <C-l> <Esc>:tabnext<CR>
 
 "sudo apt-get install fonts-powerline
 let g:airline_powerline_fonts=1
