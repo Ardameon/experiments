@@ -304,7 +304,7 @@ highlight cBlock ctermfg=yellow
 highlight cParen ctermfg=yellow
 highlight cBracket ctermfg=yellow
 highlight cComment ctermfg=grey
-highlight Function ctermfg=lightblue cterm=italic,bold term=italic,bold
+highlight Function ctermfg=lightblue cterm=bold term=bold
 
 nnoremap <S-k> 5k
 nnoremap <S-j> 5j
