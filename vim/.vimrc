@@ -149,8 +149,8 @@ nmap <S-Q> <c-W>c
 nmap < :bp<CR> 
 nmap > :bn<CR>
 " переключение между открытыми буферами по Tab - Shift Tab
-nmap <Tab> <c-W>w
-nmap <S-Tab> <c-W>W
+"nmap <Tab> <c-W>W - с этой опцией не работает кобинация <c-i>
+"nmap <S-Tab> <c-W>W
         " окно ниже и развернуть
         "imap <Tab> <Esc><C-W>j<C-W>_a
 "       nmap <Tab> <C-W>j<C-W>_
@@ -256,7 +256,7 @@ endif
 
 
 call plug#begin()
-Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline' "apt install fonts-powerline
 Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 "Plug 'cdelledonne/vim-cmake'
@@ -308,6 +308,8 @@ highlight Function ctermfg=lightblue cterm=bold term=bold
 
 nnoremap <S-k> 5k
 nnoremap <S-j> 5j
+vnoremap <S-k> 5k
+vnoremap <S-j> 5j
 
 nnoremap <C-h> :tabprev<CR>
 nnoremap <C-l> :tabnext<CR>
