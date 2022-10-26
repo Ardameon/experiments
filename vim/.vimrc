@@ -308,6 +308,7 @@ highlight cComment ctermfg=grey
 highlight Function ctermfg=lightblue cterm=bold term=bold
 "TABS are SpecialKey
 highlight SpecialKey ctermfg=240
+highlight Conceal ctermfg=240 ctermbg=NONE
 
 nnoremap <S-k> 5k
 nnoremap <S-j> 5j
@@ -330,6 +331,9 @@ let g:airline_powerline_fonts=1
 "IndentLine settings
 let g:indentLine_showFirstIndentLevel=1
 let g:indentLine_leadingSpaceEnabled=1
+let g:indentLine_setColors=0
+let g:indentLine_color_term=240
+let g:indentLine_color_tty_dark=0
 let g:indentLine_enabled=1
 "let g:indentLine_fileType = ['c', 'cpp']
 set list listchars=tab:\|\ "Display tabs as SpecialKey
