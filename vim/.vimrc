@@ -269,6 +269,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'ap/vim-css-color'
 "Plug 'powerline/fonts'
 Plug 'pboettch/vim-cmake-syntax'
+Plug 'Yggdroot/indentLine'
 call plug#end()
 
 "set encoding=UTF-8
@@ -305,6 +306,8 @@ highlight cParen ctermfg=yellow
 highlight cBracket ctermfg=yellow
 highlight cComment ctermfg=grey
 highlight Function ctermfg=lightblue cterm=bold term=bold
+"TABS are SpecialKey
+highlight SpecialKey ctermfg=240
 
 nnoremap <S-k> 5k
 nnoremap <S-j> 5j
@@ -316,7 +319,17 @@ nnoremap <C-l> :tabnext<CR>
 inoremap <C-h> <Esc>:tabprev<CR>
 inoremap <C-l> <Esc>:tabnext<CR>
 
+set expandtab "always use spaces instead of tabs
+set nowrap
+
 "sudo apt-get install fonts-powerline
 let g:airline_powerline_fonts=1
 "let g:airline_left_sep = '▶'
 "let g:airline_right_sep = '◀'
+
+"IndentLine settings
+let g:indentLine_showFirstIndentLevel=1
+let g:indentLine_leadingSpaceEnabled=1
+let g:indentLine_enabled=1
+"let g:indentLine_fileType = ['c', 'cpp']
+set list listchars=tab:\|\ "Display tabs as SpecialKey
