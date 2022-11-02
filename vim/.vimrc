@@ -331,9 +331,12 @@ let g:airline_powerline_fonts=1
 "IndentLine settings
 let g:indentLine_showFirstIndentLevel=1
 let g:indentLine_leadingSpaceEnabled=1
+"let g:indentLine_leadingSpaceChar = '.'
 let g:indentLine_setColors=0
 let g:indentLine_color_term=240
 let g:indentLine_color_tty_dark=0
-let g:indentLine_enabled=1
+let g:indentLine_bufTypeExclude = ['help', 'terminal']
+let g:indentLine_bufNameExclude = ['_.*', 'NERD_tree.*']
+"let g:indentLine_enabled=1
 "let g:indentLine_fileType = ['c', 'cpp']
 set list listchars=tab:\|\ "Display tabs as SpecialKey
