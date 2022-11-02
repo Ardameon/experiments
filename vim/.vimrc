@@ -270,6 +270,7 @@ Plug 'ap/vim-css-color'
 "Plug 'powerline/fonts'
 Plug 'pboettch/vim-cmake-syntax'
 Plug 'Yggdroot/indentLine'
+Plug 'junegunn/fzf'
 call plug#end()
 
 "set encoding=UTF-8
@@ -340,3 +341,7 @@ let g:indentLine_bufNameExclude = ['_.*', 'NERD_tree.*']
 "let g:indentLine_enabled=1
 "let g:indentLine_fileType = ['c', 'cpp']
 set list listchars=tab:\|\ "Display tabs as SpecialKey
+
+nnoremap <S-f> :FZF!<CR>
+"let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
+
