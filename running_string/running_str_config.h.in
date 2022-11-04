@@ -1,0 +1,11 @@
+//#ifndef RUNNING_STR_CONFIG_H_
+//#define RUNNING_STR_CONFIG_H_
+
+#define VERSION_MAJOR @RunningString_VERSION_MAJOR@
+#define VERSION_MINOR @RunningString_VERSION_MINOR@
+#define VERSION_PATCH @RunningString_VERSION_PATCH@
+
+
+
+
+//#endif
