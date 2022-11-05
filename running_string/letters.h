@@ -376,6 +376,17 @@ uint8_t letterSPACE[LETTER_HEIGHT] =
     0b00000,
 };
 
+uint8_t letterEXCLAMATION[LETTER_HEIGHT] = 
+{
+    0b00100,
+    0b00100,
+    0b00100,
+    0b00100,
+    0b00000,
+    0b00100,
+};
+
+
 
 
 

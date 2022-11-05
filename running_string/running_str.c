@@ -49,6 +49,8 @@ void *RS_LetterGet(char c)
         case '8': return letter8;
         case '9': return letter9;
 
+        case '!': return letterEXCLAMATION;
+
         default: return NULL;
     }
 }
