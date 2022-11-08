@@ -7,11 +7,11 @@ int main()
     Plane *plane = plane_create();
     PlaneAdapter *planoduck = plane_adapter_create(plane);
 
-    quack(duck);
-    fly(duck);
+    quack((IDuck *)duck);
+    fly((IDuck *)duck);
 
-    quack(planoduck);
-    fly(planoduck);
+    quack((IDuck *)planoduck);
+    fly((IDuck *)planoduck);
 
     duck_destroy(duck);
     plane_destroy(plane);

@@ -18,8 +18,8 @@ Duck *duck_create(void)
 {
     Duck *duck = malloc(sizeof(*duck));
 
-    duck->base.fly_func   = &duck_fly;
-    duck->base.quack_func = &duck_quack;
+    duck->base.fly_func   = (iduck_fly_func)   &duck_fly;
+    duck->base.quack_func = (iduck_quack_func) &duck_quack;
 
     return duck;
 }
@@ -30,12 +30,12 @@ void duck_destroy(Duck *duck)
         free(duck);
 }
 
-void duck_quack(struct IDuck *iduck)
+void duck_quack(IDuck *iduck)
 {
     printf("Quack as duck!\n");
 }
 
-void duck_fly(struct IDuck *iduck)
+void duck_fly(IDuck *iduck)
 {
     printf("Fly as duck\n");
 }
@@ -70,8 +70,8 @@ PlaneAdapter *plane_adapter_create(Plane *plane)
 {
     PlaneAdapter *pa = malloc(sizeof(*pa));
 
-    pa->base.fly_func   = &plane_adapter_fly;
-    pa->base.quack_func = &plane_adapter_quack;
+    pa->base.fly_func   = (iduck_fly_func)   &plane_adapter_fly;
+    pa->base.quack_func = (iduck_quack_func) &plane_adapter_quack;
 
     pa->plane = plane;
 
@@ -84,7 +84,7 @@ void plane_adapter_destroy(PlaneAdapter *adapter)
         free(adapter);
 }
 
-void plane_adapter_fly(struct IDuck *iduck)
+void plane_adapter_fly(IDuck *iduck)
 {
     PlaneAdapter *pa = iduck;
 
@@ -92,7 +92,7 @@ void plane_adapter_fly(struct IDuck *iduck)
         pa->plane->fly_func();
 }
 
-void plane_adapter_quack(struct IDuck *iduck)
+void plane_adapter_quack(IDuck *iduck)
 {
     PlaneAdapter *pa = iduck;
 
