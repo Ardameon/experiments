@@ -323,6 +323,8 @@ inoremap <C-l> <Esc>:tabnext<CR>
 
 set expandtab "always use spaces instead of tabs
 set nowrap
+set noswapfile "don't use .swp files
+set undofile   "store all undos to files (unlimited undo/redo)
 
 "sudo apt-get install fonts-powerline
 let g:airline_powerline_fonts=1
