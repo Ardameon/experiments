@@ -310,6 +310,8 @@ highlight Function ctermfg=lightblue cterm=bold term=bold
 "TABS are SpecialKey
 highlight SpecialKey ctermfg=240
 highlight Conceal ctermfg=240 ctermbg=NONE
+highlight CursorLineNr ctermfg=grey cterm=bold ctermbg=234
+highlight CursorLine cterm=NONE ctermbg=234
 
 nnoremap <S-k> 5k
 nnoremap <S-j> 5j
@@ -344,6 +346,12 @@ let g:indentLine_bufNameExclude = ['_.*', 'NERD_tree.*']
 "let g:indentLine_fileType = ['c', 'cpp']
 set list listchars=tab:\|\ "Display tabs as SpecialKey
 
+"execute "set <A-f>=\ef"
 nnoremap <S-f> :FZF!<CR>
+
+set cursorline
+set relativenumber
+
+
 "let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 
