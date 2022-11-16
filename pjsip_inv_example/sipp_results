@@ -1,0 +1,111 @@
+1. Traffic with 20 simultaneous calls during approximately 1-1,5 hours:
+
+tester@pavel-H410M-S2H-V3:~/test_bin$ sipp -sf /home/tester/test_bin/uac_test.xml -inf /home/tester/test_bin/extension.csv -l 20 -i 10.25.72.97 192.168.23.149:5062
+Resolving remote host '192.168.23.149'... Done.
+------------------------------ Scenario Screen -------- [1-9]: Change Screen --
+  Call rate (length)   Port   Total-time  Total-calls  Remote-host
+  10,0(0 ms)/1,000s   5061    6333.41 s         6300  192.168.23.149:5062(UDP)
+
+  0 new calls during 0.000 s period       0 ms scheduler resolution            
+  0 calls (limit 20)                      Peak was 20 calls, after 2 s
+  0 Running, 41 Paused, 0 Woken up
+  0 dead call msg (discarded)             0 out-of-call msg (discarded)
+  0 open sockets                          0/0/0 UDP errors (send/recv/cong)
+  0 open sockets                          0/0/0 UDP errors (send/recv/cong)
+
+                                 Messages  Retrans   Timeout   Unexpected-Msg
+0 :      INVITE ---------->         6300      0         0                      
+1 :         100 <----------         6300      0         0         0            
+2 :         180 <----------         6300      0         0         0            
+3 :         183 <----------         0         0         0         0            
+4 :         200 <----------  E-RTD1 6300      0         0         0            
+5 :         ACK ---------->         6300      0                                
+6 :       Pause [      0ms]         6300                          0        
+7 :         BYE <----------         6300      0         0         0            
+8 :         200 ---------->         6300      0                                
+9 :       Pause [   4000ms]         6300                          0        
+------------------------------ Test Terminated --------------------------------
+----------------------------- Statistics Screen ------- [1-9]: Change Screen --
+  Start Time             | 2022-11-09	21:21:55.282992	1668003715.282992         
+  Last Reset Time        | 2022-11-09	23:07:28.698661	1668010048.698661         
+  Current Time           | 2022-11-09	23:07:28.699472	1668010048.699472         
+-------------------------+---------------------------+--------------------------
+  Counter Name           | Periodic value            | Cumulative value
+-------------------------+---------------------------+--------------------------
+  Elapsed Time           | 00:00:00:000000           | 00:00:00:000000          
+  Call Rate              |    0,000 cps              |    0,995 cps             
+-------------------------+---------------------------+--------------------------
+  Incoming calls created |        0                  |        0                 
+  Outgoing calls created |        0                  |     6300                 
+  Total Calls created    |                           |     6300                 
+  Current Calls          |        0                  |                          
+-------------------------+---------------------------+--------------------------
+  Successful call        |        0                  |     6300                 
+  Failed call            |        0                  |        0                 
+-------------------------+---------------------------+--------------------------
+  Response Time 1        | 00:00:00:000000           | 00:00:00:000000          
+  Call Length            | 00:00:00:000000           | 00:00:00:000000          
+------------------------------ Test Terminated --------------------------------
+
+
+
+2. More than 20 simultaneous calls:
+tester@pavel-H410M-S2H-V3:~/test_bin$ sipp -sf /home/tester/test_bin/uac_test.xml -inf /home/tester/test_bin/extension.csv -m 22 -l 22 -i 10.25.72.97 192.168.23.149:5062
+Resolving remote host '192.168.23.149'... Done.
+------------------------------ Scenario Screen -------- [1-9]: Change Screen --
+  Call rate (length)   Port   Total-time  Total-calls  Remote-host
+  10,0(0 ms)/1,000s   5061      22.01 s           22  192.168.23.149:5062(UDP)
+
+  Call limit 22 hit, 0,0 s period         0 ms scheduler resolution            
+  0 calls (limit 22)                      Peak was 21 calls, after 2 s
+  0 Running, 23 Paused, 0 Woken up
+  0 dead call msg (discarded)             0 out-of-call msg (discarded)
+  0 open sockets                          0/0/0 UDP errors (send/recv/cong)
+  0 open sockets                          0/0/0 UDP errors (send/recv/cong)
+
+                                 Messages  Retrans   Timeout   Unexpected-Msg
+0 :      INVITE ---------->         22        0         0                      
+1 :         100 <----------         20        0         0         2            
+2 :         180 <----------         20        0         0         0            
+3 :         183 <----------         0         0         0         0            
+4 :         200 <----------  E-RTD1 20        0         0         0            
+5 :         ACK ---------->         20        0                                
+6 :       Pause [      0ms]         20                            0        
+7 :         BYE <----------         20        0         0         0            
+8 :         200 ---------->         20        0                                
+9 :       Pause [   4000ms]         20                            0        
+------------------------------ Test Terminated --------------------------------
+----------------------------- Statistics Screen ------- [1-9]: Change Screen --
+  Start Time             | 2022-11-09	23:11:08.829003	1668010268.829003         
+  Last Reset Time        | 2022-11-09	23:11:30.842646	1668010290.842646         
+  Current Time           | 2022-11-09	23:11:30.843473	1668010290.843473         
+-------------------------+---------------------------+--------------------------
+  Counter Name           | Periodic value            | Cumulative value
+-------------------------+---------------------------+--------------------------
+  Elapsed Time           | 00:00:00:000000           | 00:00:00:000000          
+  Call Rate              |    0,000 cps              |    0,999 cps             
+-------------------------+---------------------------+--------------------------
+  Incoming calls created |        0                  |        0                 
+  Outgoing calls created |        0                  |       22                 
+  Total Calls created    |                           |       22                 
+  Current Calls          |        0                  |                          
+-------------------------+---------------------------+--------------------------
+  Successful call        |        0                  |       20                 
+  Failed call            |        0                  |        2                 
+-------------------------+---------------------------+--------------------------
+  Response Time 1        | 00:00:00:000000           | 00:00:00:000000          
+  Call Length            | 00:00:00:000000           | 00:00:00:000000          
+------------------------------ Test Terminated --------------------------------
+2022-11-09	23:11:11.034082	1668010271.034082: Aborting call on unexpected message for Call-Id '22-548228@10.25.72.97': while expecting '100' (index 1), received 'SIP/2.0 486 Too many calls
+Via: SIP/2.0/UDP 10.25.72.97:5061;received=10.25.72.97;branch=z9hG4bK-548228-22-0
+Call-ID: 22-548228@10.25.72.97
+From: "sipp" <sip:sipp@10.25.72.97>;tag=548228SIPpTag0022
+To: "1111" <sip:1111@192.168.23.149>;tag=z9hG4bK-548228-22-0
+CSeq: 1 INVITE
+Content-Length:  0
+
+'
+There were more errors, enable -trace_err to log them.
+
+Note: two calls were failed, there are not described by sipp scenario. SIP 486 busy message is sent after 20 call.
+
