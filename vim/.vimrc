@@ -326,7 +326,6 @@ inoremap <C-l> <Esc>:tabnext<CR>
 set expandtab "always use spaces instead of tabs
 set nowrap
 set noswapfile "don't use .swp files
-set undofile   "store all undos to files (unlimited undo/redo)
 
 "sudo apt-get install fonts-powerline
 let g:airline_powerline_fonts=1
@@ -348,10 +347,20 @@ set list listchars=tab:\|\ "Display tabs as SpecialKey
 
 "execute "set <A-f>=\ef"
 nnoremap <S-f> :FZF!<CR>
+"let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 
 set cursorline
 set relativenumber
+set nobackup
+set writebackup
 
-
-"let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
+" Let's save undo info!
+if !isdirectory($HOME."/.vim")
+    call mkdir($HOME."/.vim", "", 0770)
+endif
+if !isdirectory($HOME."/.vim/undo-dir")
+    call mkdir($HOME."/.vim/undo-dir", "", 0700)
+endif
+set undodir=~/.vim/undo-dir
+set undofile
 
