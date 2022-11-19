@@ -364,3 +364,12 @@ endif
 set undodir=~/.vim/undo-dir
 set undofile
 
+"search for tags in current file dirrectory, then search for tags in all upper
+"dirrectories till $HOME
+set tags=./tags,tags;$HOME
+
+"To create tags of system files and custom files
+"$ sudo apt install exuberant-ctags
+"$ ctags --c-kinds=+p -R /usr/include/
+"$ ctags --c-kinds=+p -R *
+
