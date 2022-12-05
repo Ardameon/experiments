@@ -160,9 +160,9 @@ nmap > :bn<CR>
 " запускаем shell
 map <F1> :shell<CR>
 " переключиться между хидером и файлом
-map <F2> :A<CR>
+"map <F2> :A<CR>
 " покахать/скрыть tag list
-map <F3> :TlistToggle<CR>
+"map <F3> :TlistToggle<CR>
 "открыть новую вкладку
 imap <F4> <Esc>:browse tabnew<CR> 
 map <F4> <Esc>:browse tabnew<CR>
@@ -368,8 +368,16 @@ set undofile
 "dirrectories till $HOME
 set tags=./tags,tags;$HOME
 
+"Go to next tag (should be used afre 'CTRL-]')
+nnoremap <F2> :tn<CR>
+"Show tags list to select (should be used afre 'CTRL-]')
+nnoremap <F3> :ts<CR>
+
+"'CTRL-]' - search and go to tag under cursor
+"'CTRL-T' - pop all tag-stack
+
 "To create tags of system files and custom files
-"$ sudo apt install exuberant-ctags
+"$ sudo apt install universal-ctags
 "$ ctags --c-kinds=+p -R /usr/include/
 "$ ctags --c-kinds=+p -R *
 
