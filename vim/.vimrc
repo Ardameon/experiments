@@ -138,11 +138,11 @@ map <s-down>    :resize +20<CR>
 map <s-up>      :resize -20<CR>
 " коментирование - ракоментирования текста
 map <C-K> :s/^/\/\//<CR>:nohl<CR>
-map <C-U> :s/^\/\///<CR>:nohl<CR>
+"map <C-U> :s/^\/\///<CR>:nohl<CR>
 " создание табов
 nmap <S-T> :tabnew<CR>
 " удаление буфера
-nmap <C-D> :Kwbd<CR>
+"nmap <C-D> :Kwbd<CR>
 nmap <S-Q> <c-W>c
 "<c-W>c
 " переключение буферов и табов
