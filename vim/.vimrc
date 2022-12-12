@@ -140,7 +140,7 @@ map <s-up>      :resize -20<CR>
 map <C-K> :s/^/\/\//<CR>:nohl<CR>
 "map <C-U> :s/^\/\///<CR>:nohl<CR>
 " создание табов
-nmap <S-T> :tabnew<CR>
+"nmap <S-T> :tabnew<CR>
 " удаление буфера
 "nmap <C-D> :Kwbd<CR>
 nmap <S-Q> <c-W>c
@@ -271,6 +271,7 @@ Plug 'ap/vim-css-color'
 Plug 'pboettch/vim-cmake-syntax'
 Plug 'Yggdroot/indentLine'
 Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
 call plug#end()
 
@@ -354,8 +355,22 @@ let g:indentLine_bufNameExclude = ['_.*', 'NERD_tree.*']
 set list listchars=tab:\|\ "Display tabs as SpecialKey
 
 "execute "set <A-f>=\ef"
-nnoremap <S-f> :FZF!<CR>
-"let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
+"for good fzf need actual vim, you can install it manually from ppa
+"   sudo add-apt-repository ppa:jonathonf/vim
+"apt install fzf
+"apt install rg
+"
+"For syntax highlighting we need to install bat
+"
+"$ sudo apt install bat 
+"$ mkdir -p ~/.local/bin
+"$ ln -s /usr/bin/batcat ~/.local/bin/bat
+"
+"help fzf-vim - for more info
+nnoremap <S-f> :Rg<CR>
+nnoremap <S-p> :FZF<CR>
+nnoremap <S-t> :Tags<CR>
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 
 set cursorline
 set relativenumber
