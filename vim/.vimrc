@@ -271,10 +271,18 @@ Plug 'ap/vim-css-color'
 Plug 'pboettch/vim-cmake-syntax'
 Plug 'Yggdroot/indentLine'
 Plug 'junegunn/fzf'
+Plug 'tpope/vim-surround'
 call plug#end()
 
 "set encoding=UTF-8
 
+"vim-surround commands:
+"
+"csbB csrb csrB csBr cs'" cs'(
+"ds" dsb dsB dsr ds<pre> ds{
+"yssb yssB yssr yss"
+"ySSb ySS{ yss<pre>
+"vS" vSb vSB
 
 nnoremap <C-n> :NERDTreeToggle<CR>
 
