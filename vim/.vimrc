@@ -367,10 +367,44 @@ set list listchars=tab:\|\ "Display tabs as SpecialKey
 "$ ln -s /usr/bin/batcat ~/.local/bin/bat
 "
 "help fzf-vim - for more info
+
+command! -bang -nargs=* CustomBLines
+    \ call fzf#vim#grep(
+    \   'rg --with-filename --column --line-number --no-heading --smart-case . '.fnameescape(expand('%')), 1,
+    \   fzf#vim#with_preview({'options': '--keep-right --delimiter : --nth 4.. --preview "bat -p --color always {}"'}, 'up:60%' ))
+
+let mapleader = " "
+
+"global content search
 nnoremap <S-f> :Rg<CR>
-nnoremap <S-p> :FZF<CR>
+"global content search using word under cursor"
+nnoremap <Leader>f :Rg <C-R><C-W><CR>
+"file content search
+nnoremap <C-f> :CustomBLines<CR>
+"global file search
+nnoremap <C-p> :FZF<CR>
+nnoremap <leader>p :FZF<CR>
+"global tags search
 nnoremap <S-t> :Tags<CR>
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
+"global tags search using word under cursor
+nnoremap <leader>t :Tags <C-R><C-W><CR>
+"file lines search
+nnoremap <S-l> :Lines<CR>
+"buffers search
+nnoremap <leader>b :Buffers<CR>
+"marks of file
+nnoremap <leader>m :Marks<CR>
+"git diffs show
+nnoremap <leader>g :GFiles?<CR>
+"git show commits
+nnoremap <leader>c :Commits<CR>
+"remove search result highlighting
+nnoremap <leader>h :noh<CR>
+
+
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
+let g:fzf_tags_command = 'ctags -R --c-kinds=+p'
+let g:fzf_preview_window = ['up,60%', 'ctrl-/']
 
 set cursorline
 set relativenumber
