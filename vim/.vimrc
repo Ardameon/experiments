@@ -14,7 +14,7 @@ set showmatch                   "показывать первую парную 
 set cindent
 syn on
 
-"включаем автодополнения 
+"включаем автодополнения
 autocmd FileType c set omnifunc=ccomplete#Complete
 set omnifunc=syntaxcomplete#Complete
 
@@ -52,7 +52,7 @@ set complete="" "Слова откуда будем завершать
 set complete+=. "Из текущего буфера
 set complete+=k "Из словаря
 set complete+=b "Из других открытых буферов
-set complete+=t "из тегов 
+set complete+=t "из тегов
 set backspace=2 "разрешить backspace в режиме вставки
 " включаем проверку синтаксиса
 let g:syntastic_enable_signs=1
@@ -72,7 +72,7 @@ highlight String ctermfg=green
 highlight Conditional ctermfg=yellow
 highlight LineNr ctermfg=240
 highlight Number ctermfg=red
-highlight Constant ctermfg=magenta 
+highlight Constant ctermfg=magenta
 highlight cFormat ctermfg=magenta
 highlight cSpecial ctermfg=magenta
 highlight cType ctermfg=yellow
@@ -146,7 +146,7 @@ map <C-K> :s/^/\/\//<CR>:nohl<CR>
 nmap <S-Q> <c-W>c
 "<c-W>c
 " переключение буферов и табов
-nmap < :bp<CR> 
+nmap < :bp<CR>
 nmap > :bn<CR>
 " переключение между открытыми буферами по Tab - Shift Tab
 "nmap <Tab> <c-W>W - с этой опцией не работает кобинация <c-i>
@@ -164,7 +164,7 @@ map <F1> :shell<CR>
 " покахать/скрыть tag list
 "map <F3> :TlistToggle<CR>
 "открыть новую вкладку
-imap <F4> <Esc>:browse tabnew<CR> 
+imap <F4> <Esc>:browse tabnew<CR>
 map <F4> <Esc>:browse tabnew<CR>
 
 " открыть проводник vim
@@ -227,7 +227,7 @@ map <F11> :emenu vim.<TAB>
 "menu svn.commit_this            :!svn ci % --editor-cmd vim <CR><CR>:!<CR><CR>
 "menu svn.status                                 :new<CR>:read !svn status<CR>:set buftype=nofile<CR>:/^[!ACDIMRX] .*<CR>
 "menu svn.commit                                 :!svn ci --editor-cmd vim <CR><CR>:!<CR><CR>
-"menu svn.update                                 :!svn up --editor-cmd vim <CR> 
+"menu svn.update                                 :!svn up --editor-cmd vim <CR>
 "menu svn.log                                            :new<CR>:read !svn log <CR>:set buftype=nofile<CR>gg:/^r[0-9]*<CR>
 "menu svn.diff                                           :new<CR>:read !svn diff -x -b<CR>:set syntax=diff buftype=nofile<CR>gg
 "menu svn.browser                                :!svnb<CR>
@@ -246,7 +246,7 @@ map <F7> :emenu make.<TAB>
 "-------- Подключаем файл настроек проекта -------
 if filereadable("project.vim")
         source project.vim
-endif 
+endif
 
 "VIMPLUG
 "Install for vim
@@ -363,7 +363,7 @@ execute "set <A-f>=\ef"
 "
 "For syntax highlighting we need to install bat
 "
-"$ sudo apt install bat 
+"$ sudo apt install bat
 "$ mkdir -p ~/.local/bin
 "$ ln -s /usr/bin/batcat ~/.local/bin/bat
 "
@@ -439,3 +439,5 @@ nnoremap <F3> :ts<CR>
 "$ ctags --c-kinds=+p -R /usr/include/
 "$ ctags --c-kinds=+p -R *
 
+"autoremove trailing whitespaces aftr saving file
+autocmd BufWritePre * :%s/\s\+$//e
