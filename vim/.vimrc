@@ -354,7 +354,8 @@ let g:indentLine_bufNameExclude = ['_.*', 'NERD_tree.*']
 "let g:indentLine_fileType = ['c', 'cpp']
 set list listchars=tab:\|\ "Display tabs as SpecialKey
 
-"execute "set <A-f>=\ef"
+"alt + f alias
+execute "set <A-f>=\ef"
 "for good fzf need actual vim, you can install it manually from ppa
 "   sudo add-apt-repository ppa:jonathonf/vim
 "apt install fzf
@@ -376,7 +377,7 @@ command! -bang -nargs=* CustomBLines
 let mapleader = " "
 
 "global content search
-nnoremap <S-f> :Rg<CR>
+nnoremap <A-f> :Rg<CR>
 "global content search using word under cursor"
 nnoremap <Leader>f :Rg <C-R><C-W><CR>
 "file content search
