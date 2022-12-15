@@ -441,3 +441,21 @@ nnoremap <F3> :ts<CR>
 
 "autoremove trailing whitespaces aftr saving file
 autocmd BufWritePre * :%s/\s\+$//e
+
+" Determines whether to use spaces or tabs on the current buffer.
+function TabsOrSpaces()
+    if getfsize(bufname("%")) > 256000
+        " File is very large, just use the default.
+        return
+    endif
+
+    let numTabs=len(filter(getbufline(bufname("%"), 1, 250), 'v:val =~ "^\\t"'))
+    let numSpaces=len(filter(getbufline(bufname("%"), 1, 250), 'v:val =~ "^ "'))
+
+    if numTabs > numSpaces
+        setlocal noexpandtab
+    endif
+endfunction
+
+" Call the function after opening a buffer
+autocmd BufReadPost * call TabsOrSpaces()
