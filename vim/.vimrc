@@ -275,6 +275,8 @@ Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
 call plug#end()
 
+let mapleader = " "
+
 "set encoding=UTF-8
 
 "vim-surround commands:
@@ -327,6 +329,19 @@ nnoremap <S-j> 5j
 vnoremap <S-k> 5k
 vnoremap <S-j> 5j
 
+"moving selected lines
+"vnoremap J :m '>+1<CR>gv=gv
+"vnoremap K :m '<-2<CR>gv=gv
+
+"always center cursor line after moving
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+"nnoremap <C-i> <C-i>zz
+"nnoremap <C-o> <C-o>zz
+"center cursor line on search movings
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
 nnoremap <C-h> :tabprev<CR>
 nnoremap <C-l> :tabnext<CR>
 inoremap <C-h> <Esc>:tabprev<CR>
@@ -373,8 +388,6 @@ command! -bang -nargs=* CustomBLines
     \ call fzf#vim#grep(
     \   'rg --with-filename --column --line-number --no-heading --smart-case . '.fnameescape(expand('%')), 1,
     \   fzf#vim#with_preview({'options': '--keep-right --delimiter : --nth 4.. --preview "bat -p --color always {}"'}, 'up:60%' ))
-
-let mapleader = " "
 
 "global content search
 nnoremap <A-f> :Rg<CR>
