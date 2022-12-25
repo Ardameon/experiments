@@ -472,3 +472,5 @@ endfunction
 
 " Call the function after opening a buffer
 autocmd BufReadPost * call TabsOrSpaces()
+
+nnoremap <leader>r yi{
