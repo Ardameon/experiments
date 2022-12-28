@@ -389,6 +389,26 @@ command! -bang -nargs=* CustomBLines
     \   'rg --with-filename --column --line-number --no-heading --smart-case . '.fnameescape(expand('%')), 1,
     \   fzf#vim#with_preview({'options': '--keep-right --delimiter : --nth 4.. --preview "bat -p --color always {}"'}, 'up:60%' ))
 
+"Marks command with preview
+function! s:fzf_preview_p(bang, ...) abort
+    let preview_args = get(g:, 'fzf_preview_window', ['up:50%', 'ctrl-/'])
+    if empty(preview_args)
+        return { 'options': ['--preview-window', 'hidden'] }
+    endif
+
+    " For backward-compatiblity
+    if type(preview_args) == type('')
+        let preview_args = [preview_args]
+    endif
+    return call('fzf#vim#with_preview', extend(copy(a:000), preview_args))
+endfunction
+
+command! -bar -bang MP
+            \ call fzf#vim#marks(
+            \     s:fzf_preview_p(<bang>0, {'placeholder': '$([ -r $(echo {4} | sed "s#^~#$HOME#") ]  && [ -n {4} ] || echo ' . fzf#shellescape(expand('%')) . '):{2}',
+            \               'options': '--preview-window +{2}-/2'}),
+            \     <bang>0)
+
 "global content search
 nnoremap <A-f> :Rg<CR>
 "global content search using word under cursor"
@@ -407,7 +427,7 @@ nnoremap <S-l> :Lines<CR>
 "buffers search
 nnoremap <leader>b :Buffers<CR>
 "marks of file
-nnoremap <leader>m :Marks<CR>
+nnoremap <leader>m :MP<CR>
 "git diffs show
 nnoremap <leader>g :GFiles?<CR>
 "git show commits
