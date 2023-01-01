@@ -437,7 +437,7 @@ nnoremap <leader>h :noh<CR>
 
 
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
-let g:fzf_tags_command = 'ctags -R --c-kinds=+p'
+let g:fzf_tags_command = 'ctags -R --c-kinds=+pxl'
 let g:fzf_preview_window = ['up,60%', 'ctrl-/']
 
 set cursorline
@@ -493,4 +493,7 @@ endfunction
 " Call the function after opening a buffer
 autocmd BufReadPost * call TabsOrSpaces()
 
+"Go to start of block
 nnoremap <leader>r yi{
+"For pointers in C/C++
+inoremap <C-o> ->
