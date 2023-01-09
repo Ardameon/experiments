@@ -1,0 +1,10 @@
+user;project;version;ref;status;subject;tags;
+Александр Лещев;-;;-;-;-;-;-;
+Роман Рупп;SMG gateway;3.20.5 (Patch) [Росгвардия, Эксплуатация];234517;In Progress;[SMG200][Ростелеком, Филиал в Республике Марий Эл] Нет слышимости FXO-FXO при выходе через IVR;['plan_month_01', 'plan_week_02'];12.0;P4;;
+Артем Щерба;SMG gateway;3.403.0 (Develop);207685;In Progress;[Микротек, г. Москва][SMG2016] При отправке SNMP запроса ifAdminStatus умирает switchd;['plan_month_1', 'plan_week_2'];1.0;P4;;
+Владимир Алексеев;SMG gateway;3.20.5 (Patch) [Росгвардия, Эксплуатация];233069;In Progress;Некорректно отрабатывают таймеры "Настройки цикла обзвона" задачи СГО;['plan_month_01', 'plan_week_02'];0;P4;;
+Игорь Липовцев;SMG gateway;3.20.5 (Patch) [Росгвардия, Эксплуатация];234189;In Progress;Включить голосовое уведомление о записи разговора в запись разговора;['sdvoip', 'plan_month_12', 'plan_week_52', 'plan_month_01', 'plan_week_02', 'plan_week_03'];10.0;P4;;
+Кристина Михед;SMG gateway;SMG Support - Kanban (2023);235147;In Progress;[ПАО МГТС, г Москва] Информация о падении линка (SD56749);['sdvoip'];3.0;P4;;
+Ксения Михед;SMG gateway;3.20.5 (Patch) [Росгвардия, Эксплуатация];235289;In Progress;[SMG1016M/2016/3016] Проигрывать КПВ при обратном вызове из удержания;['plan_month_01', 'plan_week_02'];7.0;P4;;
+Владислав Бражников;SMG gateway;3.20.5 (Patch) [Росгвардия, Эксплуатация];225429;In Progress;[СГО|ОЛС] Парсинг файла с задачами;['plan_month_01', 'plan_week_02'];117.0;P4;;
+Илья Трухин;SMG gateway;3.403.0 (Develop);231940;In Progress;Сохранять базу абонентов только при включенной опции "Хранить базу данных абонентов";['plan_month_12', 'plan_week_52', 'plan_month_01', 'plan_week_02'];9.0;P4;;
