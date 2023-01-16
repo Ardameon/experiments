@@ -336,8 +336,8 @@ vnoremap <S-j> 5j
 "always center cursor line after moving
 nnoremap <C-d> <C-d>zz
 nnoremap <C-u> <C-u>zz
-"nnoremap <C-i> <C-i>zz
-"nnoremap <C-o> <C-o>zz
+nnoremap <C-i> <C-i>zz
+nnoremap <C-o> <C-o>zz
 "center cursor line on search movings
 nnoremap n nzzzv
 nnoremap N Nzzzv
