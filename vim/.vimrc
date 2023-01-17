@@ -281,11 +281,11 @@ let mapleader = " "
 
 "vim-surround commands:
 "
-"csbB csrb csrB csBr cs'" cs'(
-"ds" dsb dsB dsr ds<pre> ds{
-"yssb yssB yssr yss"
+"csbB csrb csrB csBr cs'< cs'(
+"ds' dsb dsB dsr ds<pre> ds{
+"yssb yssB yssr yss'
 "ySSb ySS{ yss<pre>
-"vS" vSb vSB
+"vS' vSb vSB
 
 nnoremap <C-n> :NERDTreeToggle<CR>
 
@@ -349,7 +349,9 @@ inoremap <C-l> <Esc>:tabnext<CR>
 
 set expandtab "always use spaces instead of tabs
 set nowrap
-set noswapfile "don't use .swp files
+
+"don't use .swp files
+"set noswapfile
 
 "sudo apt-get install fonts-powerline
 let g:airline_powerline_fonts=1
