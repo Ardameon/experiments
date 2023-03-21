@@ -462,7 +462,7 @@ set undofile
 set tags=./tags,tags;$HOME
 
 "Go to next tag (should be used afre 'CTRL-]')
-nnoremap <F2> :tn<CR>
+nnoremap <F2> :tn<CR>zz
 "Show tags list to select (should be used afre 'CTRL-]')
 nnoremap <F3> :ts<CR>
 

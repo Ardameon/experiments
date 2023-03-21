@@ -18,18 +18,7 @@ syn on
 autocmd FileType c set omnifunc=ccomplete#Complete
 set omnifunc=syntaxcomplete#Complete
 
-" Автозавершение слов по tab =)
-function! InsertTabWrapper()
-        let col = col('.') - 1
-        if !col || getline('.')[col - 1] !~ '\k'
-                return "\<tab>"
-        else
-                " если назад по строке встречается точка '.' или стрелка '->' и до точки или стрелки есть слово
-                " найти его тип, и показать все члены этого типа из tags
-                return "\<c-p>"
-        endif
-endfunction
-imap <tab> <c-r>=InsertTabWrapper()<cr>
+imap <tab> <c-p>
 
 "function! SuperCleverTab()
 "    if strpart(getline('.'), 0, col('.') - 1)
