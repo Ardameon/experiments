@@ -461,6 +461,8 @@ set undofile
 "dirrectories till $HOME
 set tags=./tags,tags;$HOME
 
+"Center screen after going to tag
+nnoremap <C-]> <C-]>zz
 "Go to next tag (should be used afre 'CTRL-]')
 nnoremap <F2> :tn<CR>zz
 "Show tags list to select (should be used afre 'CTRL-]')
