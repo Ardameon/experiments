@@ -132,7 +132,7 @@ void wav_check(FILE *f)
     stWAVHeader hdr;
     uint8_t buff[sizeof(stELTEXextension) + 1] = {0};
     stELTEXextension *ext;
-    uint8_t marked_as_read;
+    uint8_t marked_as_read = 0;
 
     fread(&hdr, 1, sizeof(hdr), f);
 
@@ -140,7 +140,9 @@ void wav_check(FILE *f)
 
     fread(buff, 1, sizeof(buff), f);
     ext = (stELTEXextension *)buff;
-    marked_as_read = ext->data[0];
+
+    if (!strncmp(ext->name, ELTEX_EXTENSION_STR, strlen(ELTEX_EXTENSION_STR)))
+        marked_as_read = ext->data[0];
 
     printf("File %s\n", marked_as_read ? "READ" : "UNREAD");
 
