@@ -520,9 +520,9 @@ if executable('ccls')
 endif
 
 " Key bindings for vim-lsp.
-nn <F2> :LspDefinition<cr>zz
+"nn <F2> :LspDefinition<cr>zz
 nn <leader>d :LspDefinition<cr>zz
-nn <F3> :tn<CR>zz
+"nn <F3> :tn<CR>zz
 "nn <silent> <M-r> :LspReferences<cr>
 "nn <f2> :LspRename<cr>
 "nn <silent> <M-a> :LspWorkspaceSymbol<cr>
@@ -547,3 +547,13 @@ let g:asyncomplete_popup_delay = 200
 
 highlight Pmenu ctermfg=0 ctermbg=177 guibg=NONE
 highlight SignColumn ctermfg=red ctermbg=234 guibg=NONE
+
+" Install python pylsp server (apt install python3-pylsp)
+if executable('pylsp')
+    " pip install python-lsp-server
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pylsp',
+        \ 'cmd': {server_info->['pylsp']},
+        \ 'allowlist': ['python'],
+        \ })
+endif
