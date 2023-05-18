@@ -273,6 +273,11 @@ Plug 'Yggdroot/indentLine'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
+" Plugins for Language server support
+Plug 'prabirshrestha/vim-lsp'
+Plug 'mattn/vim-lsp-settings'
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
 call plug#end()
 
 let mapleader = " "
@@ -413,6 +418,7 @@ command! -bar -bang MP
 
 "global content search
 nnoremap <A-f> :Rg<CR>
+nnoremap <M-g> :Rg<CR>
 "global content search using word under cursor"
 nnoremap <Leader>f :Rg <C-R><C-W><CR>
 "file content search
@@ -501,3 +507,43 @@ autocmd BufReadPost * call TabsOrSpaces()
 nnoremap <leader>r yi{
 "For pointers in C/C++
 inoremap <C-o> ->
+
+" Register ccls C++ lanuage server.
+if executable('ccls')
+   au User lsp_setup call lsp#register_server({
+      \ 'name': 'ccls',
+      \ 'cmd': {server_info->['ccls']},
+      \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
+      \ 'initialization_options': {'cache': {'directory': expand('~/.cache/ccls') }},
+      \ 'allowlist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
+      \ })
+endif
+
+" Key bindings for vim-lsp.
+nn <F2> :LspDefinition<cr>zz
+nn <leader>d :LspDefinition<cr>zz
+nn <F3> :tn<CR>zz
+"nn <silent> <M-r> :LspReferences<cr>
+"nn <f2> :LspRename<cr>
+"nn <silent> <M-a> :LspWorkspaceSymbol<cr>
+"nn <silent> <M-l> :LspDocumentSymbol<cr>
+
+" Key bindings for asyncomplete
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
+imap <c-@> <Plug>(asyncomplete_force_refresh)
+
+let g:lsp_auto_enable = 1
+"let g:lsp_completion_documentation_delay = 520
+let g:lsp_diagnostics_enabled = 1
+let g:lsp_diagnostics_echo_cursor = 1
+let g:lsp_diagnostics_float_cursor = 1
+"let g:lsp_preview_float = 1
+"let g:lsp_preview_max_height = 6
+"let g:lsp_hover_ui = 'preview'
+
+let g:asyncomplete_popup_delay = 200
+
+highlight Pmenu ctermfg=0 ctermbg=177 guibg=NONE
+highlight SignColumn ctermfg=red ctermbg=234 guibg=NONE
