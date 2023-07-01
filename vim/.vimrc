@@ -527,6 +527,8 @@ nn <leader>d :LspDefinition<cr>zz
 "nn <f2> :LspRename<cr>
 "nn <silent> <M-a> :LspWorkspaceSymbol<cr>
 "nn <silent> <M-l> :LspDocumentSymbol<cr>
+nn <leader>l :call lsp#enable()<cr>
+nn <leader>L :call lsp#disable()<cr>
 
 " Key bindings for asyncomplete
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
