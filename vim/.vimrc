@@ -328,6 +328,11 @@ highlight SpecialKey ctermfg=240
 highlight Conceal ctermfg=240 ctermbg=NONE
 highlight CursorLineNr ctermfg=grey cterm=bold ctermbg=234
 highlight CursorLine cterm=NONE ctermbg=234
+highlight diffAdded ctermfg=10 cterm=bold
+highlight diffRemoved ctermfg=9 cterm=bold
+highlight diffSubname ctermfg=lightblue
+"highlight link diffSubname Identifier
+
 
 nnoremap <S-k> 5k
 nnoremap <S-j> 5j
