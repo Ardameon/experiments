@@ -528,6 +528,8 @@ endif
 " Key bindings for vim-lsp.
 "nn <F2> :LspDefinition<cr>zz
 nn <leader>d :LspDefinition<cr>zz
+nn <leader>R :LspRename<cr>
+
 "nn <F3> :tn<CR>zz
 "nn <silent> <M-r> :LspReferences<cr>
 "nn <f2> :LspRename<cr>
