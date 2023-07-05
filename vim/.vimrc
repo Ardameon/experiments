@@ -330,6 +330,7 @@ highlight CursorLineNr ctermfg=grey cterm=bold ctermbg=234
 highlight CursorLine cterm=NONE ctermbg=234
 highlight diffAdded ctermfg=10 cterm=bold
 highlight diffRemoved ctermfg=9 cterm=bold
+highlight diffFile ctermfg=177 cterm=bold
 highlight diffSubname ctermfg=lightblue
 "highlight link diffSubname Identifier
 
