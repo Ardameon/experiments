@@ -323,6 +323,7 @@ highlight cParen ctermfg=yellow
 highlight cBracket ctermfg=yellow
 highlight cComment ctermfg=grey
 highlight Function ctermfg=lightblue cterm=bold term=bold
+highlight link cMemberAccess Statement
 "TABS are SpecialKey
 highlight SpecialKey ctermfg=240
 highlight Conceal ctermfg=240 ctermbg=NONE
@@ -536,7 +537,7 @@ nn <leader>R :LspRename<cr>
 "nn <silent> <M-a> :LspWorkspaceSymbol<cr>
 "nn <silent> <M-l> :LspDocumentSymbol<cr>
 nn <leader>l :call lsp#enable()<cr>
-nn <leader>L :call lsp#disable()<cr>
+nn <leader>L :call lsp#disable()<cr>:LspStopServer<cr>
 
 " Key bindings for asyncomplete
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
