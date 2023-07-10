@@ -14,3 +14,11 @@ hi def link cMyEnum  cConstant
 syn match cMyType "\<\D\w\+_t\>\|\<\D\w\+_e\>\|\<\D\w\+_s\>"
 hi def cMyType ctermfg=32 cterm=bold
 
+"syn match cMyParenAndBrackets "[\(\)\<\>]"
+"hi def link cMyParenAndBrackets Statement
+
+syn match cMySpecSym "[\.\;\,\*\!\?\=\+\-\%\&]"
+hi def link cMySpecSym Statement
+
+"Copy that to see highlight group of item under cursor in status bar
+"set statusline+=%{synIDattr(synID(line('.'),col('.'),1),'name')}
