@@ -494,7 +494,7 @@ autocmd BufWritePre * :%s/\s\+$//e
 
 " Determines whether to use spaces or tabs on the current buffer.
 function TabsOrSpaces()
-    if getfsize(bufname("%")) > 256000
+    if getfsize(bufname("%")) > 1024000
         " File is very large, just use the default.
         return
     endif
