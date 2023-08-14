@@ -336,10 +336,10 @@ highlight diffSubname ctermfg=lightblue
 "highlight link diffSubname Identifier
 
 
-nnoremap <S-k> 5k
-nnoremap <S-j> 5j
-vnoremap <S-k> 5k
-vnoremap <S-j> 5j
+"nnoremap <S-k> 5k
+"nnoremap <S-j> 5j
+"vnoremap <S-k> 5k
+"vnoremap <S-j> 5j
 
 "moving selected lines
 "vnoremap J :m '>+1<CR>gv=gv
@@ -434,9 +434,10 @@ nnoremap <C-f> :CustomBLines<CR>
 nnoremap <C-p> :FZF<CR>
 nnoremap <leader>p :FZF<CR>
 "global tags search
-nnoremap <S-t> :Tags<CR>
+"nnoremap <S-t> :Tags<CR>
 "global tags search using word under cursor
-nnoremap <leader>t :Tags <C-R><C-W><CR>
+"nnoremap <leader>t :Tags <C-R><C-W><CR>
+nnoremap <leader>t :Tags<CR>
 "file lines search
 nnoremap <S-l> :Lines<CR>
 "buffers search
