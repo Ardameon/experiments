@@ -582,3 +582,20 @@ if executable('cmake-language-server')
   \ }
   \})
 endif
+
+"Install node v16 min via NVM
+"
+"curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+"nvm install v16
+"npm i -g bash-language-server
+"
+"Test langugae-server
+"
+"bash-language-server --help
+if executable('bash-language-server')
+  au User lsp_setup call lsp#register_server({
+        \ 'name': 'bash-language-server',
+        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'bash-language-server start']},
+        \ 'allowlist': ['sh', 'bash'],
+        \ })
+endif
