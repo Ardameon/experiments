@@ -20,27 +20,39 @@ RUN adduser --disabled-password --gecos '' ${VIM_USER}
 RUN mkdir -p ${VIM_USER_HOME}/.cache
 
 RUN echo "This message will appear only on image build"
-RUN apt-get update -y
-RUN apt-get upgrade -y
-RUN apt-get install dialog -y
-RUN apt-get install apt-utils -y
-RUN apt-get install bash -y
-RUN apt-get install git -y
-RUN apt-get install vim -y
-RUN apt-get install curl -y
-RUN apt-get install fonts-powerline -y
-RUN apt-get install fzf -y
-RUN apt-get install ripgrep -y
-RUN apt-get install locales -y
+RUN apt-get update -yq
+RUN apt-get upgrade -yq
+RUN apt-get install dialog -yq
+RUN apt-get install apt-utils -yq
+RUN apt-get install bash -yq
+RUN apt-get install git -yq
+RUN apt-get install vim -yq
+RUN apt-get install curl -yq
+RUN apt-get install fonts-powerline -yq
+RUN apt-get install fzf -yq
+RUN apt-get install ripgrep -yq
+RUN apt-get install locales -yq
 
-RUN apt-get install bat -y && \
+RUN apt-get install bat -yq && \
     mkdir -p ${VIM_USER_HOME}/.local/bin && \
     ln -s /usr/bin/batcat ${VIM_USER_HOME}/.local/bin/bat
 
-RUN apt-get install language-pack-ru -y
+RUN apt-get install language-pack-ru -yq
 RUN locale-gen en_US.UTF-8 ru_RU.UTF-8
 #RUN update-locale LANG=en_US.UTF-8
 RUN update-locale LANG=ru_RU.UTF-8
+
+RUN apt-get install universal-ctags -yq
+
+RUN apt-get install python3 python3-pip -yq
+RUN apt-get install python3-pylsp -yq
+RUN apt-get install ccls -yq
+RUN pip3 install cmake-language-server
+
+# Need to install nodejs v16 minimum, maybe use image dependency?
+#RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash && \
+#    nvm install v16 && \
+#    npm i -g bash-language-server
 
 RUN apt-get clean && apt-get autoremove --purge && apt-get autoclean
 
