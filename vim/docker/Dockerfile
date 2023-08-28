@@ -57,7 +57,7 @@ RUN pip3 install cmake-language-server
 RUN apt-get clean && apt-get autoremove --purge && apt-get autoclean
 
 RUN cp ${LOCAL_VIMRC} ${VIM_USER_HOME}/.vimrc
-RUN cp -r ./syntax ${VIM_USER_HOME}/.vim
+RUN mkdir -p ${VIM_USER_HOME}/.vim/syntax && cp -r ./syntax ${VIM_USER_HOME}/.vim
 #RUN curl -fLo ${VIM_USER_HOME}/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 RUN cp -r ./autoload ${VIM_USER_HOME}/.vim
 
