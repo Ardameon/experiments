@@ -334,7 +334,10 @@ highlight diffRemoved ctermfg=9 cterm=bold
 highlight diffFile ctermfg=177 cterm=bold
 highlight diffSubname ctermfg=lightblue
 "highlight link diffSubname Identifier
-
+highlight DiffAdd ctermfg=15 cterm=bold term=bold ctermbg=33
+highlight DiffChange ctermfg=15 cterm=bold term=bold ctermbg=8
+highlight DiffDelete ctermfg=15 cterm=bold term=bold ctermbg=9
+highlight DiffText ctermfg=15 cterm=bold term=bold ctermbg=124
 
 "nnoremap <S-k> 5k
 "nnoremap <S-j> 5j
