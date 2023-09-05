@@ -46,9 +46,22 @@ def issue_time_entry_sum(issue):
             time += time_entry.hours
     return time
 
+def issue_week_tags_str(issue):
+    tag_week_str = 'plan_week'
+    tags_str = issue.custom_fields[1].value
+    tags_list = tags_str.split()
+    weeks_list = []
+
+    for tag in tags_list:
+        tag_splited = tag.rsplit('_', 1)
+        if (tag_splited[0] == tag_week_str):
+            weeks_list.append(tag_splited[1])
+
+    return ', '.join([week_num for week_num in weeks_list])
+
 def distribute_issue(issue):
         issue_info = "| #" + str(issue.id) + " | " + str(issue.subject) + " | " + str(issue.assigned_to) + " | "
-        issue_info += str(issue_time_entry_sum(issue)) + " | " + str(issue.done_ratio) + "% |"
+        issue_info += str(issue_time_entry_sum(issue)) + " | " + str(issue.done_ratio) + "% | " + issue_week_tags_str(issue) + " | "
 
         if str(issue.status) == "New":
             new_issues.append(issue_info)
@@ -70,7 +83,7 @@ def get_sub_issues(issues, _parent_id):
 
 def issue_list_print(prefix, issue_list):
     issues_info = "|\\5=. *" + prefix + "* |\n"
-    issues_info += "|=. *Номер* |=. *Название* |=. *Исполнитель* |=. *Время* |=. *Готовность* |\n"
+    issues_info += "|=. *Номер* |=. *Название* |=. *Исполнитель* |=. *Время* |=. *Готовность* |=. *План(неделя)* |\n"
     for issue_info in issue_list:
         issues_info += issue_info + "\n"
 
