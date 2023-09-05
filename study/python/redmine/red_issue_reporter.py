@@ -2,6 +2,7 @@
 
 from redminelib import Redmine
 from optparse import OptionParser
+from datetime import datetime
 
 usage = "usage: %prog [options]\n\nRedmine issue reporter"
 parser = OptionParser(usage=usage)
@@ -51,11 +52,19 @@ def issue_week_tags_str(issue):
     tags_str = issue.custom_fields[1].value
     tags_list = tags_str.split()
     weeks_list = []
+    current_week = datetime.now().isocalendar()[1]
 
     for tag in tags_list:
         tag_splited = tag.rsplit('_', 1)
         if (tag_splited[0] == tag_week_str):
-            weeks_list.append(tag_splited[1])
+            week_num_str = tag_splited[1]
+
+            if int(week_num_str) == current_week:
+                week_num_str = "*" + week_num_str + "*"
+            else:
+                week_num_str = "-%{color:red}" + week_num_str + "%-" if int(week_num_str) < current_week else "%{color:green}" + week_num_str + "%"
+
+            weeks_list.append(week_num_str)
 
     return ', '.join([week_num for week_num in weeks_list])
 
