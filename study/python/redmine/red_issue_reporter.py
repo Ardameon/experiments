@@ -61,7 +61,7 @@ def issue_week_tags_str(issue):
 
 def distribute_issue(issue):
         issue_info = "| #" + str(issue.id) + " | " + str(issue.subject) + " | " + str(issue.assigned_to) + " | "
-        issue_info += str(issue_time_entry_sum(issue)) + " | " + str(issue.done_ratio) + "% | " + issue_week_tags_str(issue) + " | "
+        issue_info += "%02.2f" % issue_time_entry_sum(issue) + " | " + str(issue.done_ratio) + "% | " + issue_week_tags_str(issue) + " | "
 
         if str(issue.status) == "New":
             new_issues.append(issue_info)
