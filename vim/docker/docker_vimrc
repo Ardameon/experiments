@@ -549,6 +549,12 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
 imap <c-@> <Plug>(asyncomplete_force_refresh)
 
+inoremap ( ()<Left>
+inoremap [ []<Left>
+inoremap { {}<Left>
+inoremap " ""<Left>
+inoremap ' ''<Left>
+
 let g:lsp_auto_enable = 1
 "let g:lsp_completion_documentation_delay = 520
 let g:lsp_diagnostics_enabled = 1
