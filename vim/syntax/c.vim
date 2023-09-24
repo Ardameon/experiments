@@ -21,7 +21,7 @@ hi def link cErrInBracket cMyParenAndBrackets
 hi def link cErrInParen cMyParenAndBrackets
 hi def link cParenError cMyParenAndBrackets
 
-syn match cMySpecSym "[\:\.\;\,\*\!\?\=\+\-\%\&\~]"
+syn match cMySpecSym "[\:\.\;\,\*\!\?\=\+\-\%\&\~\|]"
 hi def link cMySpecSym Statement
 
 "Copy that to see highlight group of item under cursor in status bar
