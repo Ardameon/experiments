@@ -1,0 +1,229 @@
+set modeline
+set t_Co=256
+set expandtab
+set softtabstop=2
+set shiftwidth=2
+set tabstop=2
+set smarttab
+set fileformats=unix
+set hlsearch
+set incsearch
+
+set listchars=tab:--
+set nofixendofline
+
+"set mouse=a
+
+"syntax enable
+"colorscheme solorized
+
+" Word under cursor in current dir
+"map <C-S> :execute "silent! grep! -r " . expand("<cword>") . " ." <Bar> vert cw 70<CR>
+" Word under cursor in current dir -- just stuck - why
+"map <C-S> :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> vert cw 70<CR>
+map <C-S> :execute "silent! grep! -r --exclude=*.swp '\\<" . expand("<cword>") . "\\>' ." <Bar> vert cw 70<CR>
+
+augroup MyQFCommand
+au!
+au FileType qf nnoremap <buffer> <CR> <CR><C-W>p
+augroup END
+
+let c_space_errors = 1
+
+set viminfo=""
+
+set tabpagemax=100
+
+set numberwidth=5
+set number
+
+set colorcolumn=120
+
+set incsearch 
+	
+set scrolloff=2 
+set sidescrolloff=2
+
+set laststatus=2
+set statusline=%<%3*%f%2*%h%1*%m%r%*\ ['%b'x%B]\ %=%l,%c%V\ %P\ %{&encoding}
+
+set autoindent
+set cin
+set nobackup
+set background=light
+hi LineNr ctermfg=blue
+set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz 
+set updatetime=100
+
+"highlight TooLongLine term=reverse ctermfg=Yellow ctermbg=Red
+"2match TooLongLine /.\%>81v/
+
+"set foldmethod=syntax
+set foldmethod=marker
+
+"insert tabs by shift-tab
+:inoremap <S-Tab> <C-V><Tab>
+
+"tabs
+nnoremap H gT
+nnoremap L gt
+
+
+" UltiSnips
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsListSnippets="<c-b>"
+let g:UltiSnipsJumpForwardTrigger="<c-n>"
+let g:UltiSnipsJumpBackwardTrigger="<c-m>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="tabdo"
+
+
+"vim-cpp-enhanced-highlight
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
+let g:cpp_posix_standard = 1
+let g:cpp_experimental_simple_template_highlight = 1
+let g:cpp_experimental_template_highlight = 1
+let g:cpp_concepts_highlight = 1
+"let g:cpp_no_function_highlight = 1
+
+
+"gutentags
+let g:gutentags_cache_dir = "~/.vim/gutentags_cache_dir/"
+
+
+"gitgutter - show git diff in sign col
+"let g:gitgutter_diff_base = '<some commit SHA>'
+"gitgutter#hunk#close_hunk_preview_window()
+let g:gitgutter_max_sign = -1
+let g:gitgutter_sign_added              = '++'
+let g:gitgutter_sign_modified           = '@@'
+let g:gitgutter_sign_removed            = '__'
+let g:gitgutter_sign_removed_first_line = '‾‾'
+let g:gitgutter_sign_removed_above_and_below = '_¯'
+let g:gitgutter_sign_modified_removed   = '@_'
+
+highlight GitGutterAdd    guifg=#009900 ctermfg=2
+highlight GitGutterChange guifg=#bbbb00 ctermfg=3
+highlight GitGutterDelete guifg=#ff2222 ctermfg=1
+highlight SignColumn      guibg=#009900 ctermbg=7
+
+let g:gitgutter_map_keys = 0
+map <C-G>g :GitGutterToggle<CR>
+map <C-G>G :GitGutterLineHighlightsToggle<CR>
+map <C-G>d :GitGutterPreviewHunk<CR>
+map <C-G>D :GitGutterDiffOrig<CR>
+map <C-G>h :execute "GitGutterQuickFixCurrentFile \| copen"<CR>
+map <C-G>H :execute "GitGutterQuickFix \| copen"<CR>
+map <C-G>u :GitGutterUndoHunk<CR>
+map <C-G>f :GitGutterFold<CR>
+nmap ggn <Plug>(GitGutterNextHunk)
+nmap ggm <Plug>(GitGutterPrevHunk)
+map <C-G>s :GitGutterStageHunk<CR>
+" похоже, что всё, что нужно кроме меток можно сделать из fugitive
+" посмотреть там и убрать здесь
+
+" %{FugitiveStatusline()} -- посмотреть как добавить в statusline
+
+"tagbar
+map <C-E> :TagbarToggle<CR>
+imap <C-E> <C-o><C-E><ESC><ESC>
+let g:tagbar_autoclose = 1
+let g:tagbar_autofocus = 1
+let g:tagbar_compact = 1
+let g:tagbar_show_data_type = 1
+let g:tagbar_show_linenumbers = 1
+let g:tagbar_show_tag_linenumbers = 2
+let g:tagbar_show_tag_count = 1
+let g:tagbar_sort = 0
+
+"NERDTree
+map <C-D> :NERDTreeToggle<CR>
+imap <C-D> <C-o><C-D><ESC><ESC>
+let NERDTreeQuitOnOpen = 1
+let NERDTreeShowBookmarks = 1
+let NERDTreeMinimalUI = 1
+
+"lightline
+set noshowmode
+
+"set keymap=russian-jcukenwin
+
+map Ж :
+cmap ц w
+cmap й q
+cmap йф qa
+cmap й! q!
+cmap цй wq
+
+map <down> gj
+map <up>   gk
+
+"map <C-D> :se softtabstop=2<CR> :se shiftwidth=2<CR> :se tabstop=2<CR> :se expandtab<CR>
+"map <C-F> :se softtabstop=4<CR> :se shiftwidth=4<CR> :se tabstop=4<CR> :se noexpandtab<CR>
+
+"map <C-D> :buffers<CR>
+
+map <C-H> <C-W>h
+imap <C-H> <C-o><C-H>
+map <C-J> <C-W>j
+imap <C-J> <C-o><C-J>
+map <C-K> <C-W>k
+imap <C-K> <C-o><C-K>
+map <C-L> <C-W>l
+imap <C-L> <C-o><C-L>
+
+"map <C-Y> <C-W>_
+"imap <C-Y> <C-o><C-Y>
+"map <C-U> <C-W>=
+"imap <C-U> <C-o><C-U>
+"conflicts with tab
+"map <C-I> :vertical resize -5<CR>
+"imap <C-I> <C-o><C-I>
+"map <C-O> :vertical resize +5<CR>
+"imap <C-O> <C-o><C-O>
+
+
+iabbrev #d #define
+iabbrev #i #include
+iabbrev mne intmain (int argc, char *argv[]){}
+iabbrev whe while(){}
+iabbrev sce switch(){case :break;case :break;}
+iabbrev fre for (i=0; i<; i++){}
+iabbrev uca unsigned char
+
+"doxygen
+"
+" using with JAVADOC_AUTOBRIEF YES
+"
+" for function declarations and others (external) - detiled after <. >
+iabbrev ddde /** .*/
+" for methods, enum elements and data structs (internal) - detiled after <. >
+iabbrev dddi /**< .*/
+"detail funcs in *.c
+iabbrev dddf /**\param[in,out]\return\retval\remark/
+"file documentation.
+iabbrev dddff /**@file <filename>Brief.Details/
+
+" Group markers
+iabbrev dddgd /** @defgroup <uniq_key> Label Description.@{*//** @}*/
+iabbrev dddga /** @addtogroup <uniq_key> @{*//** @}*/
+iabbrev dddgw /** @weakgroup <uniq_key> @{*//** @}*/
+"
+" using with JAVADOC_AUTOBRIEF NO
+"detail description
+"iabbrev dddd /*! */
+"brief in *.h for func and for others
+"iabbrev dddb //! .
+" members
+"brief member description
+"iabbrev dddbm //!< .
+"detail member description
+"iabbrev ddddm /*!< */
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+hi User1 term=inverse,bold cterm=inverse,bold ctermfg=red
+hi User2 term=inverse,bold cterm=inverse,bold ctermfg=green
+hi User3 term=inverse,bold cterm=inverse,bold ctermfg=blue
