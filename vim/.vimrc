@@ -634,8 +634,8 @@ nnoremap <leader>gh :execute "GitGutterQuickFixCurrentFile \| copen"<CR>
 nnoremap <leader>gH :execute "GitGutterQuickFix \| copen"<CR>
 nnoremap <leader>gu :GitGutterUndoHunk<CR>
 nnoremap <leader>gf :GitGutterFold<CR>
-nmap <leader>gn <Plug>(GitGutterNextHunk)
-nmap <leader>gN <Plug>(GitGutterPrevHunk)
+nmap <leader>gn :GitGutterNextHunk<CR>zz
+nmap <leader>gN :GitGutterPrevHunk<CR>zz
 nnoremap <leader>gs :GitGutterStageHunk<CR>
 
 
