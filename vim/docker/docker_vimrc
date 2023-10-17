@@ -256,6 +256,7 @@ endif
 
 
 call plug#begin()
+Plug 'airblade/vim-gitgutter'
 Plug 'vim-airline/vim-airline' "apt install fonts-powerline
 Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
@@ -448,7 +449,7 @@ nnoremap <leader>b :Buffers<CR>
 "marks of file
 nnoremap <leader>m :MP<CR>
 "git diffs show
-nnoremap <leader>g :GFiles?<CR>
+nnoremap <leader>G :GFiles?<CR>
 "git show commits
 nnoremap <leader>c :Commits<CR>
 "remove search result highlighting
@@ -608,3 +609,34 @@ if executable('bash-language-server')
         \ 'allowlist': ['sh', 'bash'],
         \ })
 endif
+
+
+"GitGutter plagin settings
+let g:gitgutter_max_sign = -1
+let g:gitgutter_sign_added              = '++'
+let g:gitgutter_sign_modified           = '@@'
+let g:gitgutter_sign_removed            = '__'
+let g:gitgutter_sign_removed_first_line = '‾‾'
+let g:gitgutter_sign_removed_above_and_below = '_¯'
+let g:gitgutter_sign_modified_removed   = '@_'
+
+"highlight GitGutterAdd    guifg=#009900 ctermfg=2
+"highlight GitGutterChange guifg=#bbbb00 ctermfg=3
+"highlight GitGutterDelete guifg=#ff2222 ctermfg=1
+"highlight SignColumn      guibg=#009900 ctermbg=7
+
+let g:gitgutter_map_keys = 0
+nnoremap <leader>gg :GitGutterToggle<CR>
+nnoremap <leader>gG :GitGutterLineHighlightsToggle<CR>
+nnoremap <leader>gd :GitGutterPreviewHunk<CR>
+nnoremap <leader>gD :GitGutterDiffOrig<CR><C-W><left>
+nnoremap <leader>gh :execute "GitGutterQuickFixCurrentFile \| copen"<CR>
+nnoremap <leader>gH :execute "GitGutterQuickFix \| copen"<CR>
+nnoremap <leader>gu :GitGutterUndoHunk<CR>
+nnoremap <leader>gf :GitGutterFold<CR>
+nmap <leader>gn <Plug>(GitGutterNextHunk)
+nmap <leader>gN <Plug>(GitGutterPrevHunk)
+nnoremap <leader>gs :GitGutterStageHunk<CR>
+
+
+
