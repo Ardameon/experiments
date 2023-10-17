@@ -454,6 +454,8 @@ nnoremap <leader>G :GFiles?<CR>
 nnoremap <leader>c :Commits<CR>
 "remove search result highlighting
 nnoremap <leader>h :noh<CR>
+"open QuickFix window
+nnoremap <leader>q :copen<CR>
 
 
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
@@ -614,11 +616,11 @@ endif
 "GitGutter plagin settings
 let g:gitgutter_max_sign = -1
 let g:gitgutter_sign_added              = '++'
-let g:gitgutter_sign_modified           = '@@'
+let g:gitgutter_sign_modified           = '~~'
 let g:gitgutter_sign_removed            = '__'
 let g:gitgutter_sign_removed_first_line = '‾‾'
 let g:gitgutter_sign_removed_above_and_below = '_¯'
-let g:gitgutter_sign_modified_removed   = '@_'
+let g:gitgutter_sign_modified_removed   = '~_'
 
 "highlight GitGutterAdd    guifg=#009900 ctermfg=2
 "highlight GitGutterChange guifg=#bbbb00 ctermfg=3
