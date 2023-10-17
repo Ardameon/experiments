@@ -10,4 +10,4 @@ run:
 clean:
 	docker rmi my_vim
 
-.PHONY: run build clear
+.PHONY: run build clean
