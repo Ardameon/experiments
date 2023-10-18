@@ -137,7 +137,7 @@ map <S-Left>    :vertical resize -15<CR>
 map <s-down>    :resize +20<CR>
 map <s-up>      :resize -20<CR>
 " коментирование - ракоментирования текста
-map <C-K> :s/^/\/\//<CR>:nohl<CR>
+"map <C-K> :s/^/\/\//<CR>:nohl<CR>
 "map <C-U> :s/^\/\///<CR>:nohl<CR>
 " создание табов
 "nmap <S-T> :tabnew<CR>
@@ -454,8 +454,10 @@ nnoremap <leader>G :GFiles?<CR>
 nnoremap <leader>c :Commits<CR>
 "remove search result highlighting
 nnoremap <leader>h :noh<CR>
-"open QuickFix window
-nnoremap <leader>q :copen<CR>
+"manage QuickFix window
+nnoremap <leader>q :cclose<CR>
+nnoremap <C-j> :cnext<CR>
+nnoremap <C-k> :cprev<CR>
 
 
 let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
@@ -639,6 +641,7 @@ nnoremap <leader>gf :GitGutterFold<CR>
 nmap <leader>gn :GitGutterNextHunk<CR>zz
 nmap <leader>gN :GitGutterPrevHunk<CR>zz
 nnoremap <leader>gs :GitGutterStageHunk<CR>
+
 
 
 
