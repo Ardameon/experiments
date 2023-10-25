@@ -478,6 +478,8 @@ if !isdirectory($HOME."/.vim/undo-dir")
 endif
 set undodir=~/.vim/undo-dir
 set undofile
+"Save marks in vim info
+set viminfo='1000,f1
 
 "search for tags in current file dirrectory, then search for tags in all upper
 "dirrectories till $HOME
