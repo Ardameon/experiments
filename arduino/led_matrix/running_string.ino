@@ -72,7 +72,7 @@ int RS_StringSet(char *str)
     if (!str || !strlen(str))
         return -2;
 
-    running_str = malloc(strlen(str) + 2);
+    running_str = (char *)malloc(strlen(str) + 2);
 
     strcpy(running_str, str);
     strcat(running_str, " ");
@@ -105,7 +105,7 @@ void *RS_StringProc()
         return NULL;
     }
 
-    cur_sym_left_display = RS_DisplayProc(RS_LetterGet(*current_sym), RS_LetterGet(*next_sym));
+    cur_sym_left_display = RS_DisplayProc((uint8_t *)RS_LetterGet(*current_sym), (uint8_t *)RS_LetterGet(*next_sym));
 
     if (cur_sym_left_display)
     {

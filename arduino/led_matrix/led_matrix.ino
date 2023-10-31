@@ -6,13 +6,14 @@
 #define DISPLAY_REFRESH_TO_MS 100
 #define DISPLAY_INTESITY 1
 #define DISPLAY_ROTATION 3
+#define DISPLAY_MSG_LEN  128
 
 int pinCS = 10;
 int numberOfHorizontalDisplays = 1;
 int numberOfVerticalDisplays = 1;
 
 uint8_t *display = NULL;
-uint8_t *message = "Hello world!";
+char message[DISPLAY_MSG_LEN];
 uint8_t loop_enabled = 1;
 
 Max72xxPanel matrix = Max72xxPanel(pinCS, numberOfHorizontalDisplays, numberOfVerticalDisplays);
@@ -21,6 +22,7 @@ void setup()
 {
     matrix.setIntensity(DISPLAY_INTESITY);
     matrix.setRotation(DISPLAY_ROTATION);
+    strncpy(message, "Hello world!", DISPLAY_MSG_LEN - 1);
     DisplayReset();
 }
 
@@ -42,7 +44,7 @@ void loop()
 
     delay(DISPLAY_REFRESH_TO_MS);
 
-    display = RS_StringProc();
+    display = (uint8_t *)RS_StringProc();
 
     DisplayClear();
 }
@@ -50,7 +52,7 @@ void loop()
 void DisplayReset()
 {
     RS_StringSet(message);
-    display = RS_StringProc();
+    display = (uint8_t *)RS_StringProc();
     DisplayClear();
 }
 
