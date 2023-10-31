@@ -3,6 +3,10 @@
 #include <Max72xxPanel.h>
 #include "running_str.h"
 
+#define DISPLAY_REFRESH_TO_MS 100
+#define DISPLAY_INTESITY 1
+#define DISPLAY_ROTATION 3
+
 int pinCS = 10;
 int numberOfHorizontalDisplays = 1;
 int numberOfVerticalDisplays = 1;
@@ -13,9 +17,10 @@ uint8_t loop_enabled = 1;
 
 Max72xxPanel matrix = Max72xxPanel(pinCS, numberOfHorizontalDisplays, numberOfVerticalDisplays);
 
-void setup() {
-    matrix.setIntensity(1);
-    matrix.setRotation(3);
+void setup()
+{
+    matrix.setIntensity(DISPLAY_INTESITY);
+    matrix.setRotation(DISPLAY_ROTATION);
     DisplayReset();
 }
 
@@ -35,7 +40,7 @@ void loop()
 
     DisplayPrint(display, RS_DISPLAY_HEIGHT, RS_DISPLAY_WIDTH);
 
-    delay(100);
+    delay(DISPLAY_REFRESH_TO_MS);
 
     display = RS_StringProc();
 
