@@ -10,6 +10,7 @@
 
 int   RS_StringSet(char *str);
 void *RS_StringProc();
+void  RS_StringStop();
 
 
 

@@ -88,6 +88,15 @@ int RS_StringSet(char *str)
     return 0;
 }
 
+void RS_StringStop()
+{
+    if (!running_str || !current_sym)
+        return;
+
+    *current_sym = '\0';
+
+    RS_StringProc();
+}
 
 void *RS_StringProc()
 {
