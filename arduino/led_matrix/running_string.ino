@@ -50,6 +50,8 @@ void *RS_LetterGet(char c)
         case '9': return letter9;
 
         case '!': return letterEXCLAMATION;
+        case '?': return letterQUESTION;
+        case '-': return letterDASH;
 
         default: return NULL;
     }

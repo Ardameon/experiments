@@ -386,6 +386,25 @@ uint8_t letterEXCLAMATION[LETTER_HEIGHT] =
     0b00100,
 };
 
+uint8_t letterQUESTION[LETTER_HEIGHT] =
+{
+    0b00110,
+    0b01001,
+    0b00001,
+    0b00010,
+    0b00000,
+    0b00100,
+};
+
+uint8_t letterDASH[LETTER_HEIGHT] =
+{
+    0b00000,
+    0b00000,
+    0b01110,
+    0b00000,
+    0b00000,
+    0b00000,
+};
 
 
 
