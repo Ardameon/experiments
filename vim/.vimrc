@@ -279,6 +279,7 @@ Plug 'prabirshrestha/vim-lsp'
 Plug 'mattn/vim-lsp-settings'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'jeetsukumaran/vim-markology'
 call plug#end()
 
 let mapleader = " "
@@ -644,6 +645,9 @@ nmap <leader>gn :GitGutterNextHunk<CR>zz
 nmap <leader>gN :GitGutterPrevHunk<CR>zz
 nnoremap <leader>gs :GitGutterStageHunk<CR>
 
-
-
+"Markology settings"
+let g:markology_include="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+highlight MarkologyHLu cterm=bold ctermfg=173 ctermbg=234 guifg=green guibg=blue
+highlight MarkologyHLl cterm=bold ctermfg=173 ctermbg=234 guifg=green guibg=blue
+highlight MarkologyHLo cterm=bold ctermfg=173 ctermbg=234 guifg=green guibg=blue
 
