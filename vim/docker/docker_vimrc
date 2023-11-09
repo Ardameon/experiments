@@ -651,3 +651,16 @@ highlight MarkologyHLu cterm=bold ctermfg=173 ctermbg=234 guifg=green guibg=blue
 highlight MarkologyHLl cterm=bold ctermfg=173 ctermbg=234 guifg=green guibg=blue
 highlight MarkologyHLo cterm=bold ctermfg=173 ctermbg=234 guifg=green guibg=blue
 
+nmap <silent> ;1 <Plug>MarkologyEnable
+nmap <silent> ;0 <Plug>MarkologyDisable
+nmap <silent> ;! <Plug>MarkologyToggle
+nmap <silent> ;, <Plug>MarkologyPlaceMarkToggle
+nmap <silent> ;+ <Plug>MarkologyPlaceMark
+nmap <silent> ;- <Plug>MarkologyClearMark
+nmap <silent> ;_ <Plug>MarkologyClearAll
+nmap <silent> ;] <Plug>MarkologyNextLocalMarkPos
+nmap <silent> ;[ <Plug>MarkologyPrevLocalMarkPos
+nmap <silent> ;} <Plug>MarkologyNextLocalMarkByAlpha
+nmap <silent> ;{ <Plug>MarkologyPrevLocalMarkByAlpha
+nmap <silent> ;? <Plug>MarkologyLocationList
+nmap <silent> ;~ <Plug>MarkologyQuickFix
