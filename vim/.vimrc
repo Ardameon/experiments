@@ -364,6 +364,9 @@ nnoremap <C-l> :tabnext<CR>
 inoremap <C-h> <Esc>:tabprev<CR>
 inoremap <C-l> <Esc>:tabnext<CR>
 
+"copy to clipboard
+vnoremap <C-y> "+y
+
 set expandtab "always use spaces instead of tabs
 set nowrap
 
