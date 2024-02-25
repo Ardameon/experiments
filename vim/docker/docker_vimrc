@@ -82,7 +82,6 @@ highlight Macro ctermfg=green
 
 
 
-set wrap                                                "перенос длинных строк
 set lbr                                                 "переносить целые слова
 set number                                      "показывать номера строк ...
 set ruler                                               "показывать позицию курсора
@@ -91,11 +90,11 @@ set ts=4                                                "задать разме
 set shiftwidth=4               "Размер табуляции по умолчанию
 set softtabstop=4
 set tabstop=4
-set scrolloff=7         "Теперь нет необходимости передвигать курсор к краю экрана, чтобы опуститься в режиме редактирования
 set winheight=12
 set winwidth=12
 set winminheight=12 "set from 12 to 0 according dread idea
 set winminwidth=7
+set scrolloff=7
 
 " установка режима сварачивания блоков тескста
 set foldmethod=manual
@@ -439,7 +438,6 @@ nnoremap <Leader>f :Rg <C-R><C-W><CR>
 nnoremap <C-f> :CustomBLines<CR>
 "global file search
 nnoremap <C-p> :FZF<CR>
-nnoremap <leader>p :FZF<CR>
 "global tags search
 "nnoremap <S-t> :Tags<CR>
 "global tags search using word under cursor
@@ -528,6 +526,12 @@ autocmd BufReadPost * call TabsOrSpaces()
 nnoremap <leader>r yi{
 "For pointers in C/C++
 inoremap <C-o> ->
+
+"Paste directly from copy register
+nnoremap <leader>p "0p
+vnoremap <leader>p "0p
+nnoremap <leader>P "0P
+vnoremap <leader>P "0P
 
 " Register ccls C++ lanuage server.
 if executable('ccls')
