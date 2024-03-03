@@ -1,3 +1,6 @@
 [submodule "study/html_css/HTMLFreeman/book_repo"]
 	path = study/html_css/HTMLFreeman/book_repo
 	url = https://github.com/bethrobson/Head-First-HTML.git
+[submodule "unit/framework_src/cpputest"]
+	path = unit/framework_src/cpputest
+	url = https://github.com/cpputest/cpputest.git
