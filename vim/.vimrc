@@ -670,3 +670,30 @@ nmap <silent> ;} <Plug>MarkologyNextLocalMarkByAlpha
 nmap <silent> ;{ <Plug>MarkologyPrevLocalMarkByAlpha
 nmap <silent> ;? <Plug>MarkologyLocationList
 nmap <silent> ;~ <Plug>MarkologyQuickFix
+
+
+"doxygen
+"
+" for function declarations and others (external) - detiled after <. >
+iabbrev ddde /** .*/
+" for methods, enum elements and data structs (internal) - detiled after <. >
+iabbrev dddi /**< .*/
+
+"general brief documentation.
+iabbrev dddb /** @brief DESCRIOTION */
+"name section documentation.
+iabbrev dddn /**@name SECTION_NAME@{*/
+"function documentation.
+iabbrev dddfunc /**@copybrief FUNC_NAME@param[in,out]  NAME  DESC@return ret_desc*/
+"file header documentation.
+iabbrev dddfh /**@file@brief HEADER_DESC@defgroup GROUP_NAME GROUP_DESC@ingroup PARENT_GROUP_NAME@{*/
+"file source documentation.
+iabbrev dddfs /**@file@brief SOURCE_DESC@addtogroup GROUP_NAME@{*/
+"file source documentation.
+iabbrev dddc /** @} */
+
+" Group markers
+""iabbrev dddgd /** @defgroup <uniq_key> Label Description.@{*//** @}*/
+""iabbrev dddga /** @addtogroup <uniq_key> @{*//** @}*/
+""iabbrev dddgw /** @weakgroup <uniq_key> @{*//** @}*/
+
