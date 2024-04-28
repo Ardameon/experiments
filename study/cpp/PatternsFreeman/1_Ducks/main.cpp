@@ -1,4 +1,4 @@
-#include "duck.h"
+#include "duck.hpp"
 
 int main(int argc, char const *argv[])
 {
