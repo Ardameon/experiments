@@ -1,4 +1,9 @@
+#include <stdio.h>
+
 #include "duck.h"
+#include "mellor_duck.h"
+#include "rocket_duck.h"
+#include "bath_duck.h"
 
 void duck_handle(duck_t *duck)
 {
@@ -10,14 +15,21 @@ void duck_handle(duck_t *duck)
 
 int main()
 {
-    duck_t *duck;
+    const int cnt = 3;
+    duck_t *duck[cnt];
+    int i;
 
-    mellor_duck_create(&duck);
-    duck_handle(duck);
-    rocket_duck_create(&duck);
-    duck_handle(duck);
-    bath_duck_create(&duck);
-    duck_handle(duck);
+    mellor_duck_create(&duck[0]);
+    rocket_duck_create(&duck[1]);
+    bath_duck_create(&duck[2]);
+
+    printf("==============================\n");
+
+    for (i = 0; i < cnt; i++)
+    {
+        duck_handle(duck[i]);
+    }
+
 
     return 0;
 }
