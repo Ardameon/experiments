@@ -1,6 +1,107 @@
 "------------------------------------------------
-"                               .vimrc by Helius aka Eugene Samoylov
-"                                       ghelius@gmail.com
+"                               .vimrc by Mikhail Tyryshkin
+"                                       helldiver@yandex.ru
+"------------------------------------------------
+" INSTALL all you need:
+"
+"------------------------------------------------
+" VIMPLUG
+"------------------------------------------------
+"
+" Install for vim
+" curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+"
+" Install for nvim
+" sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+"
+" Then :PlugUpdate
+"
+"------------------------------------------------
+" Fuzzyfinder
+"------------------------------------------------
+"
+" For good fzf need actual vim, you can install it manually from ppa
+"
+" $ sudo add-apt-repository ppa:jonathonf/vim
+" $ sudo apt install vim
+"
+" $ sudo apt install fzf
+" $ sudo apt install ripgrep
+"
+" For syntax highlighting we need to install bat
+"
+" $ sudo apt install bat
+" $ mkdir -p ~/.local/bin
+" $ ln -s /usr/bin/batcat ~/.local/bin/bat
+"
+" help fzf-vim - for more info
+"
+"------------------------------------------------
+" SYNTAX extanding
+"------------------------------------------------
+"
+" Find 'c.vim' file nearby
+" Copy this file to ~/.vim/syntax
+"
+"------------------------------------------------
+" TAGS
+"------------------------------------------------
+"
+" To create tags of system files and custom files
+" $ sudo apt install universal-ctags
+" $ ctags --c-kinds=+p -R /usr/include/
+" $ ctags --c-kinds=+p -R *
+"
+"------------------------------------------------
+" Language servers
+"------------------------------------------------
+"------------------------------------------------
+" Install ccls C/C++ language server
+"------------------------------------------------
+"
+" $ sudo apt install ccls
+"
+" WARNING! If you have an issue with detecting standard c++ library by ccls, do next:
+"
+" $ ll /usr/lib/gcc/x86_64-linux-gnu/
+"
+" Choose max version (e.g. 12) and then install libstdc++ of appropriate
+" version:
+"
+" $ sudo apt install libstdc++-12-dev
+"
+" If issue still exists, try to check if ccls clang version is matched to
+" system clang:
+"
+" $ ccls --version
+" $ clang --version
+"
+"------------------------------------------------
+" Install python language server
+"------------------------------------------------
+"
+" $ sudo apt install python3-pylsp
+"
+"------------------------------------------------
+" Install cmake language server
+"------------------------------------------------
+"
+" $ pip3 install cmake-language-server
+"
+"------------------------------------------------
+" Install bash language server
+"------------------------------------------------
+"
+" Install node v16 min via NVM
+"
+" curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+" nvm install v16
+" npm i -g bash-language-server
+"
+" Test langugae-server
+"
+" bash-language-server --help
+"
 "------------------------------------------------
 
 set magic
