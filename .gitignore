@@ -19,3 +19,6 @@ __pycache__
 *.includes
 *.cflags
 *.swp
+
+compile_commands.json
+tags
