@@ -9,6 +9,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(MY_VARIABLE test_value)
 
+add_subdirectory(cpputest)
+
 add_subdirectory(1_Ducks)
 add_subdirectory(2_Observer)
 add_subdirectory(3_Decorator)
