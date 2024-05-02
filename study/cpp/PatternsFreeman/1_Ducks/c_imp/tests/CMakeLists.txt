@@ -1,4 +1,4 @@
-file(GLOB strategy_src
+list(APPEND test_src
     ../bath_duck.c
     ../duck.c
     ../fly_behavior.c
@@ -6,21 +6,21 @@ file(GLOB strategy_src
     ../quak_behavior.c
     ../rocket_duck.c
     )
-file(GLOB strategy_hdr
-    bath_duck.h
-    duck.h
-    fly_behavior.h
-    mellor_duck.h
-    quak_behavior.h
-    rocket_duck.h
-    )
 
-set_source_files_properties(${strategy_src} PROPERTIES LANGUAGE CXX)
+file(GLOB strategy_hdr ../*.h)
+
+list(REMOVE_ITEM test_src ../main.c)
+list(APPEND test_src test_main.cpp)
+
+list(REMOVE_ITEM test_src ../mellor_duck.c)
+list(APPEND test_src test_mellor_duck.cpp)
+
+list(APPEND test_src test.cpp)
+
+set_source_files_properties(${test_src} PROPERTIES LANGUAGE CXX)
 
 add_executable(tests #EXCLUDE_FROM_ALL
-    test_main.cpp
-    test.cpp
-    ${strategy_src}
+    ${test_src}
     ${strategy_hdr}
     )
 

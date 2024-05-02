@@ -26,6 +26,12 @@ TEST_GROUP(ducks_base)
     }
 };
 
+TEST(ducks_base, duck_quak_malloc)
+{
+    mellor_duck_create(&duck);
+    duck_destroy(duck);
+}
+
 TEST(ducks_base, duck_quak_null_ptr)
 {
     duck = NULL;
