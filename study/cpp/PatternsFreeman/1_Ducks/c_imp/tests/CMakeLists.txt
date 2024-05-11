@@ -26,6 +26,9 @@ add_executable(tests #EXCLUDE_FROM_ALL
 
 target_include_directories(tests PUBLIC ${CMAKE_CURRENT_LIST_DIR}/.. )
 
+#set(test_compile_options "-O0" "-g")
+#target_compile_options(tests PUBLIC ${test_compile_options})
+
 target_link_libraries(tests PRIVATE
     CppUTest::CppUTest
     CppUTest::CppUTestExt)

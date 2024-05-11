@@ -22,7 +22,7 @@ TEST_GROUP(mellor_ducks)
 
     void teardown()
     {
-        duck_destroy(duck);
+        mellor_duck_destroy((mellor_duck_t *)duck);
     }
 };
 
