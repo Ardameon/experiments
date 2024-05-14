@@ -120,12 +120,16 @@ void foo(uint8_t *p)
 void foo2(uint8_t p[][5])
 {
     printf("%-5s: &p:%p sizeof(p) = %zd sizeof(*p) = %zd\n", __func__, &p, sizeof(p), sizeof(*p));
+    printf("%-5s: p[0]:%p | *(p + 0):%p\n", __func__, p[0], *(p + 0));
+    printf("%-5s: p[1]:%p | *(p + 1):%p\n", __func__, p[1], *(p + 1));
     //printf("%-5s: &p:%p sizeof(p) = %zd sizeof(*p) = %zd p[1][1] = %#x\n", __func__, &p, sizeof(p), sizeof(*p), p[1][1]);
 }
 
 void foo3(uint8_t **p)
 {
     printf("%-5s: &p:%p sizeof(p) = %zd sizeof(*p) = %zd\n", __func__, &p, sizeof(p), sizeof(*p));
+    printf("%-5s: p[0]:%p | *(p + 0):%p\n", __func__, p[0], *(p + 0));
+    printf("%-5s: p[1]:%p | *(p + 1):%p\n", __func__, p[1], *(p + 1));
     //printf("%-5s: &p:%p sizeof(p) = %zd sizeof(*p) = %zd p[1][1] = %#x\n", __func__, &p, sizeof(p), sizeof(*p), p[1][1]);
 }
 
