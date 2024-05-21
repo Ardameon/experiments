@@ -1,4 +1,5 @@
 add_subdirectory(c_imp)
+add_subdirectory(array)
 
 add_executable(1_strategy main.cpp duck.hpp)
 

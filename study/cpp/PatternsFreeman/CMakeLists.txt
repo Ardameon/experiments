@@ -11,7 +11,7 @@ set(MY_VARIABLE test_value)
 
 add_subdirectory(cpputest)
 
-add_subdirectory(1_Ducks)
+add_subdirectory(1_Strategy)
 add_subdirectory(2_Observer)
 add_subdirectory(3_Decorator)
 add_subdirectory(4_Factory)
