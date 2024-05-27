@@ -22,6 +22,8 @@ add_subdirectory(8_Facade)
 add_subdirectory(9_TemplateMethod)
 add_subdirectory(10_Iterator)
 
+add_subdirectory(array)
+
 configure_file(patterns.h.in patterns.h)
 
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)

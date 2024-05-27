@@ -10,7 +10,7 @@ void bath_duck_show   (bath_duck_t *duck);
 
 void bath_duck_create (duck_t **duck)
 {
-    bath_duck_t *new_duck = (bath_duck_t *)(*duck);
+    bath_duck_t *new_duck;
     new_duck = (bath_duck_t *)malloc(sizeof(*new_duck));
 
     duck_create(&new_duck->base);

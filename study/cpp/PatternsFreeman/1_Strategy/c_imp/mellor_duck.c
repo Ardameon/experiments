@@ -10,6 +10,7 @@ static void mellor_duck_show   (mellor_duck_t *duck);
 
 void mellor_duck_create(duck_t **duck)
 {
+    (*duck) = NULL;
     mellor_duck_t *new_duck = (mellor_duck_t *)(*duck);
 
     new_duck = (mellor_duck_t *)malloc(sizeof(*new_duck));
