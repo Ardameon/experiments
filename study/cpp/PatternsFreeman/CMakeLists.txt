@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(MY_VARIABLE test_value)
+set(compile_options "-Wall" "-O2" "-g")
 
 add_subdirectory(cpputest)
 
