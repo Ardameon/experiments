@@ -12,6 +12,8 @@ extern "C"
 
 TEST_GROUP(array_base)
 {
+    array_t array_base;
+
     void setup()
     {
     }
@@ -21,10 +23,14 @@ TEST_GROUP(array_base)
     }
 };
 
+TEST(array_base, array_strategies)
+{
+    array_base.size_strategy;
+    //array_base.fill_strategy;
+}
+
 TEST(array_base, array_t)
 {
-    array_t array_base;
-
     array_size(&array_base);
     array_fill(&array_base);
     array_show(&array_base);

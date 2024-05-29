@@ -1,5 +1,6 @@
 list(APPEND test_src
         ../array.c
+        ../array_size_strategy.c
     #    ../duck.c
     #    ../fly_behavior.c
     #    ../mellor_duck.c

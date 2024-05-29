@@ -1,13 +1,13 @@
 #ifndef __ARRAY__
 #define __ARRAY__
 
-typedef struct array_t array_t;
+#include "array_size_strategy.h"
 
-typedef int (*array_size_func)(const array_t *array);
+typedef struct array_t array_t;
 
 typedef struct array_t
 {
-    array_size_func size;
+    array_size_strategy_i size_strategy;
 } array_t;
 
 int  array_size(const array_t *array);

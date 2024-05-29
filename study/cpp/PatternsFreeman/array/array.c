@@ -2,8 +2,8 @@
 
 int array_size(const array_t *array)
 {
-    if (array && array->size)
-        return array->size(array);
+    if (array && array->size_strategy.size_func)
+        return array->size_strategy.size_func(array);
 
     return -1;
 }
