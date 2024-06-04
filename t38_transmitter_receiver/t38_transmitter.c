@@ -209,13 +209,13 @@ int main(int argc, char *argv[])
     pthread_t      f_thread[FAX_MAX_SESSION_CNT][2];
     struct stat st;
 
-    if (argc < 5) {
-        printf("Not enough arguments: [REMOTE_HOST] [REMOTE_PORT] [SESSION_COUNT] [TIFF_FILE_TO_SEND]\n");
+    if (argc < 6) {
+        printf("Not enough arguments: [LOCAL_NET_IFACE] [REMOTE_HOST] [REMOTE_PORT] [SESSION_COUNT] [TIFF_FILE_TO_SEND]\n");
         ret_status = EXIT_FAILURE;
         goto _exit;
     }
 
-    ses_count = strtoul(argv[3], NULL, 10);
+    ses_count = strtoul(argv[4], NULL, 10);
 
     if (ses_count > FAX_MAX_SESSION_CNT) {
         printf("Too many sessions! No more then %d supported\n", FAX_MAX_SESSION_CNT);
@@ -223,14 +223,14 @@ int main(int argc, char *argv[])
         goto _exit;
     }
 
-    strncpy(tiff_filename, argv[4], sizeof(tiff_filename));
+    strncpy(tiff_filename, argv[5], sizeof(tiff_filename));
     if (stat(tiff_filename, &st)) {
         printf("Tiff file error ('%s'): %s\n", tiff_filename, strerror(errno));
         ret_status = EXIT_FAILURE;
         goto _exit;
     }
 
-    strcpy(local_ip, getLocalIP("eth0"));
+    strcpy(local_ip, getLocalIP(argv[1]));
 
     printf("Local IP is '%s:%d'\n", local_ip, local_port);
 
@@ -239,7 +239,7 @@ int main(int argc, char *argv[])
         goto _exit;
     }
 
-    if ((res = getHostAddr(argv[1], argv[2], &remote_addr))) {
+    if ((res = getHostAddr(argv[2], argv[3], &remote_addr))) {
         printf("getaddrinfo() error: %s\n", gai_strerror(res));
         ret_status = EXIT_FAILURE;
         goto _exit;
