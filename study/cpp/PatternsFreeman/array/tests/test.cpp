@@ -23,10 +23,32 @@ TEST_GROUP(array_base)
     }
 };
 
+TEST(array_base, array_strategies2)
+{
+    array_base.size_strategy = size_array;
+    array_base.size_strategy.size(&array_base);
+    array_base.fill_strategy = fill_array;
+    array_base.fill_strategy.fill(&array_base);
+    array_base.sort_strategy = sort_array;
+    array_base.sort_strategy.sort(&array_base);
+    array_base.find_strategy = find_array;
+    array_base.find_strategy.find(&array_base, 1);
+    array_base.show_strategy = show_array;
+    array_base.show_strategy.show(&array_base);
+}
+
 TEST(array_base, array_strategies)
 {
     array_base.size_strategy;
-    //array_base.fill_strategy;
+    array_base.size_strategy.size;
+    array_base.fill_strategy;
+    array_base.fill_strategy.fill;
+    array_base.show_strategy;
+    array_base.show_strategy.show;
+    array_base.sort_strategy;
+    array_base.sort_strategy.sort;
+    array_base.find_strategy;
+    array_base.find_strategy.find;
 }
 
 TEST(array_base, array_t)

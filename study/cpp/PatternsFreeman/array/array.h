@@ -2,12 +2,21 @@
 #define __ARRAY__
 
 #include "array_size_strategy.h"
+#include "array_fill_strategy.h"
+#include "array_sort_strategy.h"
+#include "array_find_strategy.h"
+#include "array_show_strategy.h"
 
-typedef struct array_t array_t;
 
 typedef struct array_t
 {
     array_size_strategy_i size_strategy;
+    array_fill_strategy_i fill_strategy;
+    array_sort_strategy_i sort_strategy;
+    array_find_strategy_i find_strategy;
+    array_show_strategy_i show_strategy;
+
+    int size;
 } array_t;
 
 int  array_size(const array_t *array);

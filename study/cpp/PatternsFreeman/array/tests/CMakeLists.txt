@@ -1,11 +1,10 @@
 list(APPEND test_src
         ../array.c
         ../array_size_strategy.c
-    #    ../duck.c
-    #    ../fly_behavior.c
-    #    ../mellor_duck.c
-    #    ../quak_behavior.c
-    #    ../rocket_duck.c
+        ../array_fill_strategy.c
+        ../array_sort_strategy.c
+        ../array_find_strategy.c
+        ../array_show_strategy.c
     )
 
 file(GLOB array_hdr ../*.h)
