@@ -57,12 +57,13 @@ echo "";echo "------------------";echo ""
 my_var=
 name="Petya"
 age=35
-name_age="$name $age"
+name_age="$my_var $name $age"
 echo "$name_age"
 
 echo "";echo "------------------";echo ""
 # Arrays
 my_arr=(one two three four)
+echo $my_arr
 echo "$my_arr[*]"
 echo ${my_arr[*]}
 echo ${my_arr[1]}
@@ -94,6 +95,13 @@ echo "Out value - $TEST_VAR"
 ./env_var.sh
 # Inner changes of exported variables will not affect out script
 echo "Out value after script - $TEST_VAR"
+
+echo "";echo "------------------";echo ""
+# Import variables from other file
+echo "Out value - $VAR"
+source vars
+# Now $VAR value was imported
+echo "Out value after import - $VAR"
 
 echo "";echo "------------------";echo ""
 # CMD substitution
