@@ -1,6 +1,8 @@
 #ifndef __ARRAY__
 #define __ARRAY__
 
+#include <stdlib.h>
+
 #include "array_size_strategy.h"
 #include "array_fill_strategy.h"
 #include "array_sort_strategy.h"
@@ -16,7 +18,8 @@ typedef struct array_t
     array_find_strategy_i find_strategy;
     array_show_strategy_i show_strategy;
 
-    int size;
+    int *item;
+    size_t size;
 } array_t;
 
 int  array_size(const array_t *array);

@@ -23,16 +23,46 @@ TEST_GROUP(array_base)
     }
 };
 
-TEST(array_base, array_strategies2)
+TEST(array_base, fill_strategy)
+{
+    array_fill_random(&array_base);
+    array_fill_inc_pos(&array_base);
+    array_fill_inc_neg(&array_base);
+    array_fill_inc_mix(&array_base);
+    array_fill_dec_pos(&array_base);
+    array_fill_dec_neg(&array_base);
+    array_fill_dec_mix(&array_base);
+
+    array_base.fill_strategy = fill_array_random;
+    array_base.fill_strategy.fill(&array_base);
+    array_base.fill_strategy = fill_array_inc_pos;
+    array_base.fill_strategy = fill_array_inc_neg;
+    array_base.fill_strategy = fill_array_inc_mix;
+    array_base.fill_strategy = fill_array_dec_pos;
+    array_base.fill_strategy = fill_array_dec_neg;
+    array_base.fill_strategy = fill_array_dec_mix;
+}
+
+TEST(array_base, size_strategy)
 {
     array_base.size_strategy = size_array;
     array_base.size_strategy.size(&array_base);
-    array_base.fill_strategy = fill_array;
-    array_base.fill_strategy.fill(&array_base);
+}
+
+TEST(array_base, sort_strategy)
+{
     array_base.sort_strategy = sort_array;
     array_base.sort_strategy.sort(&array_base);
+}
+
+TEST(array_base, find_strategy)
+{
     array_base.find_strategy = find_array;
     array_base.find_strategy.find(&array_base, 1);
+}
+
+TEST(array_base, show_strategy)
+{
     array_base.show_strategy = show_array;
     array_base.show_strategy.show(&array_base);
 }
@@ -58,5 +88,8 @@ TEST(array_base, array_t)
     array_show(&array_base);
     array_sort(&array_base);
     array_find(&array_base, 5);
+
+    array_base.size;
+    array_base.item;
 }
 
