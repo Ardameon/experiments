@@ -26,5 +26,8 @@ echo
 ./if_statement.sh 1
 ./if_statement.sh 1 2
 ./if_statement.sh 1 2 3
-
+echo
+echo "CASE statement script tests"
+echo
+./case_statement.sh AA C bb r c 234 -1 19993 20001 name1 name2 name3 name
 
