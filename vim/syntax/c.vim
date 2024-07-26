@@ -11,7 +11,7 @@ syn match cMyEnum "\<e\u[A-Z0-9_]\+\>\|\<k\u[A-Z0-9_]\+\>\|\<E_\u[A-Z0-9_]\+\>"
 hi def link cMyEnum  cConstant
 
 "my_type_t my_type_e my_type_s
-syn match cMyType "\<\D\w\+_t\>\|\<\D\w\+_e\>\|\<\D\w\+_s\>\|\<\D\w\+_i\>|\<\D\w\+_func\>"
+syn match cMyType "\<\D\w\+_t\>\|\<\D\w\+_e\>\|\<\D\w\+_s\>\|\<\D\w\+_i\>\|\<\D\w\+_func\>"
 hi def cMyType ctermfg=32 cterm=bold
 
 "use cMyParenAndBrackets only with redefining hi for parens and brackets errors
