@@ -145,19 +145,65 @@ cleanall()
     if [ -d $BUILD_DIR ]; then
         echo -e "Clean all build directory"
         rm -rf $BUILD_DIR
-        log_success "Cleanall success"
-    else
-        log_err "Build directory \"$BUILD_DIR\" doesn't exist"
-        exit 7
     fi
+
+    log_success "Cleanall success"
+}
+
+parse_args()
+{
+    while [ -n "$1" ]
+    do
+        case "$1" in
+            --clean)
+                echo "clean"
+                CLEAN=true;;
+
+            --cleanall)
+                echo "cleanall"
+                CLEANALL=true;;
+
+            --tests)
+                echo "tests"
+                TESTS=true;;
+
+            --no-tests)
+                echo "no tests"
+                NO_TESTS=true;;
+
+            *)
+                log_err "Invalid argument - \"$1\""
+                exit_error;;
+        esac
+        shift
+    done
 }
 
 echo -e "Script arguments($#): $*"
 log_warn "WARNING! This script is not working correctly yet!"
 
-#build_app
-[ -x $TESTS_BIN ] || build_tests
-run_tests
-clean
-#cleanall
+parse_args $*
+
+if $CLEANALL;
+then
+    cleanall
+    exit 0
+fi
+
+if $CLEAN;
+then
+    clean
+fi
+
+if $TESTS;
+then
+    build_tests
+    run_tests
+    exit 0
+elif ! $NO_TESTS;
+then
+    build_tests
+fi
+
+build_app
 
