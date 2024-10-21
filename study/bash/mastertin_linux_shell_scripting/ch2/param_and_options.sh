@@ -2,17 +2,17 @@
 
 while [ -n "$1" ]
 do
-case "$1" in
--a) echo "-a option passed";;
--b) param=$2
-    echo "-b option passed, with value $param"
-    shift;;
--c) echo "-c option passed";;
---) shift
-    break;;
-*) echo "Option $1 is not an option";;
-esac
-shift
+    case "$1" in
+        -a) echo "-a option passed";;
+        -b) param=$2
+            echo "-b option passed, with value $param"
+            shift;;
+        -c) echo "-c option passed";;
+        --) shift
+            break;;
+        *) echo "Option $1 is not an option";;
+    esac
+    shift
 done
 
 num=1

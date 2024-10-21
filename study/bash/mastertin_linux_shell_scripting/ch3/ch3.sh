@@ -6,7 +6,7 @@ echo
 test 1 -lt 2 && echo "1 is less then 2"
 [ 1 -lt 2 ] && echo "1 is less then 2"
 
-if [ -n $SSH_TTY ]; then
+if [ -n "$SSH_TTY" ]; then
     echo "This is SSH terminal connection"
 else
     echo "This is not SSH terminal connection"
