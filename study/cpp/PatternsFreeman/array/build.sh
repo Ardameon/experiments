@@ -69,11 +69,12 @@ exit_error()
 
 cmd_exec_check()
 {
-    [ $# -lt 3 ] && log_err "Command execution check: not enough argumets - less then 3" && exit 200
+    local exec_res=$?
 
-    local exec_res=$1
-    local exec_str=$2
-    local exit_code=$3
+    [ $# -lt 2 ] && log_err "Command execution check: not enough argumets - less then 2" && exit 200
+
+    local exec_str=$1
+    local exit_code=$2
 
     if [ $exec_res -eq 0 ]; then
         log_success "$exec_str: success"
@@ -91,7 +92,7 @@ make_build_dir()
 
     pushd $BUILD_ROOT || return
     cmake -B $BUILD_DIRNAME
-    cmd_exec_check $? "Make build dir" 1
+    cmd_exec_check "Make build dir" 1
     popd || return
 }
 
@@ -103,10 +104,9 @@ build_app()
 
     pushd $BUILD_DIR || return
     make $APP_NAME
-    cmd_exec_check $? "Build app" 2
+    cmd_exec_check "Build app" 2
     popd || return
 }
-
 
 build_tests()
 {
@@ -116,14 +116,14 @@ build_tests()
 
     pushd $BUILD_DIR || return
     make $TESTS_NAME
-    cmd_exec_check $? "Build tests" 3
+    cmd_exec_check "Build tests" 3
     popd || return
 }
 
 run_tests()
 {
     ./$TESTS_BIN -v -c
-    cmd_exec_check $? "Run tests" 4
+    cmd_exec_check "Run tests" 4
 }
 
 clean()
