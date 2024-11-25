@@ -1,0 +1,5 @@
+valgrind --tool=callgrind [callgrind options] your-program [program options]
+
+apt install kcachegrind
+
+$ kcachegrind .
