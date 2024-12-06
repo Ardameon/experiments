@@ -238,6 +238,8 @@ const char *a2e_perror(a2e_status_e status)
         case eA2E_STATUS_OK:              return "OK";
         case eA2E_STATUS_NOT_IMPLEMENTED: return "NOT_IMPLEMENTED";
         case eA2E_STATUS_INVALID_ARGS:    return "INVALID_ARGS";
+        case eA2E_STATUS_NO_MEM:          return "NO_MEM";
+        case eA2E_STATUS_WRONG_STATE:     return "WRONG_STATE";
         case eA2E_STATUS_ERROR:           return "ERROR";
         default:                          return "UNDEF_STATUS";
     }

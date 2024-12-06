@@ -13,4 +13,6 @@ void a2e_set_state(a2e_t *a2e, a2e_state_e state);
 
 const char *a2e_state_str(a2e_state_e state);
 
+const char *a2e_name(const a2e_t *a2e);
+
 #endif /* __A2E_COMMON_H__ */

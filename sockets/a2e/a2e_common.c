@@ -16,7 +16,7 @@ void a2e_set_state(a2e_t *a2e, a2e_state_e state)
 {
     if (a2e->state != state)
     {
-        a2e_dbg("%s. State changed: %s => %s", a2e->cfg.name, a2e_state_str(a2e->state), a2e_state_str(state));
+        a2e_dbg("%s. State changed: %s => %s", a2e_name(a2e), a2e_state_str(a2e->state), a2e_state_str(state));
         a2e->state = state;
     }
 }
@@ -25,6 +25,7 @@ const char *a2e_state_str(a2e_state_e state)
 {
     switch(state)
     {
+        case eA2E_STATE_NULL:           return "NULL";
         case eA2E_STATE_IDLE:           return "IDLE";
         case eA2E_STATE_REQ_RECV:       return "REQ_RECV";
         case eA2E_STATE_REQ_SENT:       return "REQ_SENT";
@@ -34,4 +35,9 @@ const char *a2e_state_str(a2e_state_e state)
         case eA2E_STATE_RESP_SENT:      return "RESP_SENT";
         default:                        return "UNDEF_STATE";
     }
+}
+
+const char *a2e_name(const a2e_t *a2e)
+{
+    return a2e ? a2e->cfg.name : "nullptr";
 }

@@ -11,6 +11,8 @@ typedef enum
     eA2E_STATUS_OK,
     eA2E_STATUS_NOT_IMPLEMENTED,
     eA2E_STATUS_INVALID_ARGS,
+    eA2E_STATUS_NO_MEM,
+    eA2E_STATUS_WRONG_STATE,
     eA2E_STATUS_ERROR,
 } a2e_status_e;
 
@@ -22,6 +24,7 @@ typedef enum
 
 typedef enum
 {
+    eA2E_STATE_NULL,
     eA2E_STATE_IDLE,
     eA2E_STATE_REQ_RECV,
     eA2E_STATE_REQ_SENT,
