@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 typedef struct a2e_t a2e_t;
+typedef struct a2e_cfg_t a2e_cfg_t;
 
 typedef int (*a2e_request_rx_func)      (a2e_t *a2e, uint8_t **rx_buffer, uint32_t *size);
 typedef int (*a2e_request_tx_func)      (a2e_t *a2e, uint8_t  *tx_buffer, uint32_t size);
@@ -14,7 +15,7 @@ typedef int (*a2e_response_tx_func)     (a2e_t *a2e, uint8_t  *tx_buffer, uint32
 
 typedef int (*a2e_progress_tx_func)     (a2e_t *a2e);
 
-typedef int (*a2e_init_func)            (a2e_t **a2e);
+typedef int (*a2e_init_func)            (a2e_t **a2e, const a2e_cfg_t *cfg);
 typedef int (*a2e_close_func)           (a2e_t *a2e);
 
 typedef struct a2e_strategy_i

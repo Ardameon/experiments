@@ -1,10 +1,11 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "a2e_iface.h"
 #include "a2e_server.h"
 #include "a2e_dbg.h"
 
-static a2e_status_e server_init(a2e_server_t **server);
+static a2e_status_e server_init(a2e_server_t **server, const a2e_cfg_t *cfg);
 static a2e_status_e server_close(a2e_server_t *server);
 
 static a2e_status_e server_request_rx(a2e_server_t *server, uint8_t **rx_buffer, uint32_t *size);
@@ -23,7 +24,7 @@ static a2e_strategy_i server_iface =
     .prog_tx   = (a2e_progress_tx_func)      &server_progress_tx,
 };
 
-static a2e_status_e server_init(a2e_server_t **server)
+static a2e_status_e server_init(a2e_server_t **server, const a2e_cfg_t *cfg)
 {
     a2e_server_t *new_srv = NULL;
     a2e_status_e status = eA2E_STATUS_ERROR;
@@ -37,6 +38,7 @@ static a2e_status_e server_init(a2e_server_t **server)
     if (new_srv)
     {
         new_srv->iface = server_iface;
+        memcpy(&new_srv->base.cfg, cfg, sizeof(*cfg));
 
         (*server) = new_srv;
 

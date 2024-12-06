@@ -1,10 +1,11 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "a2e_iface.h"
 #include "a2e_client.h"
 #include "a2e_dbg.h"
 
-static a2e_status_e client_init(a2e_client_t **client);
+static a2e_status_e client_init(a2e_client_t **client, const a2e_cfg_t *cfg);
 static a2e_status_e client_close(a2e_client_t *client);
 
 static a2e_status_e client_request_tx(a2e_client_t *client, uint8_t *tx_buffer, uint32_t size);
@@ -21,7 +22,7 @@ static a2e_strategy_i client_iface =
     .resp_rx   = (a2e_response_rx_func)      &client_response_rx,
 };
 
-static a2e_status_e client_init(a2e_client_t **client)
+static a2e_status_e client_init(a2e_client_t **client, const a2e_cfg_t *cfg)
 {
     a2e_client_t *new_clt = NULL;
     a2e_status_e status = eA2E_STATUS_ERROR;
@@ -35,6 +36,7 @@ static a2e_status_e client_init(a2e_client_t **client)
     if (new_clt)
     {
         new_clt->iface = client_iface;
+        memcpy(&new_clt->base.cfg, cfg, sizeof(*cfg));
 
         (*client) = new_clt;
 

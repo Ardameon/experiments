@@ -1,8 +1,11 @@
+#include <string.h>
+
 #include "a2e.h"
 #include "a2e_iface.h"
 #include "a2e_client.h"
 #include "a2e_server.h"
 #include "a2e_dbg.h"
+#include "a2e_common.h"
 
 typedef struct a2e_ext_t
 {
@@ -11,7 +14,7 @@ typedef struct a2e_ext_t
 } a2e_ext_t;
 
 
-a2e_status_e a2e_init_client(a2e_t **a2e)
+a2e_status_e a2e_init_client(a2e_t **a2e, const a2e_cfg_t *cfg)
 {
     a2e_dbg("%s: start", __func__);
     a2e_status_e status = eA2E_STATUS_NOT_IMPLEMENTED;
@@ -19,7 +22,7 @@ a2e_status_e a2e_init_client(a2e_t **a2e)
 
     if (client_iface.init)
     {
-        status = client_iface.init(a2e);
+        status = client_iface.init(a2e, cfg);
     }
 
     a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
@@ -27,7 +30,7 @@ a2e_status_e a2e_init_client(a2e_t **a2e)
 }
 
 
-a2e_status_e a2e_init_server(a2e_t **a2e)
+a2e_status_e a2e_init_server(a2e_t **a2e, const a2e_cfg_t *cfg)
 {
     a2e_dbg("%s: start", __func__);
     a2e_status_e status = eA2E_STATUS_NOT_IMPLEMENTED;
@@ -35,7 +38,7 @@ a2e_status_e a2e_init_server(a2e_t **a2e)
 
     if (server_iface.init)
     {
-        status = server_iface.init(a2e);
+        status = server_iface.init(a2e, cfg);
     }
 
     a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
@@ -213,17 +216,17 @@ _exit:
 
 }
 
-void a2e_set_dbg_on(void)
+void a2e_dbg_on(void)
 {
     a2e_set_dbg(1);
 }
 
-void a2e_set_dbg_off(void)
+void a2e_dbg_off(void)
 {
     a2e_set_dbg(0);
 }
 
-void a2e_set_dbg_func(a2e_log_func log_func)
+void a2e_dbg_set_func(a2e_log_func log_func)
 {
     a2e_set_dbg_log_func(log_func);
 }
@@ -237,5 +240,14 @@ const char *a2e_perror(a2e_status_e status)
         case eA2E_STATUS_INVALID_ARGS:    return "INVALID_ARGS";
         case eA2E_STATUS_ERROR:           return "ERROR";
         default:                          return "UNDEF_STATUS";
+    }
+}
+
+void a2e_cfg_set_default(a2e_cfg_t *cfg)
+{
+    if (cfg)
+    {
+        strncpy(cfg->sock_dir, DEF_A2E_SOCK_DIR, A2E_SOCK_DIR_LEN_MAX);
+        strncpy(cfg->name, DEF_A2E_NAME, A2E_NAME_LEN_MAX);
     }
 }
