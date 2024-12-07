@@ -8,12 +8,16 @@ typedef void (*a2e_log_func)(const char *log_str, int len);
 
 typedef enum
 {
-    eA2E_STATUS_OK,
-    eA2E_STATUS_NOT_IMPLEMENTED,
-    eA2E_STATUS_INVALID_ARGS,
-    eA2E_STATUS_NO_MEM,
-    eA2E_STATUS_WRONG_STATE,
-    eA2E_STATUS_ERROR,
+    eA2E_SC_OK,
+    eA2E_SC_IN_PROGRESS,
+    eA2E_SC_TIMEOUT,
+    eA2E_SC_NOT_IMPLEMENTED,
+    eA2E_SC_INVALID_ARGS,
+    eA2E_SC_NO_MEM,
+    eA2E_SC_WRONG_STATE,
+    eA2E_SC_INCOMPLETE_READ,
+    eA2E_SC_CONTINUE,
+    eA2E_SC_ERROR,
 } a2e_status_e;
 
 typedef enum
@@ -26,7 +30,9 @@ typedef enum
 {
     eA2E_STATE_NULL,
     eA2E_STATE_IDLE,
-    eA2E_STATE_REQ_RECV,
+    eA2E_STATE_REQ_RX_START,
+    eA2E_STATE_REQ_RX,
+    eA2E_STATE_REQ_RX_FINISH,
     eA2E_STATE_REQ_SENT,
     eA2E_STATE_REQ_PROGRESS,
     eA2E_STATE_REQ_COMPLT,

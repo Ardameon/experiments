@@ -12,6 +12,11 @@ unsigned long a2e_get_timestamp(void)
     return ((tp.tv_sec * 1000) + (tp.tv_nsec / 1000000));
 }
 
+uint8_t a2e_timeout_reached(unsigned long start_timestamp, unsigned timeout_ms)
+{
+    return ((a2e_get_timestamp()) - start_timestamp) >= timeout_ms;
+}
+
 void a2e_set_state(a2e_t *a2e, a2e_state_e state)
 {
     if (a2e->state != state)
@@ -27,7 +32,9 @@ const char *a2e_state_str(a2e_state_e state)
     {
         case eA2E_STATE_NULL:           return "NULL";
         case eA2E_STATE_IDLE:           return "IDLE";
-        case eA2E_STATE_REQ_RECV:       return "REQ_RECV";
+        case eA2E_STATE_REQ_RX_START:   return "REQ_RX_START";
+        case eA2E_STATE_REQ_RX:         return "REQ_RX";
+        case eA2E_STATE_REQ_RX_FINISH:  return "REQ_RX_FINISH";
         case eA2E_STATE_REQ_SENT:       return "REQ_SENT";
         case eA2E_STATE_REQ_PROGRESS:   return "REQ_PROGRESS";
         case eA2E_STATE_REQ_COMPLT:     return "REQ_COMPLT";
