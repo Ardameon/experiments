@@ -18,6 +18,8 @@ typedef struct
     uint8_t *req;
     uint32_t req_size_recv;
     uint32_t req_size_exp;
+
+    uint32_t rsp_size_sent;
 } a2e_server_t;
 
 a2e_strategy_i a2e_server_iface_get(void);

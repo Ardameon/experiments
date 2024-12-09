@@ -51,6 +51,18 @@ int main(void)
         if (status == eA2E_SC_OK)
             a2e_progress_tx(server, TO);
 
+        do
+        {
+            status = a2e_response_tx(server, buf_rx, size, TO);
+            printf("AAAAA. TX status: %s\n", a2e_perror(status));
+
+            if (status == eA2E_SC_OK)
+                break;
+
+        } while (status == eA2E_SC_TIMEOUT || status == eA2E_SC_CONTINUE || status == eA2E_SC_CONTINUE_TIMEOUT);
+
+        printf("TX[%d]: %.*s\n", size, size, buf_rx);
+
         a2e_request_complete(server);
     }
 

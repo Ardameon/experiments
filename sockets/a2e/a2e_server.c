@@ -15,7 +15,8 @@
 #include "a2e_dbg.h"
 #include "a2e_common.h"
 
-#define RX_CHUNK_SIZE 16
+#define RX_TX_CHUNK_SIZE 16
+#define POLL_RX_TX_TIMEOUT_MS 50
 
 static a2e_status_e server_init_func(a2e_server_t **server, const a2e_cfg_t *cfg);
 static a2e_status_e server_close_func(a2e_server_t *server);
@@ -34,6 +35,8 @@ static a2e_status_e server_stop(a2e_server_t *server);
 static a2e_status_e server_conn_accept(a2e_server_t *server, uint16_t to_ms);
 static a2e_status_e server_conn_read_start(a2e_server_t *server, uint16_t to_ms);
 static a2e_status_e server_conn_read(a2e_server_t *server, uint8_t **rx_buffer, uint32_t *size, uint16_t to_ms);
+static a2e_status_e server_conn_write_start(a2e_server_t *server, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms);
+static a2e_status_e server_conn_write(a2e_server_t *server, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms);
 
 static a2e_strategy_i server_iface =
 {
@@ -190,7 +193,7 @@ static a2e_status_e server_conn_read_start(a2e_server_t *server, uint16_t to_ms)
     struct pollfd fds = {0};
     int res = 0;
     unsigned long start_time;
-    int poll_to_ms = 50;
+    int poll_to_ms = POLL_RX_TX_TIMEOUT_MS;
 
     a2e_dbg("%s: start", __func__);
 
@@ -263,6 +266,7 @@ _exit:
     a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
 }
+
 static a2e_status_e server_conn_read(a2e_server_t *server, uint8_t **rx_buffer, uint32_t *size, uint16_t to_ms)
 {
     a2e_status_e status = eA2E_SC_ERROR;
@@ -298,7 +302,7 @@ static a2e_status_e server_conn_read(a2e_server_t *server, uint8_t **rx_buffer, 
 
             rx_buf_ptr = server->req + server->req_size_recv;
 
-            recv_len = recv(server->rem_fd, rx_buf_ptr, A2E_MIN(RX_CHUNK_SIZE, server->req_size_exp - server->req_size_recv), 0);
+            recv_len = recv(server->rem_fd, rx_buf_ptr, A2E_MIN(RX_TX_CHUNK_SIZE, server->req_size_exp - server->req_size_recv), 0);
             if (recv_len < 0)
             {
                 a2e_dbg("%s. Conn read error (%s)", a2e_name(A2E_BASE(server)));
@@ -349,9 +353,170 @@ _exit:
     return status;
 }
 
+static a2e_status_e server_conn_write_start(a2e_server_t *server, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms)
+{
+    a2e_status_e status = eA2E_SC_ERROR;
+    struct pollfd fds = {0};
+    int res = 0;
+    unsigned long start_time;
+    int poll_to_ms = 50;
+
+    a2e_dbg("%s: start", __func__);
+
+    start_time = a2e_get_timestamp();
+
+    fds.fd = server->rem_fd;
+    fds.events = POLLOUT;
+
+    while (1)
+    {
+        res = poll(&fds, 1, poll_to_ms);
+        if (res > 0)
+        {
+            if (fds.revents & (POLLNVAL | POLLERR))
+            {
+                a2e_dbg("%s. Conn write poll failed (POLLNVAL | PLLERR)", a2e_name(A2E_BASE(server)));
+                goto _exit;
+            }
+
+            if (fds.revents & POLLHUP)
+            {
+                a2e_dbg("%s. Conn write connection closed by remote side", a2e_name(A2E_BASE(server)));
+                goto _exit;
+            }
+
+            /* TODO: write message header here */
+
+            server->rsp_size_sent = 0;
+
+            a2e_set_state(A2E_BASE(server), eA2E_STATE_RSP_TX);
+
+            //rx_buf_ptr = server->req + server->req_size_recv;
+
+            //recv_len = recv(server->rem_fd, rx_buf_ptr, RX_CHUNK_SIZE, 0);
+            //if (recv_len < 0)
+            //{
+            //    a2e_dbg("%s. Conn write error (%s)", a2e_name(A2E_BASE(server)));
+            //    goto _exit;
+            //}
+
+            status = eA2E_SC_CONTINUE;
+
+            goto _exit;
+        }
+        else if (res < 0)
+        {
+            if (errno != EINTR)
+            {
+                a2e_dbg("%s. Conn write poll failed (%s)", a2e_name(A2E_BASE(server)), errno);
+                goto _exit;
+            }
+        }
+        else
+        {
+            a2e_dbg("%s. Conn write poll timeout (no data for write)", a2e_name(A2E_BASE(server)));
+            /* cycle continue */
+        }
+
+        if (a2e_timeout_reached(start_time, to_ms))
+        {
+            status = eA2E_SC_TIMEOUT;
+            goto _exit;
+        }
+    }
+
+_exit:
+    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
+    return status;
+}
+
+static a2e_status_e server_conn_write(a2e_server_t *server, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms)
+{
+    a2e_status_e status = eA2E_SC_ERROR;
+    struct pollfd fds = {0};
+    int res = 0, sent_len = 0;
+    unsigned long start_time;
+    int poll_to_ms = POLL_RX_TX_TIMEOUT_MS;
+    uint8_t *tx_buf_ptr;
+
+    a2e_dbg("%s: start", __func__);
+
+    start_time = a2e_get_timestamp();
+
+    fds.fd = server->rem_fd;
+    fds.events = POLLOUT;
+
+    while (1)
+    {
+        res = poll(&fds, 1, poll_to_ms);
+        if (res > 0)
+        {
+            if (fds.revents & (POLLNVAL | POLLERR))
+            {
+                a2e_dbg("%s. Conn write poll failed (POLLNVAL | PLLERR)", a2e_name(A2E_BASE(server)));
+                goto _exit;
+            }
+
+            if (fds.revents & POLLHUP)
+            {
+                a2e_dbg("%s. Conn write connection closed by remote side", a2e_name(A2E_BASE(server)));
+                goto _exit;
+            }
+
+            tx_buf_ptr = tx_buffer + server->rsp_size_sent;
+
+            sent_len = send(server->rem_fd, tx_buf_ptr, A2E_MIN(RX_TX_CHUNK_SIZE, size - server->rsp_size_sent), 0);
+            if (sent_len < 0)
+            {
+                a2e_dbg("%s. Conn write error (%s)", a2e_name(A2E_BASE(server)));
+                goto _exit;
+            }
+
+            server->rsp_size_sent += sent_len;
+
+            a2e_dbg("%s. Sent data chunk size[%d] (total[%d/%d])", a2e_name(A2E_BASE(server)), sent_len, server->rsp_size_sent, size);
+
+            if (server->rsp_size_sent >= size)
+            {
+                a2e_set_state(A2E_BASE(server), eA2E_STATE_RSP_TX_FINISH);
+                status = eA2E_SC_OK;
+                goto _exit;
+            }
+            else
+            {
+                status = eA2E_SC_CONTINUE;
+                /* Cycle will be continued until write end or timeout reached */
+            }
+        }
+        else if (res < 0)
+        {
+            if (errno != EINTR)
+            {
+                a2e_dbg("%s. Conn write poll failed (%s)", a2e_name(A2E_BASE(server)), errno);
+                goto _exit;
+            }
+        }
+        else
+        {
+            a2e_dbg("%s. Conn write poll timeout (no data for write)", a2e_name(A2E_BASE(server)));
+            /* cycle continue */
+        }
+
+        if (a2e_timeout_reached(start_time, to_ms))
+        {
+            status = (status == eA2E_SC_CONTINUE) ? eA2E_SC_CONTINUE_TIMEOUT: eA2E_SC_TIMEOUT;
+            goto _exit;
+        }
+    }
+
+_exit:
+    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
+    return status;
+}
+
 static a2e_status_e server_request_complete_func(a2e_server_t *server)
 {
-    a2e_status_e status = eA2E_SC_WRONG_STATE;
+    a2e_status_e status = eA2E_SC_ERROR;
     a2e_dbg("%s: start", __func__);
 
     switch(A2E_BASE(server)->state)
@@ -359,6 +524,9 @@ static a2e_status_e server_request_complete_func(a2e_server_t *server)
         case eA2E_STATE_REQ_RX_START:
         case eA2E_STATE_REQ_RX:
         case eA2E_STATE_REQ_RX_FINISH:
+        case eA2E_STATE_REQ_PROGRESS:
+        case eA2E_STATE_RSP_TX:
+        case eA2E_STATE_RSP_TX_FINISH:
         {
             if (server->rem_fd > -1)
             {
@@ -375,6 +543,8 @@ static a2e_status_e server_request_complete_func(a2e_server_t *server)
                 server->req_size_recv = 0;
             }
 
+            server->rsp_size_sent = 0;
+
             a2e_set_state(A2E_BASE(server), eA2E_STATE_IDLE);
             status = eA2E_SC_OK;
 
@@ -382,6 +552,7 @@ static a2e_status_e server_request_complete_func(a2e_server_t *server)
         }
 
         default:
+            status = eA2E_SC_WRONG_STATE;
             break;
     }
 
@@ -391,9 +562,26 @@ static a2e_status_e server_request_complete_func(a2e_server_t *server)
 
 static a2e_status_e server_response_tx_func(a2e_server_t *server, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms)
 {
+    a2e_status_e status = eA2E_SC_ERROR;
+
     a2e_dbg("%s: start", __func__);
-    a2e_dbg("%s: end", __func__);
-    return eA2E_SC_OK;
+    switch (A2E_BASE(server)->state)
+    {
+        case eA2E_STATE_REQ_RX_FINISH:
+        case eA2E_STATE_REQ_PROGRESS:
+            status = server_conn_write_start(server, tx_buffer, size, to_ms);
+            break;
+
+        case eA2E_STATE_RSP_TX:
+            status = server_conn_write(server, tx_buffer, size, to_ms);
+            break;
+
+        default:
+            status = eA2E_SC_WRONG_STATE;
+            break;
+    }
+    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
+    return status;
 }
 
 static a2e_status_e server_progress_tx_func(a2e_server_t *server, uint16_t to_ms)
