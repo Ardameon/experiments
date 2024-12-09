@@ -17,13 +17,13 @@
 
 #define RX_CHUNK_SIZE 16
 
-static a2e_status_e server_init(a2e_server_t **server, const a2e_cfg_t *cfg);
-static a2e_status_e server_close(a2e_server_t *server);
+static a2e_status_e server_init_func(a2e_server_t **server, const a2e_cfg_t *cfg);
+static a2e_status_e server_close_func(a2e_server_t *server);
 
-static a2e_status_e server_request_rx(a2e_server_t *server, uint8_t **rx_buffer, uint32_t *size, uint16_t to_ms);
-static a2e_status_e server_request_complete(a2e_server_t *server);
-static a2e_status_e server_response_tx(a2e_server_t *server, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms);
-static a2e_status_e server_progress_tx(a2e_server_t *server, uint16_t to_ms);
+static a2e_status_e server_request_rx_func(a2e_server_t *server, uint8_t **rx_buffer, uint32_t *size, uint16_t to_ms);
+static a2e_status_e server_request_complete_func(a2e_server_t *server);
+static a2e_status_e server_response_tx_func(a2e_server_t *server, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms);
+static a2e_status_e server_progress_tx_func(a2e_server_t *server, uint16_t to_ms);
 
 static a2e_status_e server_alloc(a2e_server_t **server);
 static void         server_free(a2e_server_t *server);
@@ -37,16 +37,16 @@ static a2e_status_e server_conn_read(a2e_server_t *server, uint8_t **rx_buffer, 
 
 static a2e_strategy_i server_iface =
 {
-    .init      = (a2e_init_func)             &server_init,
-    .close     = (a2e_close_func)            &server_close,
+    .init      = (a2e_init_func)             &server_init_func,
+    .close     = (a2e_close_func)            &server_close_func,
 
-    .req_rx    = (a2e_request_rx_func)       &server_request_rx,
-    .req_cmplt = (a2e_request_complete_func) &server_request_complete,
-    .resp_tx   = (a2e_response_tx_func)      &server_response_tx,
-    .prog_tx   = (a2e_progress_tx_func)      &server_progress_tx,
+    .req_rx    = (a2e_request_rx_func)       &server_request_rx_func,
+    .req_cmplt = (a2e_request_complete_func) &server_request_complete_func,
+    .resp_tx   = (a2e_response_tx_func)      &server_response_tx_func,
+    .prog_tx   = (a2e_progress_tx_func)      &server_progress_tx_func,
 };
 
-static a2e_status_e server_init(a2e_server_t **server, const a2e_cfg_t *cfg)
+static a2e_status_e server_init_func(a2e_server_t **server, const a2e_cfg_t *cfg)
 {
     a2e_server_t *new_srv = NULL;
     a2e_status_e status = eA2E_SC_ERROR;
@@ -80,7 +80,7 @@ _exit:
     return status;
 }
 
-static a2e_status_e server_close(a2e_server_t *server)
+static a2e_status_e server_close_func(a2e_server_t *server)
 {
     a2e_dbg("%s: start", __func__);
     server_stop(server);
@@ -89,7 +89,7 @@ static a2e_status_e server_close(a2e_server_t *server)
     return eA2E_SC_OK;
 }
 
-static a2e_status_e server_request_rx(a2e_server_t *server, uint8_t **rx_buffer, uint32_t *size, uint16_t to_ms)
+static a2e_status_e server_request_rx_func(a2e_server_t *server, uint8_t **rx_buffer, uint32_t *size, uint16_t to_ms)
 {
     a2e_status_e status = eA2E_SC_ERROR;
 
@@ -218,7 +218,7 @@ static a2e_status_e server_conn_read_start(a2e_server_t *server, uint16_t to_ms)
 
             /* TODO: read message header here */
 
-            server->req_size_exp = 128;
+            server->req_size_exp = 133;
             server->req_size_recv = 0;
 
             server->req = malloc(server->req_size_exp);
@@ -309,19 +309,19 @@ static a2e_status_e server_conn_read(a2e_server_t *server, uint8_t **rx_buffer, 
 
             a2e_dbg("%s. Recv data chunk size[%d] (total[%d/%d])", a2e_name(A2E_BASE(server)), recv_len, server->req_size_recv, server->req_size_exp);
 
-            if (server->req_size_recv < server->req_size_exp)
-            {
-                status = eA2E_SC_CONTINUE;
-            }
-            else
+            if (server->req_size_recv >= server->req_size_exp)
             {
                 (*rx_buffer) = server->req;
                 (*size) = server->req_size_recv;
                 a2e_set_state(A2E_BASE(server), eA2E_STATE_REQ_RX_FINISH);
                 status = eA2E_SC_OK;
+                goto _exit;
             }
-
-            goto _exit;
+            else
+            {
+                status = eA2E_SC_CONTINUE;
+                /* Cycle will be continued until read end or timeout reached */
+            }
         }
         else if (res < 0)
         {
@@ -339,7 +339,7 @@ static a2e_status_e server_conn_read(a2e_server_t *server, uint8_t **rx_buffer, 
 
         if (a2e_timeout_reached(start_time, to_ms))
         {
-            status = eA2E_SC_TIMEOUT;
+            status = (status == eA2E_SC_CONTINUE) ? eA2E_SC_CONTINUE_TIMEOUT: eA2E_SC_TIMEOUT;
             goto _exit;
         }
     }
@@ -349,7 +349,7 @@ _exit:
     return status;
 }
 
-static a2e_status_e server_request_complete(a2e_server_t *server)
+static a2e_status_e server_request_complete_func(a2e_server_t *server)
 {
     a2e_status_e status = eA2E_SC_WRONG_STATE;
     a2e_dbg("%s: start", __func__);
@@ -389,14 +389,14 @@ static a2e_status_e server_request_complete(a2e_server_t *server)
     return status;
 }
 
-static a2e_status_e server_response_tx(a2e_server_t *server, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms)
+static a2e_status_e server_response_tx_func(a2e_server_t *server, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms)
 {
     a2e_dbg("%s: start", __func__);
     a2e_dbg("%s: end", __func__);
     return eA2E_SC_OK;
 }
 
-static a2e_status_e server_progress_tx(a2e_server_t *server, uint16_t to_ms)
+static a2e_status_e server_progress_tx_func(a2e_server_t *server, uint16_t to_ms)
 {
     a2e_dbg("%s: start", __func__);
     a2e_dbg("%s: end", __func__);

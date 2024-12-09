@@ -234,17 +234,18 @@ const char *a2e_perror(a2e_status_e status)
 {
     switch(status)
     {
-        case eA2E_SC_OK:              return "OK";
-        case eA2E_SC_IN_PROGRESS:     return "IN_PROGRESS";
-        case eA2E_SC_TIMEOUT:         return "TIMEOUT";
-        case eA2E_SC_NOT_IMPLEMENTED: return "NOT_IMPLEMENTED";
-        case eA2E_SC_INVALID_ARGS:    return "INVALID_ARGS";
-        case eA2E_SC_NO_MEM:          return "NO_MEM";
-        case eA2E_SC_WRONG_STATE:     return "WRONG_STATE";
-        case eA2E_SC_INCOMPLETE_READ: return "INCOMPLETE_READ";
-        case eA2E_SC_CONTINUE:        return "CONTINUE";
-        case eA2E_SC_ERROR:           return "ERROR";
-        default:                      return "UNDEF_STATUS";
+        case eA2E_SC_OK:               return "OK";
+        case eA2E_SC_IN_PROGRESS:      return "IN_PROGRESS";
+        case eA2E_SC_TIMEOUT:          return "TIMEOUT";
+        case eA2E_SC_NOT_IMPLEMENTED:  return "NOT_IMPLEMENTED";
+        case eA2E_SC_INVALID_ARGS:     return "INVALID_ARGS";
+        case eA2E_SC_NO_MEM:           return "NO_MEM";
+        case eA2E_SC_WRONG_STATE:      return "WRONG_STATE";
+        case eA2E_SC_INCOMPLETE_READ:  return "INCOMPLETE_READ";
+        case eA2E_SC_CONTINUE:         return "CONTINUE";
+        case eA2E_SC_CONTINUE_TIMEOUT: return "CONTINUE_TIMEOUT";
+        case eA2E_SC_ERROR:            return "ERROR";
+        default:                       return "UNDEF_STATUS";
     }
 }
 

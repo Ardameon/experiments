@@ -17,6 +17,7 @@ typedef enum
     eA2E_SC_WRONG_STATE,
     eA2E_SC_INCOMPLETE_READ,
     eA2E_SC_CONTINUE,
+    eA2E_SC_CONTINUE_TIMEOUT,
     eA2E_SC_ERROR,
 } a2e_status_e;
 

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <unistd.h>
 
 #include "a2e.h"
 
@@ -43,7 +44,7 @@ int main(void)
             if (status == eA2E_SC_OK)
                 break;
 
-        } while (status == eA2E_SC_TIMEOUT || status == eA2E_SC_CONTINUE);
+        } while (status == eA2E_SC_TIMEOUT || status == eA2E_SC_CONTINUE || status == eA2E_SC_CONTINUE_TIMEOUT);
 
         printf("RX[%d]: %.*s\n", size, size, buf_rx);
 
