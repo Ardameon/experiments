@@ -1,4 +1,5 @@
 #include <time.h>
+#include <string.h>
 
 #include "a2e_common.h"
 #include "a2e_dbg.h"
@@ -52,4 +53,14 @@ const char *a2e_state_str(a2e_state_e state)
 const char *a2e_name(const a2e_t *a2e)
 {
     return a2e ? a2e->cfg.name : "nullptr";
+}
+
+void a2e_cfg_apply(a2e_t *a2e, const a2e_cfg_t *cfg)
+{
+    memcpy(&a2e->cfg, cfg, sizeof(*cfg));
+
+    if (!a2e->cfg.rw_chunk_size)
+    {
+        a2e->cfg.rw_chunk_size = DEF_A2E_RW_CHUNK_SIZE;
+    }
 }

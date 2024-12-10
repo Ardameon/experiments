@@ -9,6 +9,8 @@
 #define DEF_A2E_SOCK_NAME "a2e.sock"
 #define DEF_A2E_NAME      "A2E"
 
+#define DEF_A2E_RW_CHUNK_SIZE 16
+
 #define A2E_SOCK_PATH_LEN_MAX 96
 
 #define A2E_MIN(a, b) ((a) < (b) ? (a) : (b))
@@ -22,5 +24,7 @@ void a2e_set_state(a2e_t *a2e, a2e_state_e state);
 const char *a2e_state_str(a2e_state_e state);
 
 const char *a2e_name(const a2e_t *a2e);
+
+void a2e_cfg_apply(a2e_t *a2e, const a2e_cfg_t *cfg);
 
 #endif /* __A2E_COMMON_H__ */

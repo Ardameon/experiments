@@ -51,6 +51,7 @@ typedef struct a2e_cfg_t
     char name[A2E_NAME_LEN_MAX + 1];
     char sock_dir[A2E_SOCK_DIR_LEN_MAX + 1];
 
+    unsigned rw_chunk_size;
 } a2e_cfg_t;
 
 typedef struct a2e_t

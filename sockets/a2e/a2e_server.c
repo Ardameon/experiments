@@ -15,8 +15,7 @@
 #include "a2e_dbg.h"
 #include "a2e_common.h"
 
-#define RX_TX_CHUNK_SIZE 16
-#define POLL_RX_TX_TIMEOUT_MS 50
+#define RW_POLL_TIMEOUT_MS 50
 
 static a2e_status_e server_init_func(a2e_server_t **server, const a2e_cfg_t *cfg);
 static a2e_status_e server_close_func(a2e_server_t *server);
@@ -64,7 +63,8 @@ static a2e_status_e server_init_func(a2e_server_t **server, const a2e_cfg_t *cfg
         goto _exit;
     }
 
-    memcpy(&new_srv->base.cfg, cfg, sizeof(*cfg));
+    a2e_cfg_apply(A2E_BASE(new_srv), cfg);
+
     new_srv->loc_fd = -1;
     new_srv->rem_fd = -1;
     new_srv->base.role = eA2E_ROLE_SERVER;
@@ -193,7 +193,7 @@ static a2e_status_e server_conn_read_start(a2e_server_t *server, uint16_t to_ms)
     struct pollfd fds = {0};
     int res = 0;
     unsigned long start_time;
-    int poll_to_ms = POLL_RX_TX_TIMEOUT_MS;
+    int poll_to_ms = RW_POLL_TIMEOUT_MS;
 
     a2e_dbg("%s: start", __func__);
 
@@ -302,7 +302,7 @@ static a2e_status_e server_conn_read(a2e_server_t *server, uint8_t **rx_buffer, 
 
             rx_buf_ptr = server->req + server->req_size_recv;
 
-            recv_len = recv(server->rem_fd, rx_buf_ptr, A2E_MIN(RX_TX_CHUNK_SIZE, server->req_size_exp - server->req_size_recv), 0);
+            recv_len = recv(server->rem_fd, rx_buf_ptr, A2E_MIN(A2E_BASE(server)->cfg.rw_chunk_size, server->req_size_exp - server->req_size_recv), 0);
             if (recv_len < 0)
             {
                 a2e_dbg("%s. Conn read error (%s)", a2e_name(A2E_BASE(server)));
@@ -436,7 +436,7 @@ static a2e_status_e server_conn_write(a2e_server_t *server, uint8_t *tx_buffer, 
     struct pollfd fds = {0};
     int res = 0, sent_len = 0;
     unsigned long start_time;
-    int poll_to_ms = POLL_RX_TX_TIMEOUT_MS;
+    int poll_to_ms = RW_POLL_TIMEOUT_MS;
     uint8_t *tx_buf_ptr;
 
     a2e_dbg("%s: start", __func__);
@@ -465,7 +465,7 @@ static a2e_status_e server_conn_write(a2e_server_t *server, uint8_t *tx_buffer, 
 
             tx_buf_ptr = tx_buffer + server->rsp_size_sent;
 
-            sent_len = send(server->rem_fd, tx_buf_ptr, A2E_MIN(RX_TX_CHUNK_SIZE, size - server->rsp_size_sent), 0);
+            sent_len = send(server->rem_fd, tx_buf_ptr, A2E_MIN(A2E_BASE(server)->cfg.rw_chunk_size, size - server->rsp_size_sent), 0);
             if (sent_len < 0)
             {
                 a2e_dbg("%s. Conn write error (%s)", a2e_name(A2E_BASE(server)));

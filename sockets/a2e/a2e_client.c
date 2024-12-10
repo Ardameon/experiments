@@ -36,7 +36,7 @@ static a2e_status_e client_init_func(a2e_client_t **client, const a2e_cfg_t *cfg
     if (new_clt)
     {
         new_clt->iface = client_iface;
-        memcpy(&new_clt->base.cfg, cfg, sizeof(*cfg));
+        memcpy(&A2E_BASE(new_clt)->cfg, cfg, sizeof(*cfg));
 
         (*client) = new_clt;
 

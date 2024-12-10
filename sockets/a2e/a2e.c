@@ -255,5 +255,6 @@ void a2e_cfg_set_default(a2e_cfg_t *cfg)
     {
         strncpy(cfg->sock_dir, DEF_A2E_SOCK_DIR, A2E_SOCK_DIR_LEN_MAX);
         strncpy(cfg->name, DEF_A2E_NAME, A2E_NAME_LEN_MAX);
+        cfg->rw_chunk_size = DEF_A2E_RW_CHUNK_SIZE;
     }
 }
