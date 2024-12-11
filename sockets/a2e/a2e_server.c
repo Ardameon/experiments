@@ -15,13 +15,12 @@
 #include "a2e_dbg.h"
 #include "a2e_common.h"
 
-#define RW_POLL_TIMEOUT_MS 50
-
 static a2e_status_e server_init_func(a2e_server_t **server, const a2e_cfg_t *cfg);
 static a2e_status_e server_close_func(a2e_server_t *server);
 
 static a2e_status_e server_request_rx_func(a2e_server_t *server, uint8_t **rx_buffer, uint32_t *size, uint16_t to_ms);
 static a2e_status_e server_request_complete_func(a2e_server_t *server);
+static a2e_status_e server_request_complete_wait_func(a2e_server_t *server, uint16_t to_ms);
 static a2e_status_e server_response_tx_func(a2e_server_t *server, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms);
 static a2e_status_e server_progress_tx_func(a2e_server_t *server, uint16_t to_ms);
 
@@ -37,15 +36,18 @@ static a2e_status_e server_conn_read(a2e_server_t *server, uint8_t **rx_buffer, 
 static a2e_status_e server_conn_write_start(a2e_server_t *server, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms);
 static a2e_status_e server_conn_write(a2e_server_t *server, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms);
 
+static a2e_status_e server_request_close(a2e_server_t *server);
+
 static a2e_strategy_i server_iface =
 {
-    .init      = (a2e_init_func)             &server_init_func,
-    .close     = (a2e_close_func)            &server_close_func,
+    .init           = (a2e_init_func)                  &server_init_func,
+    .close          = (a2e_close_func)                 &server_close_func,
 
-    .req_rx    = (a2e_request_rx_func)       &server_request_rx_func,
-    .req_cmplt = (a2e_request_complete_func) &server_request_complete_func,
-    .resp_tx   = (a2e_response_tx_func)      &server_response_tx_func,
-    .prog_tx   = (a2e_progress_tx_func)      &server_progress_tx_func,
+    .req_rx         = (a2e_request_rx_func)            &server_request_rx_func,
+    .req_cmplt      = (a2e_request_complete_func)      &server_request_complete_func,
+    .req_cmplt_wait = (a2e_request_complete_wait_func) &server_request_complete_wait_func,
+    .resp_tx        = (a2e_response_tx_func)           &server_response_tx_func,
+    .prog_tx        = (a2e_progress_tx_func)           &server_progress_tx_func,
 };
 
 static a2e_status_e server_init_func(a2e_server_t **server, const a2e_cfg_t *cfg)
@@ -65,8 +67,8 @@ static a2e_status_e server_init_func(a2e_server_t **server, const a2e_cfg_t *cfg
 
     a2e_cfg_apply(A2E_BASE(new_srv), cfg);
 
-    new_srv->loc_fd = -1;
-    new_srv->rem_fd = -1;
+    new_srv->fd_listen = -1;
+    new_srv->fd_rw = -1;
     new_srv->base.role = eA2E_ROLE_SERVER;
     new_srv->base.state = eA2E_STATE_NULL;
 
@@ -129,11 +131,13 @@ static a2e_status_e server_conn_accept(a2e_server_t *server, uint16_t to_ms)
 
     start_time = a2e_get_timestamp();
 
-    fds.fd = server->loc_fd;
+    fds.fd = server->fd_listen;
     fds.events = POLLIN;
 
-    while (1)
+    while(1)
     {
+        status = eA2E_SC_ERROR;
+
         res = poll(&fds, 1, to_ms);
         if (res > 0)
         {
@@ -146,17 +150,18 @@ static a2e_status_e server_conn_accept(a2e_server_t *server, uint16_t to_ms)
                 goto _exit;
             }
 
-            res = accept(server->loc_fd, (struct sockaddr *)&raddr, &rlen);
+            res = accept(server->fd_listen, (struct sockaddr *)&raddr, &rlen);
             if (res != -1)
             {
-                server->rem_fd = res;
-                fcntl(server->rem_fd, F_SETFL, O_NONBLOCK);
+                server->fd_rw = res;
+                server->req_cmplt_wait_tries = 0;
+                fcntl(server->fd_rw, F_SETFL, O_NONBLOCK);
                 a2e_set_state(A2E_BASE(server), eA2E_STATE_REQ_RX_START);
                 status = eA2E_SC_CONTINUE;
             }
             else
             {
-                a2e_dbg("%s. Conn accept failed (%s)", a2e_name(A2E_BASE(server)), errno);
+                a2e_dbg("%s. Conn accept failed (%s)", a2e_name(A2E_BASE(server)), strerror(errno));
             }
 
             goto _exit;
@@ -165,7 +170,7 @@ static a2e_status_e server_conn_accept(a2e_server_t *server, uint16_t to_ms)
         {
             if (errno != EINTR)
             {
-                a2e_dbg("%s. Conn accept poll failed (%s)", a2e_name(A2E_BASE(server)), errno);
+                a2e_dbg("%s. Conn accept poll failed (%s)", a2e_name(A2E_BASE(server)), strerror(errno));
                 goto _exit;
             }
         }
@@ -193,17 +198,19 @@ static a2e_status_e server_conn_read_start(a2e_server_t *server, uint16_t to_ms)
     struct pollfd fds = {0};
     int res = 0;
     unsigned long start_time;
-    int poll_to_ms = RW_POLL_TIMEOUT_MS;
+    int poll_to_ms = DEF_A2E_RW_POLL_TIMEOUT_MS;
 
     a2e_dbg("%s: start", __func__);
 
     start_time = a2e_get_timestamp();
 
-    fds.fd = server->rem_fd;
+    fds.fd = server->fd_rw;
     fds.events = POLLIN;
 
-    while (1)
+    while(1)
     {
+        status = eA2E_SC_ERROR;
+
         res = poll(&fds, 1, poll_to_ms);
         if (res > 0)
         {
@@ -245,7 +252,7 @@ static a2e_status_e server_conn_read_start(a2e_server_t *server, uint16_t to_ms)
         {
             if (errno != EINTR)
             {
-                a2e_dbg("%s. Conn read poll failed (%s)", a2e_name(A2E_BASE(server)), errno);
+                a2e_dbg("%s. Conn read poll failed (%s)", a2e_name(A2E_BASE(server)), strerror(errno));
                 goto _exit;
             }
         }
@@ -280,11 +287,13 @@ static a2e_status_e server_conn_read(a2e_server_t *server, uint8_t **rx_buffer, 
 
     start_time = a2e_get_timestamp();
 
-    fds.fd = server->rem_fd;
+    fds.fd = server->fd_rw;
     fds.events = POLLIN;
 
-    while (1)
+    while(1)
     {
+        status = eA2E_SC_ERROR;
+
         res = poll(&fds, 1, poll_to_ms);
         if (res > 0)
         {
@@ -302,7 +311,7 @@ static a2e_status_e server_conn_read(a2e_server_t *server, uint8_t **rx_buffer, 
 
             rx_buf_ptr = server->req + server->req_size_recv;
 
-            recv_len = recv(server->rem_fd, rx_buf_ptr, A2E_MIN(A2E_BASE(server)->cfg.rw_chunk_size, server->req_size_exp - server->req_size_recv), 0);
+            recv_len = recv(server->fd_rw, rx_buf_ptr, A2E_MIN(A2E_BASE(server)->cfg.rw_chunk_size, server->req_size_exp - server->req_size_recv), 0);
             if (recv_len < 0)
             {
                 a2e_dbg("%s. Conn read error (%s)", a2e_name(A2E_BASE(server)));
@@ -331,7 +340,7 @@ static a2e_status_e server_conn_read(a2e_server_t *server, uint8_t **rx_buffer, 
         {
             if (errno != EINTR)
             {
-                a2e_dbg("%s. Conn read poll failed (%s)", a2e_name(A2E_BASE(server)), errno);
+                a2e_dbg("%s. Conn read poll failed (%s)", a2e_name(A2E_BASE(server)), strerror(errno));
                 goto _exit;
             }
         }
@@ -365,11 +374,13 @@ static a2e_status_e server_conn_write_start(a2e_server_t *server, uint8_t *tx_bu
 
     start_time = a2e_get_timestamp();
 
-    fds.fd = server->rem_fd;
+    fds.fd = server->fd_rw;
     fds.events = POLLOUT;
 
-    while (1)
+    while(1)
     {
+        status = eA2E_SC_ERROR;
+
         res = poll(&fds, 1, poll_to_ms);
         if (res > 0)
         {
@@ -408,7 +419,7 @@ static a2e_status_e server_conn_write_start(a2e_server_t *server, uint8_t *tx_bu
         {
             if (errno != EINTR)
             {
-                a2e_dbg("%s. Conn write poll failed (%s)", a2e_name(A2E_BASE(server)), errno);
+                a2e_dbg("%s. Conn write poll failed (%s)", a2e_name(A2E_BASE(server)), strerror(errno));
                 goto _exit;
             }
         }
@@ -436,18 +447,20 @@ static a2e_status_e server_conn_write(a2e_server_t *server, uint8_t *tx_buffer, 
     struct pollfd fds = {0};
     int res = 0, sent_len = 0;
     unsigned long start_time;
-    int poll_to_ms = RW_POLL_TIMEOUT_MS;
+    int poll_to_ms = DEF_A2E_RW_POLL_TIMEOUT_MS;
     uint8_t *tx_buf_ptr;
 
     a2e_dbg("%s: start", __func__);
 
     start_time = a2e_get_timestamp();
 
-    fds.fd = server->rem_fd;
+    fds.fd = server->fd_rw;
     fds.events = POLLOUT;
 
-    while (1)
+    while(1)
     {
+        status = eA2E_SC_ERROR;
+
         res = poll(&fds, 1, poll_to_ms);
         if (res > 0)
         {
@@ -465,7 +478,7 @@ static a2e_status_e server_conn_write(a2e_server_t *server, uint8_t *tx_buffer, 
 
             tx_buf_ptr = tx_buffer + server->rsp_size_sent;
 
-            sent_len = send(server->rem_fd, tx_buf_ptr, A2E_MIN(A2E_BASE(server)->cfg.rw_chunk_size, size - server->rsp_size_sent), 0);
+            sent_len = send(server->fd_rw, tx_buf_ptr, A2E_MIN(A2E_BASE(server)->cfg.rw_chunk_size, size - server->rsp_size_sent), 0);
             if (sent_len < 0)
             {
                 a2e_dbg("%s. Conn write error (%s)", a2e_name(A2E_BASE(server)));
@@ -492,7 +505,7 @@ static a2e_status_e server_conn_write(a2e_server_t *server, uint8_t *tx_buffer, 
         {
             if (errno != EINTR)
             {
-                a2e_dbg("%s. Conn write poll failed (%s)", a2e_name(A2E_BASE(server)), errno);
+                a2e_dbg("%s. Conn write poll failed (%s)", a2e_name(A2E_BASE(server)), strerror(errno));
                 goto _exit;
             }
         }
@@ -528,26 +541,8 @@ static a2e_status_e server_request_complete_func(a2e_server_t *server)
         case eA2E_STATE_RSP_TX:
         case eA2E_STATE_RSP_TX_FINISH:
         {
-            if (server->rem_fd > -1)
-            {
-                shutdown(server->rem_fd, SHUT_RDWR);
-                close(server->rem_fd);
-                server->rem_fd = -1;
-            }
-
-            if (server->req)
-            {
-                free(server->req);
-                server->req = 0;
-                server->req_size_exp = 0;
-                server->req_size_recv = 0;
-            }
-
-            server->rsp_size_sent = 0;
-
-            a2e_set_state(A2E_BASE(server), eA2E_STATE_IDLE);
+            server_request_close(server);
             status = eA2E_SC_OK;
-
             break;
         }
 
@@ -558,6 +553,95 @@ static a2e_status_e server_request_complete_func(a2e_server_t *server)
 
     a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
+}
+
+static a2e_status_e server_request_complete_wait_func(a2e_server_t *server, uint16_t to_ms)
+{
+    a2e_status_e status = eA2E_SC_ERROR;
+    struct pollfd fds = {0};
+    int res = 0;
+    a2e_dbg("%s: start", __func__);
+
+    switch(A2E_BASE(server)->state)
+    {
+        case eA2E_STATE_REQ_RX_START:
+        case eA2E_STATE_REQ_RX:
+        case eA2E_STATE_REQ_RX_FINISH:
+        case eA2E_STATE_REQ_PROGRESS:
+        case eA2E_STATE_RSP_TX:
+        case eA2E_STATE_RSP_TX_FINISH:
+        {
+            if (server->req_cmplt_wait_tries >= A2E_BASE(server)->cfg.req_cmplt_wait_tries)
+            {
+                status = eA2E_SC_OK;
+                break;
+            }
+
+            fds.fd = server->fd_rw;
+            fds.events = POLLIN;
+
+            res = poll(&fds, 1, to_ms);
+            if ((res > 0 && (fds.revents & (POLLNVAL | POLLERR | POLLHUP))) || (res < 0))
+            {
+                status = eA2E_SC_OK;
+            }
+            else
+            {
+                if ((res > 0) && (fds.revents & POLLIN))
+                {
+                    status = eA2E_SC_INCOMPLETE_READ;
+                }
+                else
+                {
+                    status = eA2E_SC_TIMEOUT;
+                }
+
+                server->req_cmplt_wait_tries++;
+            }
+
+            break;
+        }
+
+        default:
+            status = eA2E_SC_WRONG_STATE;
+            break;
+    }
+
+    if (status == eA2E_SC_OK)
+    {
+        server_request_close(server);
+    }
+
+    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
+    return status;
+}
+
+static a2e_status_e server_request_close(a2e_server_t *server)
+{
+    a2e_dbg("%s: start", __func__);
+
+    if (server->fd_rw > -1)
+    {
+        shutdown(server->fd_rw, SHUT_RDWR);
+        close(server->fd_rw);
+        server->fd_rw = -1;
+    }
+
+    if (server->req)
+    {
+        free(server->req);
+        server->req = 0;
+        server->req_size_exp = 0;
+        server->req_size_recv = 0;
+        server->req_cmplt_wait_tries = 0;
+    }
+
+    server->rsp_size_sent = 0;
+
+    a2e_set_state(A2E_BASE(server), eA2E_STATE_IDLE);
+
+    a2e_dbg("%s: end (%s)", __func__, a2e_perror(eA2E_SC_OK));
+    return eA2E_SC_OK;
 }
 
 static a2e_status_e server_response_tx_func(a2e_server_t *server, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms)
@@ -663,21 +747,22 @@ static a2e_status_e server_start(a2e_server_t *server)
 
     unlink(server->sock_path);
 
-    if ((server->loc_fd = socket(AF_UNIX, SOCK_STREAM, 0)) < 0)
+    if ((server->fd_listen = socket(AF_UNIX, SOCK_STREAM, 0)) < 0)
     {
         a2e_dbg("%s. Failed to create socket (%s)", a2e_name(A2E_BASE(server)), strerror(errno));
         goto _exit;
     }
 
-	setsockopt(server->loc_fd, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse));
+    setsockopt(server->fd_listen, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse));
+    fcntl(server->fd_listen, F_SETFL, O_NONBLOCK);
 
-	if ((bind(server->loc_fd, (struct sockaddr *)&laddr, sizeof(laddr))) < 0)
-	{
+    if ((bind(server->fd_listen, (struct sockaddr *)&laddr, sizeof(laddr))) < 0)
+    {
         a2e_dbg("%s. Failed to bind socket (%s)", a2e_name(A2E_BASE(server)), strerror(errno));
         goto _exit;
-	}
+    }
 
-    if ((listen(server->loc_fd, 1)) < 0)
+    if ((listen(server->fd_listen, 1)) < 0)
     {
         a2e_dbg("%s. Failed to bind socket (%s)", a2e_name(A2E_BASE(server)), strerror(errno));
         goto _exit;
@@ -699,17 +784,13 @@ static a2e_status_e server_stop(a2e_server_t *server)
 
     a2e_dbg("%s. Server stop in state %s", a2e_name(A2E_BASE(server)), a2e_state_str(A2E_BASE(server)->state));
 
-    if (server->loc_fd > -1)
+    if (server->fd_listen > -1)
     {
-        shutdown(server->loc_fd, SHUT_RDWR);
-        close(server->loc_fd);
+        shutdown(server->fd_listen, SHUT_RDWR);
+        close(server->fd_listen);
     }
 
-    if (server->rem_fd > -1)
-    {
-        shutdown(server->rem_fd, SHUT_RDWR);
-        close(server->rem_fd);
-    }
+    server_request_close(server);
 
     unlink(server->sock_path);
 

@@ -13,6 +13,7 @@ a2e_status_e a2e_close(a2e_t *a2e);
 a2e_status_e a2e_request_rx(a2e_t *a2e, uint8_t **rx_buffer, uint32_t *size, uint16_t to_ms);
 a2e_status_e a2e_request_tx(a2e_t *a2e, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms);
 a2e_status_e a2e_request_complete(a2e_t *a2e);
+a2e_status_e a2e_request_complete_wait(a2e_t *a2e, uint16_t to_ms);
 
 a2e_status_e a2e_response_rx(a2e_t *a2e, uint8_t **rx_buffer, uint32_t *size, uint16_t to_ms);
 a2e_status_e a2e_response_tx(a2e_t *a2e, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms);

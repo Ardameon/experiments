@@ -117,6 +117,29 @@ _exit:
     return status;
 }
 
+a2e_status_e a2e_request_complete_wait(a2e_t *a2e, uint16_t to_ms)
+{
+    a2e_status_e status = eA2E_SC_NOT_IMPLEMENTED;
+    a2e_ext_t *ext = (a2e_ext_t *)a2e;
+
+    a2e_dbg("%s: start", __func__);
+
+    if (!a2e)
+    {
+        status = eA2E_SC_INVALID_ARGS;
+        goto _exit;
+    }
+
+    if (ext->iface.req_cmplt_wait)
+    {
+        status = ext->iface.req_cmplt_wait(a2e, to_ms);
+    }
+
+_exit:
+    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
+    return status;
+}
+
 
 a2e_status_e a2e_response_rx(a2e_t *a2e, uint8_t **rx_buffer, uint32_t *size, uint16_t to_ms)
 {
@@ -256,5 +279,6 @@ void a2e_cfg_set_default(a2e_cfg_t *cfg)
         strncpy(cfg->sock_dir, DEF_A2E_SOCK_DIR, A2E_SOCK_DIR_LEN_MAX);
         strncpy(cfg->name, DEF_A2E_NAME, A2E_NAME_LEN_MAX);
         cfg->rw_chunk_size = DEF_A2E_RW_CHUNK_SIZE;
+        cfg->req_cmplt_wait_tries = DEF_A2E_REQ_CMPLT_WAIT_TRIES;
     }
 }

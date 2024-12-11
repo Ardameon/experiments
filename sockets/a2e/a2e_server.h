@@ -12,12 +12,13 @@ typedef struct
 
     char sock_path[A2E_SOCK_PATH_LEN_MAX + 1];
 
-    int loc_fd;
-    int rem_fd;
+    int fd_listen;
+    int fd_rw;
 
     uint8_t *req;
     uint32_t req_size_recv;
     uint32_t req_size_exp;
+    uint8_t  req_cmplt_wait_tries;
 
     uint32_t rsp_size_sent;
 } a2e_server_t;

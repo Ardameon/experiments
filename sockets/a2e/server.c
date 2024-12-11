@@ -63,7 +63,11 @@ int main(void)
 
         printf("TX[%d]: %.*s\n", size, size, buf_rx);
 
-        a2e_request_complete(server);
+
+        do
+        {
+            status = a2e_request_complete_wait(server, TO);
+        } while(status != eA2E_SC_OK);
     }
 
     a2e_close(server);

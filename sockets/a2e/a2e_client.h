@@ -14,9 +14,11 @@ typedef struct
 
     int fd;
 
-    uint8_t *resp;
-    uint32_t resp_size_recv;
-    uint32_t resp_size_exp;
+    uint8_t *rsp;
+    uint32_t rsp_size_recv;
+    uint32_t rsp_size_exp;
+
+    uint32_t req_size_sent;
 
 } a2e_client_t;
 

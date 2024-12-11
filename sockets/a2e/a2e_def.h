@@ -52,6 +52,7 @@ typedef struct a2e_cfg_t
     char sock_dir[A2E_SOCK_DIR_LEN_MAX + 1];
 
     unsigned rw_chunk_size;
+    unsigned req_cmplt_wait_tries;
 } a2e_cfg_t;
 
 typedef struct a2e_t
