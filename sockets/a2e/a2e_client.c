@@ -366,6 +366,14 @@ static a2e_status_e client_conn_read_start(a2e_client_t *client, uint16_t to_ms)
                 goto _exit;
             }
 
+            if (msg.type == eA2E_MSG_PROGRESS)
+            {
+                a2e_dbg("%s. RX Progress msg", a2e_name(A2E_BASE(client)));
+                a2e_set_state(A2E_BASE(client), eA2E_STATE_REQ_PROGRESS);
+                status = eA2E_SC_IN_PROGRESS;
+                goto _exit;
+            }
+
             client->rsp_size_exp = msg.len;
             client->rsp_size_recv = 0;
 
@@ -376,7 +384,7 @@ static a2e_status_e client_conn_read_start(a2e_client_t *client, uint16_t to_ms)
                 goto _exit;
             }
 
-            a2e_dbg("%s. RX response (size: %u)", a2e_name(A2E_BASE(client)), client->rsp_size_exp);
+            a2e_dbg("%s. RX Response msg (size: %u)", a2e_name(A2E_BASE(client)), client->rsp_size_exp);
 
             a2e_set_state(A2E_BASE(client), eA2E_STATE_RSP_RX);
 
@@ -416,7 +424,7 @@ static a2e_status_e client_conn_read(a2e_client_t *client, uint8_t **rx_buffer, 
     struct pollfd fds = {0};
     int res = 0, recv_len = 0;
     unsigned long start_time;
-    int poll_to_ms = 50;
+    int poll_to_ms = DEF_A2E_RW_POLL_TIMEOUT_MS;
     uint8_t *rx_buf_ptr;
 
     a2e_dbg("%s: start", __func__);
@@ -510,7 +518,7 @@ static a2e_status_e client_conn_write_start(a2e_client_t *client, uint8_t *tx_bu
     struct pollfd fds = {0};
     int res = 0, sent_len = 0;
     unsigned long start_time;
-    int poll_to_ms = 50;
+    int poll_to_ms = DEF_A2E_RW_POLL_TIMEOUT_MS;
     a2e_msg_t msg;
 
     a2e_dbg("%s: start", __func__);
@@ -547,7 +555,7 @@ static a2e_status_e client_conn_write_start(a2e_client_t *client, uint8_t *tx_bu
 
             a2e_msg_fill_req(&msg, size);
 
-            a2e_dbg("%s. TX request (size: %u)", a2e_name(A2E_BASE(client)), size);
+            a2e_dbg("%s. TX Request msg (size: %u)", a2e_name(A2E_BASE(client)), size);
 
             sent_len = send(client->fd, &msg, sizeof(msg), 0);
             if (sent_len < 0)

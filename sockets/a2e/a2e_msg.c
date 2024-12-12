@@ -19,3 +19,13 @@ void a2e_msg_fill_rsp(a2e_msg_t *msg, uint32_t len)
         msg->len = len;
     }
 }
+
+void a2e_msg_fill_prg(a2e_msg_t *msg)
+{
+    if (msg)
+    {
+        msg->type = eA2E_MSG_PROGRESS;
+        msg->magic = A2E_MSG_MAGIC;
+        msg->len = 0;
+    }
+}

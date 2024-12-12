@@ -4,7 +4,6 @@
 
 #include "a2e.h"
 
-#define BUF_SIZE 1024
 #define TO 500
 
 void log_fun(const char *str, int len)
@@ -20,6 +19,7 @@ int main(void)
     a2e_cfg_t cfg;
     a2e_status_e status;
     int i;
+    int wait_cnt = 0, wait_limit = 10;
 
     uint32_t size;
 
@@ -49,7 +49,11 @@ int main(void)
         //printf("RX[%d]: %.*s\n", size, size, buf_rx);
 
         if (status == eA2E_SC_OK)
+        {
             a2e_progress_tx(server, TO);
+            /* Imitate some progress */
+            sleep(1);
+        }
 
         do
         {
@@ -67,7 +71,16 @@ int main(void)
         do
         {
             status = a2e_request_complete_wait(server, TO);
-        } while(status != eA2E_SC_OK);
+
+            if ((status != eA2E_SC_OK) && ((++wait_cnt) < wait_limit))
+            {
+                continue;
+            }
+
+            printf("AAAAA. Wait limit reached: %s\n", a2e_perror(status));
+
+            break;
+        } while(1);
     }
 
     a2e_close(server);

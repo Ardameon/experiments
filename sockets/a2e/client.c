@@ -5,7 +5,7 @@
 
 #include "a2e.h"
 
-#define BUF_SIZE 1024
+#define MSG_SIZE 200 * 1024// * 1024;
 #define TO 500
 
 void log_fun(const char *str, int len)
@@ -33,7 +33,7 @@ int main(void)
 
     for(i = 0; i < reqests_cnt; i++)
     {
-        size = 200 * 1024 * 1024;
+        size = MSG_SIZE;
         buf_tx = malloc(size);
 
         memset(buf_tx, i + '0', size);
@@ -62,6 +62,13 @@ int main(void)
 
                 if (status == eA2E_SC_OK)
                     break;
+
+                if (status == eA2E_SC_IN_PROGRESS)
+                {
+                    printf("AAAAA. Progress received: %s\n", a2e_perror(status));
+                    status = eA2E_SC_CONTINUE;
+                    continue;
+                }
 
             } while (status == eA2E_SC_TIMEOUT || status == eA2E_SC_CONTINUE || status == eA2E_SC_CONTINUE_TIMEOUT);
 
