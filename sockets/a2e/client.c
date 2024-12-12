@@ -5,7 +5,7 @@
 
 #include "a2e.h"
 
-#define MSG_SIZE 200 * 1024// * 1024;
+#define MSG_SIZE 2 * 1024 * 1024
 #define TO 500
 
 void log_fun(const char *str, int len)
@@ -28,6 +28,8 @@ int main(void)
     a2e_dbg_set_func(&log_fun);
 
     a2e_cfg_set_default(&cfg);
+
+    strcpy(cfg.name, "CLIENT_NAME");
 
     a2e_init_client(&client, &cfg);
 

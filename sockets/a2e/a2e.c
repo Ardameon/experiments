@@ -16,7 +16,6 @@ typedef struct a2e_ext_t
 
 a2e_status_e a2e_init_client(a2e_t **a2e, const a2e_cfg_t *cfg)
 {
-    a2e_dbg("%s: start", __func__);
     a2e_status_e status = eA2E_SC_NOT_IMPLEMENTED;
     a2e_strategy_i client_iface = a2e_client_iface_get();
 
@@ -25,14 +24,12 @@ a2e_status_e a2e_init_client(a2e_t **a2e, const a2e_cfg_t *cfg)
         status = client_iface.init(a2e, cfg);
     }
 
-    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
 }
 
 
 a2e_status_e a2e_init_server(a2e_t **a2e, const a2e_cfg_t *cfg)
 {
-    a2e_dbg("%s: start", __func__);
     a2e_status_e status = eA2E_SC_NOT_IMPLEMENTED;
     a2e_strategy_i server_iface = a2e_server_iface_get();
 
@@ -41,7 +38,6 @@ a2e_status_e a2e_init_server(a2e_t **a2e, const a2e_cfg_t *cfg)
         status = server_iface.init(a2e, cfg);
     }
 
-    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
 }
 
@@ -50,8 +46,6 @@ a2e_status_e a2e_request_rx(a2e_t *a2e, uint8_t **rx_buffer, uint32_t *size, uin
 {
     a2e_status_e status = eA2E_SC_NOT_IMPLEMENTED;
     a2e_ext_t *ext = (a2e_ext_t *)a2e;
-
-    a2e_dbg("%s: start", __func__);
 
     if (!a2e || !rx_buffer || !size)
     {
@@ -65,7 +59,6 @@ a2e_status_e a2e_request_rx(a2e_t *a2e, uint8_t **rx_buffer, uint32_t *size, uin
     }
 
 _exit:
-    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
 }
 
@@ -74,8 +67,6 @@ a2e_status_e a2e_request_tx(a2e_t *a2e, uint8_t *tx_buffer, uint32_t size, uint1
 {
     a2e_status_e status = eA2E_SC_NOT_IMPLEMENTED;
     a2e_ext_t *ext = (a2e_ext_t *)a2e;
-
-    a2e_dbg("%s: start", __func__);
 
     if (!a2e || !tx_buffer)
     {
@@ -89,7 +80,6 @@ a2e_status_e a2e_request_tx(a2e_t *a2e, uint8_t *tx_buffer, uint32_t size, uint1
     }
 
 _exit:
-    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
 }
 
@@ -98,8 +88,6 @@ a2e_status_e a2e_request_complete(a2e_t *a2e)
 {
     a2e_status_e status = eA2E_SC_NOT_IMPLEMENTED;
     a2e_ext_t *ext = (a2e_ext_t *)a2e;
-
-    a2e_dbg("%s: start", __func__);
 
     if (!a2e)
     {
@@ -113,7 +101,6 @@ a2e_status_e a2e_request_complete(a2e_t *a2e)
     }
 
 _exit:
-    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
 }
 
@@ -121,8 +108,6 @@ a2e_status_e a2e_request_complete_wait(a2e_t *a2e, uint16_t to_ms)
 {
     a2e_status_e status = eA2E_SC_NOT_IMPLEMENTED;
     a2e_ext_t *ext = (a2e_ext_t *)a2e;
-
-    a2e_dbg("%s: start", __func__);
 
     if (!a2e)
     {
@@ -136,7 +121,6 @@ a2e_status_e a2e_request_complete_wait(a2e_t *a2e, uint16_t to_ms)
     }
 
 _exit:
-    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
 }
 
@@ -145,8 +129,6 @@ a2e_status_e a2e_response_rx(a2e_t *a2e, uint8_t **rx_buffer, uint32_t *size, ui
 {
     a2e_status_e status = eA2E_SC_NOT_IMPLEMENTED;
     a2e_ext_t *ext = (a2e_ext_t *)a2e;
-
-    a2e_dbg("%s: start", __func__);
 
     if (!a2e || !rx_buffer || !size)
     {
@@ -160,7 +142,6 @@ a2e_status_e a2e_response_rx(a2e_t *a2e, uint8_t **rx_buffer, uint32_t *size, ui
     }
 
 _exit:
-    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
 }
 
@@ -169,8 +150,6 @@ a2e_status_e a2e_response_tx(a2e_t *a2e, uint8_t *tx_buffer, uint32_t size, uint
 {
     a2e_status_e status = eA2E_SC_NOT_IMPLEMENTED;
     a2e_ext_t *ext = (a2e_ext_t *)a2e;
-
-    a2e_dbg("%s: start", __func__);
 
     if (!a2e || !tx_buffer)
     {
@@ -184,7 +163,6 @@ a2e_status_e a2e_response_tx(a2e_t *a2e, uint8_t *tx_buffer, uint32_t size, uint
     }
 
 _exit:
-    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
 }
 
@@ -194,8 +172,6 @@ a2e_status_e a2e_progress_tx(a2e_t *a2e, uint16_t to_ms)
 {
     a2e_status_e status = eA2E_SC_NOT_IMPLEMENTED;
     a2e_ext_t *ext = (a2e_ext_t *)a2e;
-
-    a2e_dbg("%s: start", __func__);
 
     if (!a2e)
     {
@@ -209,7 +185,6 @@ a2e_status_e a2e_progress_tx(a2e_t *a2e, uint16_t to_ms)
     }
 
 _exit:
-    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
 }
 
@@ -218,8 +193,6 @@ a2e_status_e a2e_close(a2e_t *a2e)
 {
     a2e_status_e status = eA2E_SC_NOT_IMPLEMENTED;
     a2e_ext_t *ext = (a2e_ext_t *)a2e;
-
-    a2e_dbg("%s: start", __func__);
 
     if (!a2e)
     {
@@ -233,7 +206,6 @@ a2e_status_e a2e_close(a2e_t *a2e)
     }
 
 _exit:
-    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
 
 }

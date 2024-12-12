@@ -22,7 +22,7 @@ void a2e_set_state(a2e_t *a2e, a2e_state_e state)
 {
     if (a2e->state != state)
     {
-        a2e_dbg("%s. State changed: %s => %s", a2e_name(a2e), a2e_state_str(a2e->state), a2e_state_str(state));
+        a2e_log("%s. State changed: %s => %s", a2e_name(a2e), a2e_state_str(a2e->state), a2e_state_str(state));
         a2e->state = state;
     }
 }

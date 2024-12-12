@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "a2e.h"
 
@@ -28,6 +29,8 @@ int main(void)
 
     a2e_cfg_set_default(&cfg);
 
+    strcpy(cfg.name, "SERVER_NAME");
+
     /* for tests use netcat client
      * $ nc -U /tmp/a2e.sock
      */
@@ -52,7 +55,7 @@ int main(void)
         {
             a2e_progress_tx(server, TO);
             /* Imitate some progress */
-            sleep(1);
+            sleep(2);
         }
 
         do

@@ -17,7 +17,7 @@ static a2e_dbg_cfg_t dbg_cfg;
 
 char log_buf[LOG_STR_LEN_MAX + 1];
 
-void a2e_dbg(const char *format, ...)
+void a2e_log(const char *format, ...)
 {
     if (dbg_cfg.dbg_on)
     {

@@ -50,8 +50,6 @@ static a2e_status_e client_init_func(a2e_client_t **client, const a2e_cfg_t *cfg
     a2e_client_t *new_clt = NULL;
     a2e_status_e status = eA2E_SC_ERROR;
 
-    a2e_dbg("%s: start", __func__);
-
     (*client) = NULL;
 
     status = client_alloc(&new_clt);
@@ -75,16 +73,13 @@ static a2e_status_e client_init_func(a2e_client_t **client, const a2e_cfg_t *cfg
     (*client) = new_clt;
 
 _exit:
-    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
 }
 
 static a2e_status_e client_close_func(a2e_client_t *client)
 {
-    a2e_dbg("%s: start", __func__);
     client_stop(client);
     client_free(client);
-    a2e_dbg("%s: end", __func__);
     return eA2E_SC_OK;
 }
 
@@ -92,7 +87,6 @@ static a2e_status_e client_request_tx_func(a2e_client_t *client, uint8_t *tx_buf
 {
     a2e_status_e status = eA2E_SC_ERROR;
 
-    a2e_dbg("%s: start", __func__);
     switch (A2E_BASE(client)->state)
     {
         case eA2E_STATE_IDLE:
@@ -111,14 +105,13 @@ static a2e_status_e client_request_tx_func(a2e_client_t *client, uint8_t *tx_buf
             status = eA2E_SC_WRONG_STATE;
             break;
     }
-    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
+
     return status;
 }
 
 static a2e_status_e client_request_complete_func(a2e_client_t *client, uint16_t to_ms)
 {
     a2e_status_e status = eA2E_SC_ERROR;
-    a2e_dbg("%s: start", __func__);
 
     switch(A2E_BASE(client)->state)
     {
@@ -156,7 +149,6 @@ static a2e_status_e client_request_complete_func(a2e_client_t *client, uint16_t 
             break;
     }
 
-    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
 }
 
@@ -164,7 +156,6 @@ static a2e_status_e client_response_rx_func(a2e_client_t *client, uint8_t **rx_b
 {
     a2e_status_e status = eA2E_SC_ERROR;
 
-    a2e_dbg("%s: start", __func__);
     switch (A2E_BASE(client)->state)
     {
         case eA2E_STATE_REQ_TX_FINISH:
@@ -181,14 +172,11 @@ static a2e_status_e client_response_rx_func(a2e_client_t *client, uint8_t **rx_b
             break;
     }
 
-    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
 }
 
 a2e_strategy_i a2e_client_iface_get(void)
 {
-    a2e_dbg("%s: start", __func__);
-    a2e_dbg("%s: end", __func__);
     return client_iface;
 }
 
@@ -196,8 +184,6 @@ static a2e_status_e client_alloc(a2e_client_t **client)
 {
     a2e_client_t *new_clt = NULL;
     a2e_status_e status = eA2E_SC_NO_MEM;
-
-    a2e_dbg("%s: start", __func__);
 
     (*client) = NULL;
 
@@ -212,15 +198,12 @@ static a2e_status_e client_alloc(a2e_client_t **client)
         status = eA2E_SC_OK;
     }
 
-    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
 }
 
 static void client_free(a2e_client_t *client)
 {
-    a2e_dbg("%s: start", __func__);
     free(client);
-    a2e_dbg("%s: end", __func__);
 }
 
 
@@ -230,21 +213,19 @@ static a2e_status_e client_start(a2e_client_t *client)
     a2e_status_e status = eA2E_SC_ERROR;
     int res = -1;
 
-    a2e_dbg("%s: start", __func__);
-
-    a2e_dbg("%s. Client start (unix: '%s')", a2e_name(A2E_BASE(client)), A2E_BASE(client)->cfg.sock_dir);
+    a2e_log("%s. Client start (unix: '%s')", a2e_name(A2E_BASE(client)), A2E_BASE(client)->cfg.sock_dir);
 
     if (A2E_BASE(client)->state > eA2E_STATE_NULL)
     {
         status = eA2E_SC_WRONG_STATE;
-        a2e_dbg("%s. Start in wrong state: %s", a2e_name(A2E_BASE(client)), a2e_state_str(A2E_BASE(client)->state));
+        a2e_log("%s. Start in wrong state: %s", a2e_name(A2E_BASE(client)), a2e_state_str(A2E_BASE(client)->state));
         goto _exit;
     }
 
     res = stat(A2E_BASE(client)->cfg.sock_dir, &st);
     if ((res < 0) || ((st.st_mode & S_IFMT) != S_IFDIR))
     {
-        a2e_dbg("%s. Socket dir '%s' is not dir or doesn't exist (%s)", a2e_name(A2E_BASE(client)), A2E_BASE(client)->cfg.sock_dir, strerror(errno));
+        a2e_log("%s. Socket dir '%s' is not dir or doesn't exist (%s)", a2e_name(A2E_BASE(client)), A2E_BASE(client)->cfg.sock_dir, strerror(errno));
         goto _exit;
     }
 
@@ -255,15 +236,12 @@ static a2e_status_e client_start(a2e_client_t *client)
     status = eA2E_SC_OK;
 
 _exit:
-    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
 }
 
 static a2e_status_e client_stop(a2e_client_t *client)
 {
-    a2e_dbg("%s: start", __func__);
-
-    a2e_dbg("%s. Client stop in state %s", a2e_name(A2E_BASE(client)), a2e_state_str(A2E_BASE(client)->state));
+    a2e_log("%s. Client stop in state %s", a2e_name(A2E_BASE(client)), a2e_state_str(A2E_BASE(client)->state));
 
     if (client->fd > -1)
     {
@@ -273,7 +251,6 @@ static a2e_status_e client_stop(a2e_client_t *client)
 
     a2e_set_state(A2E_BASE(client), eA2E_STATE_NULL);
 
-    a2e_dbg("%s: end", __func__);
     return eA2E_SC_OK;
 }
 
@@ -282,12 +259,11 @@ static a2e_status_e client_conn_connect(a2e_client_t *client)
     a2e_status_e status = eA2E_SC_ERROR;
     int res = 0;
     struct sockaddr_un raddr = {0};
-    a2e_dbg("%s: start", __func__);
     int reuse = 1;
 
     if ((client->fd = socket(AF_UNIX, SOCK_STREAM, 0)) < 0)
     {
-        a2e_dbg("%s. Failed to create socket (%s)", a2e_name(A2E_BASE(client)), strerror(errno));
+        a2e_log("%s. Failed to create socket (%s)", a2e_name(A2E_BASE(client)), strerror(errno));
         goto _exit;
     }
 
@@ -305,11 +281,10 @@ static a2e_status_e client_conn_connect(a2e_client_t *client)
     }
     else
     {
-        a2e_dbg("%s. Conn connect failed (%s)", a2e_name(A2E_BASE(client)), strerror(errno));
+        a2e_log("%s. Conn connect failed (%s)", a2e_name(A2E_BASE(client)), strerror(errno));
     }
 
 _exit:
-    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
 }
 
@@ -321,8 +296,6 @@ static a2e_status_e client_conn_read_start(a2e_client_t *client, uint16_t to_ms)
     unsigned long start_time;
     int poll_to_ms = DEF_A2E_RW_POLL_TIMEOUT_MS;
     a2e_msg_t msg;
-
-    a2e_dbg("%s: start", __func__);
 
     start_time = a2e_get_timestamp();
 
@@ -338,37 +311,37 @@ static a2e_status_e client_conn_read_start(a2e_client_t *client, uint16_t to_ms)
         {
             if (fds.revents & (POLLNVAL | POLLERR))
             {
-                a2e_dbg("%s. Conn read poll failed (POLLNVAL | PLLERR)", a2e_name(A2E_BASE(client)));
+                a2e_log("%s. Conn read poll failed (POLLNVAL | PLLERR)", a2e_name(A2E_BASE(client)));
                 goto _exit;
             }
 
             if (fds.revents & POLLHUP)
             {
-                a2e_dbg("%s. Conn read connection closed by remote side", a2e_name(A2E_BASE(client)));
+                a2e_log("%s. Conn read connection closed by remote side", a2e_name(A2E_BASE(client)));
                 goto _exit;
             }
 
             if (!(fds.revents & POLLIN))
             {
-                a2e_dbg("%s. Conn read no input data", a2e_name(A2E_BASE(client)));
+                a2e_log("%s. Conn read no input data", a2e_name(A2E_BASE(client)));
                 goto _exit;
             }
 
             recv_len = recv(client->fd, &msg, sizeof(msg), 0);
             if (recv_len < 0)
             {
-                a2e_dbg("%s. Conn read error (%s)", a2e_name(A2E_BASE(client)));
+                a2e_log("%s. Conn read error (%s)", a2e_name(A2E_BASE(client)));
                 goto _exit;
             }
             else if (recv_len < sizeof(msg) || msg.magic != A2E_MSG_MAGIC)
             {
-                a2e_dbg("%s. Conn read malformed msg received", a2e_name(A2E_BASE(client)));
+                a2e_log("%s. Conn read malformed msg received", a2e_name(A2E_BASE(client)));
                 goto _exit;
             }
 
             if (msg.type == eA2E_MSG_PROGRESS)
             {
-                a2e_dbg("%s. RX Progress msg", a2e_name(A2E_BASE(client)));
+                a2e_log("%s. RX Progress msg", a2e_name(A2E_BASE(client)));
                 a2e_set_state(A2E_BASE(client), eA2E_STATE_REQ_PROGRESS);
                 status = eA2E_SC_IN_PROGRESS;
                 goto _exit;
@@ -384,7 +357,7 @@ static a2e_status_e client_conn_read_start(a2e_client_t *client, uint16_t to_ms)
                 goto _exit;
             }
 
-            a2e_dbg("%s. RX Response msg (size: %u)", a2e_name(A2E_BASE(client)), client->rsp_size_exp);
+            a2e_log("%s. RX Response msg (size: %u)", a2e_name(A2E_BASE(client)), client->rsp_size_exp);
 
             a2e_set_state(A2E_BASE(client), eA2E_STATE_RSP_RX);
 
@@ -396,13 +369,13 @@ static a2e_status_e client_conn_read_start(a2e_client_t *client, uint16_t to_ms)
         {
             if (errno != EINTR)
             {
-                a2e_dbg("%s. Conn read poll failed (%s)", a2e_name(A2E_BASE(client)), strerror(errno));
+                a2e_log("%s. Conn read poll failed (%s)", a2e_name(A2E_BASE(client)), strerror(errno));
                 goto _exit;
             }
         }
         else
         {
-            a2e_dbg("%s. Conn read poll timeout (no data for read)", a2e_name(A2E_BASE(client)));
+            A2E_DBG("%s. Conn read poll timeout (no data for read)", a2e_name(A2E_BASE(client)));
             /* cycle continue */
         }
 
@@ -414,7 +387,6 @@ static a2e_status_e client_conn_read_start(a2e_client_t *client, uint16_t to_ms)
     }
 
 _exit:
-    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
 }
 
@@ -426,8 +398,6 @@ static a2e_status_e client_conn_read(a2e_client_t *client, uint8_t **rx_buffer, 
     unsigned long start_time;
     int poll_to_ms = DEF_A2E_RW_POLL_TIMEOUT_MS;
     uint8_t *rx_buf_ptr;
-
-    a2e_dbg("%s: start", __func__);
 
     start_time = a2e_get_timestamp();
 
@@ -443,19 +413,19 @@ static a2e_status_e client_conn_read(a2e_client_t *client, uint8_t **rx_buffer, 
         {
             if (fds.revents & (POLLNVAL | POLLERR))
             {
-                a2e_dbg("%s. Conn read poll failed (POLLNVAL | PLLERR)", a2e_name(A2E_BASE(client)));
+                a2e_log("%s. Conn read poll failed (POLLNVAL | PLLERR)", a2e_name(A2E_BASE(client)));
                 goto _exit;
             }
 
             if (fds.revents & POLLHUP)
             {
-                a2e_dbg("%s. Conn read connection closed by remote side", a2e_name(A2E_BASE(client)));
+                a2e_log("%s. Conn read connection closed by remote side", a2e_name(A2E_BASE(client)));
                 goto _exit;
             }
 
             if (!(fds.revents & POLLIN))
             {
-                a2e_dbg("%s. Conn read no input data", a2e_name(A2E_BASE(client)));
+                a2e_log("%s. Conn read no input data", a2e_name(A2E_BASE(client)));
                 goto _exit;
             }
 
@@ -464,13 +434,13 @@ static a2e_status_e client_conn_read(a2e_client_t *client, uint8_t **rx_buffer, 
             recv_len = recv(client->fd, rx_buf_ptr, A2E_MIN(A2E_BASE(client)->cfg.rw_chunk_size, client->rsp_size_exp - client->rsp_size_recv), 0);
             if (recv_len < 0)
             {
-                a2e_dbg("%s. Conn read error (%s)", a2e_name(A2E_BASE(client)));
+                a2e_log("%s. Conn read error (%s)", a2e_name(A2E_BASE(client)));
                 goto _exit;
             }
 
             client->rsp_size_recv += recv_len;
 
-            a2e_dbg("%s. Recv data chunk size[%d] (total[%d/%d])", a2e_name(A2E_BASE(client)), recv_len, client->rsp_size_recv, client->rsp_size_exp);
+            a2e_log("%s. Recv data chunk size[%d] (total: %d/%d)", a2e_name(A2E_BASE(client)), recv_len, client->rsp_size_recv, client->rsp_size_exp);
 
             if (client->rsp_size_recv >= client->rsp_size_exp)
             {
@@ -490,13 +460,13 @@ static a2e_status_e client_conn_read(a2e_client_t *client, uint8_t **rx_buffer, 
         {
             if (errno != EINTR)
             {
-                a2e_dbg("%s. Conn read poll failed (%s)", a2e_name(A2E_BASE(client)), strerror(errno));
+                a2e_log("%s. Conn read poll failed (%s)", a2e_name(A2E_BASE(client)), strerror(errno));
                 goto _exit;
             }
         }
         else
         {
-            a2e_dbg("%s. Conn read poll timeout (no data for read)", a2e_name(A2E_BASE(client)));
+            A2E_DBG("%s. Conn read poll timeout (no data for read)", a2e_name(A2E_BASE(client)));
             /* cycle continue */
         }
 
@@ -508,7 +478,6 @@ static a2e_status_e client_conn_read(a2e_client_t *client, uint8_t **rx_buffer, 
     }
 
 _exit:
-    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
 }
 
@@ -520,8 +489,6 @@ static a2e_status_e client_conn_write_start(a2e_client_t *client, uint8_t *tx_bu
     unsigned long start_time;
     int poll_to_ms = DEF_A2E_RW_POLL_TIMEOUT_MS;
     a2e_msg_t msg;
-
-    a2e_dbg("%s: start", __func__);
 
     start_time = a2e_get_timestamp();
 
@@ -537,30 +504,30 @@ static a2e_status_e client_conn_write_start(a2e_client_t *client, uint8_t *tx_bu
         {
             if (fds.revents & (POLLNVAL | POLLERR))
             {
-                a2e_dbg("%s. Conn write poll failed (POLLNVAL | PLLERR)", a2e_name(A2E_BASE(client)));
+                a2e_log("%s. Conn write poll failed (POLLNVAL | PLLERR)", a2e_name(A2E_BASE(client)));
                 goto _exit;
             }
 
             if (fds.revents & POLLHUP)
             {
-                a2e_dbg("%s. Conn write connection closed by remote side", a2e_name(A2E_BASE(client)));
+                a2e_log("%s. Conn write connection closed by remote side", a2e_name(A2E_BASE(client)));
                 goto _exit;
             }
 
             if (!(fds.revents & POLLOUT))
             {
-                a2e_dbg("%s. Conn write output error", a2e_name(A2E_BASE(client)));
+                a2e_log("%s. Conn write output error", a2e_name(A2E_BASE(client)));
                 goto _exit;
             }
 
             a2e_msg_fill_req(&msg, size);
 
-            a2e_dbg("%s. TX Request msg (size: %u)", a2e_name(A2E_BASE(client)), size);
+            a2e_log("%s. TX Request msg (size: %u)", a2e_name(A2E_BASE(client)), size);
 
             sent_len = send(client->fd, &msg, sizeof(msg), 0);
             if (sent_len < 0)
             {
-                a2e_dbg("%s. Conn write msg error (%s)", a2e_name(A2E_BASE(client)));
+                a2e_log("%s. Conn write msg error (%s)", a2e_name(A2E_BASE(client)));
                 goto _exit;
             }
 
@@ -576,13 +543,13 @@ static a2e_status_e client_conn_write_start(a2e_client_t *client, uint8_t *tx_bu
         {
             if (errno != EINTR)
             {
-                a2e_dbg("%s. Conn write poll failed (%s)", a2e_name(A2E_BASE(client)), strerror(errno));
+                a2e_log("%s. Conn write poll failed (%s)", a2e_name(A2E_BASE(client)), strerror(errno));
                 goto _exit;
             }
         }
         else
         {
-            a2e_dbg("%s. Conn write poll timeout (write is not possible)", a2e_name(A2E_BASE(client)));
+            A2E_DBG("%s. Conn write poll timeout (write is not possible)", a2e_name(A2E_BASE(client)));
             /* cycle continue */
         }
 
@@ -594,7 +561,6 @@ static a2e_status_e client_conn_write_start(a2e_client_t *client, uint8_t *tx_bu
     }
 
 _exit:
-    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
 }
 
@@ -606,8 +572,6 @@ static a2e_status_e client_conn_write(a2e_client_t *client, uint8_t *tx_buffer, 
     unsigned long start_time;
     int poll_to_ms = DEF_A2E_RW_POLL_TIMEOUT_MS;
     uint8_t *tx_buf_ptr;
-
-    a2e_dbg("%s: start", __func__);
 
     start_time = a2e_get_timestamp();
 
@@ -623,19 +587,19 @@ static a2e_status_e client_conn_write(a2e_client_t *client, uint8_t *tx_buffer, 
         {
             if (fds.revents & (POLLNVAL | POLLERR))
             {
-                a2e_dbg("%s. Conn write poll failed (POLLNVAL | PLLERR)", a2e_name(A2E_BASE(client)));
+                a2e_log("%s. Conn write poll failed (POLLNVAL | PLLERR)", a2e_name(A2E_BASE(client)));
                 goto _exit;
             }
 
             if (fds.revents & POLLHUP)
             {
-                a2e_dbg("%s. Conn write connection closed by remote side", a2e_name(A2E_BASE(client)));
+                a2e_log("%s. Conn write connection closed by remote side", a2e_name(A2E_BASE(client)));
                 goto _exit;
             }
 
             if (!(fds.revents & POLLOUT))
             {
-                a2e_dbg("%s. Conn write output error", a2e_name(A2E_BASE(client)));
+                a2e_log("%s. Conn write output error", a2e_name(A2E_BASE(client)));
                 goto _exit;
             }
 
@@ -644,13 +608,13 @@ static a2e_status_e client_conn_write(a2e_client_t *client, uint8_t *tx_buffer, 
             sent_len = send(client->fd, tx_buf_ptr, A2E_MIN(A2E_BASE(client)->cfg.rw_chunk_size, size - client->req_size_sent), 0);
             if (sent_len < 0)
             {
-                a2e_dbg("%s. Conn write error (%s)", a2e_name(A2E_BASE(client)));
+                a2e_log("%s. Conn write error (%s)", a2e_name(A2E_BASE(client)));
                 goto _exit;
             }
 
             client->req_size_sent += sent_len;
 
-            a2e_dbg("%s. Sent data chunk size[%d] (total[%d/%d])", a2e_name(A2E_BASE(client)), sent_len, client->req_size_sent, size);
+            a2e_log("%s. Sent data chunk size[%d] (total: %d/%d)", a2e_name(A2E_BASE(client)), sent_len, client->req_size_sent, size);
 
             if (client->req_size_sent >= size)
             {
@@ -668,13 +632,13 @@ static a2e_status_e client_conn_write(a2e_client_t *client, uint8_t *tx_buffer, 
         {
             if (errno != EINTR)
             {
-                a2e_dbg("%s. Conn write poll failed (%s)", a2e_name(A2E_BASE(client)), strerror(errno));
+                a2e_log("%s. Conn write poll failed (%s)", a2e_name(A2E_BASE(client)), strerror(errno));
                 goto _exit;
             }
         }
         else
         {
-            a2e_dbg("%s. Conn write poll timeout (write is not possible)", a2e_name(A2E_BASE(client)));
+            A2E_DBG("%s. Conn write poll timeout (write is not possible)", a2e_name(A2E_BASE(client)));
             /* cycle continue */
         }
 
@@ -686,7 +650,6 @@ static a2e_status_e client_conn_write(a2e_client_t *client, uint8_t *tx_buffer, 
     }
 
 _exit:
-    a2e_dbg("%s: end (%s)", __func__, a2e_perror(status));
     return status;
 }
 
