@@ -798,3 +798,11 @@ iabbrev dddc /** @} */
 ""iabbrev dddga /** @addtogroup <uniq_key> @{*//** @}*/
 ""iabbrev dddgw /** @weakgroup <uniq_key> @{*//** @}*/
 
+"Termdebug
+"To start termdebug in vim do (see :help :Termdebug)
+"
+" :packadd termdebug
+" :Termdebug
+"
+nnoremap <Down> :Over<CR>
+nnoremap <leader><Down> :Step<CR>
