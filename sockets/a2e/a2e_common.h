@@ -9,7 +9,7 @@
 #define DEF_A2E_SOCK_NAME "a2e.sock"
 #define DEF_A2E_NAME      "A2E"
 
-#define DEF_A2E_RW_CHUNK_SIZE 16
+#define DEF_A2E_RW_CHUNK_SIZE (64 * 1024)
 #define DEF_A2E_RW_POLL_TIMEOUT_MS 50
 #define DEF_A2E_REQ_CMPLT_WAIT_TRIES 3
 

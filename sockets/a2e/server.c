@@ -16,7 +16,7 @@ int main(void)
 {
     a2e_t *server;
     uint8_t *buf_rx;
-    int reqests_cnt = 3;
+    int reqests_cnt = 1;
     a2e_cfg_t cfg;
     a2e_status_e status;
     int i;
@@ -46,7 +46,7 @@ int main(void)
 
         } while (status == eA2E_SC_TIMEOUT || status == eA2E_SC_CONTINUE || status == eA2E_SC_CONTINUE_TIMEOUT);
 
-        printf("RX[%d]: %.*s\n", size, size, buf_rx);
+        //printf("RX[%d]: %.*s\n", size, size, buf_rx);
 
         if (status == eA2E_SC_OK)
             a2e_progress_tx(server, TO);
@@ -61,7 +61,7 @@ int main(void)
 
         } while (status == eA2E_SC_TIMEOUT || status == eA2E_SC_CONTINUE || status == eA2E_SC_CONTINUE_TIMEOUT);
 
-        printf("TX[%d]: %.*s\n", size, size, buf_rx);
+        //printf("TX[%d]: %.*s\n", size, size, buf_rx);
 
 
         do

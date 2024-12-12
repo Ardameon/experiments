@@ -14,6 +14,7 @@
 #include "a2e_client.h"
 #include "a2e_dbg.h"
 #include "a2e_common.h"
+#include "a2e_msg.h"
 
 static a2e_status_e client_init_func(a2e_client_t **client, const a2e_cfg_t *cfg);
 static a2e_status_e client_close_func(a2e_client_t *client);
@@ -194,7 +195,7 @@ a2e_strategy_i a2e_client_iface_get(void)
 static a2e_status_e client_alloc(a2e_client_t **client)
 {
     a2e_client_t *new_clt = NULL;
-    a2e_status_e status = eA2E_SC_ERROR;
+    a2e_status_e status = eA2E_SC_NO_MEM;
 
     a2e_dbg("%s: start", __func__);
 
@@ -316,9 +317,10 @@ static a2e_status_e client_conn_read_start(a2e_client_t *client, uint16_t to_ms)
 {
     a2e_status_e status = eA2E_SC_ERROR;
     struct pollfd fds = {0};
-    int res = 0;
+    int res = 0, recv_len = 0;
     unsigned long start_time;
     int poll_to_ms = DEF_A2E_RW_POLL_TIMEOUT_MS;
+    a2e_msg_t msg;
 
     a2e_dbg("%s: start", __func__);
 
@@ -346,23 +348,37 @@ static a2e_status_e client_conn_read_start(a2e_client_t *client, uint16_t to_ms)
                 goto _exit;
             }
 
-            /* TODO: read message header here */
+            if (!(fds.revents & POLLIN))
+            {
+                a2e_dbg("%s. Conn read no input data", a2e_name(A2E_BASE(client)));
+                goto _exit;
+            }
 
-            client->rsp_size_exp = 133;
+            recv_len = recv(client->fd, &msg, sizeof(msg), 0);
+            if (recv_len < 0)
+            {
+                a2e_dbg("%s. Conn read error (%s)", a2e_name(A2E_BASE(client)));
+                goto _exit;
+            }
+            else if (recv_len < sizeof(msg) || msg.magic != A2E_MSG_MAGIC)
+            {
+                a2e_dbg("%s. Conn read malformed msg received", a2e_name(A2E_BASE(client)));
+                goto _exit;
+            }
+
+            client->rsp_size_exp = msg.len;
             client->rsp_size_recv = 0;
 
             client->rsp = malloc(client->rsp_size_exp);
+            if (!client->rsp)
+            {
+                status = eA2E_SC_NO_MEM;
+                goto _exit;
+            }
+
+            a2e_dbg("%s. RX response (size: %u)", a2e_name(A2E_BASE(client)), client->rsp_size_exp);
 
             a2e_set_state(A2E_BASE(client), eA2E_STATE_RSP_RX);
-
-            //rx_buf_ptr = client->resp + client->resp_size_recv;
-
-            //recv_len = recv(client->fd, rx_buf_ptr, RX_CHUNK_SIZE, 0);
-            //if (recv_len < 0)
-            //{
-            //    a2e_dbg("%s. Conn read error (%s)", a2e_name(A2E_BASE(client)));
-            //    goto _exit;
-            //}
 
             status = eA2E_SC_CONTINUE;
 
@@ -429,6 +445,12 @@ static a2e_status_e client_conn_read(a2e_client_t *client, uint8_t **rx_buffer, 
                 goto _exit;
             }
 
+            if (!(fds.revents & POLLIN))
+            {
+                a2e_dbg("%s. Conn read no input data", a2e_name(A2E_BASE(client)));
+                goto _exit;
+            }
+
             rx_buf_ptr = client->rsp + client->rsp_size_recv;
 
             recv_len = recv(client->fd, rx_buf_ptr, A2E_MIN(A2E_BASE(client)->cfg.rw_chunk_size, client->rsp_size_exp - client->rsp_size_recv), 0);
@@ -486,9 +508,10 @@ static a2e_status_e client_conn_write_start(a2e_client_t *client, uint8_t *tx_bu
 {
     a2e_status_e status = eA2E_SC_ERROR;
     struct pollfd fds = {0};
-    int res = 0;
+    int res = 0, sent_len = 0;
     unsigned long start_time;
     int poll_to_ms = 50;
+    a2e_msg_t msg;
 
     a2e_dbg("%s: start", __func__);
 
@@ -516,20 +539,26 @@ static a2e_status_e client_conn_write_start(a2e_client_t *client, uint8_t *tx_bu
                 goto _exit;
             }
 
-            /* TODO: write message header here */
+            if (!(fds.revents & POLLOUT))
+            {
+                a2e_dbg("%s. Conn write output error", a2e_name(A2E_BASE(client)));
+                goto _exit;
+            }
+
+            a2e_msg_fill_req(&msg, size);
+
+            a2e_dbg("%s. TX request (size: %u)", a2e_name(A2E_BASE(client)), size);
+
+            sent_len = send(client->fd, &msg, sizeof(msg), 0);
+            if (sent_len < 0)
+            {
+                a2e_dbg("%s. Conn write msg error (%s)", a2e_name(A2E_BASE(client)));
+                goto _exit;
+            }
 
             client->req_size_sent = 0;
 
             a2e_set_state(A2E_BASE(client), eA2E_STATE_REQ_TX);
-
-            //rx_buf_ptr = client->req + client->req_size_recv;
-
-            //recv_len = recv(client->rem_fd, rx_buf_ptr, RX_CHUNK_SIZE, 0);
-            //if (recv_len < 0)
-            //{
-            //    a2e_dbg("%s. Conn write error (%s)", a2e_name(A2E_BASE(client)));
-            //    goto _exit;
-            //}
 
             status = eA2E_SC_CONTINUE;
 
@@ -545,7 +574,7 @@ static a2e_status_e client_conn_write_start(a2e_client_t *client, uint8_t *tx_bu
         }
         else
         {
-            a2e_dbg("%s. Conn write poll timeout (no data for write)", a2e_name(A2E_BASE(client)));
+            a2e_dbg("%s. Conn write poll timeout (write is not possible)", a2e_name(A2E_BASE(client)));
             /* cycle continue */
         }
 
@@ -596,6 +625,12 @@ static a2e_status_e client_conn_write(a2e_client_t *client, uint8_t *tx_buffer, 
                 goto _exit;
             }
 
+            if (!(fds.revents & POLLOUT))
+            {
+                a2e_dbg("%s. Conn write output error", a2e_name(A2E_BASE(client)));
+                goto _exit;
+            }
+
             tx_buf_ptr = tx_buffer + client->req_size_sent;
 
             sent_len = send(client->fd, tx_buf_ptr, A2E_MIN(A2E_BASE(client)->cfg.rw_chunk_size, size - client->req_size_sent), 0);
@@ -631,7 +666,7 @@ static a2e_status_e client_conn_write(a2e_client_t *client, uint8_t *tx_buffer, 
         }
         else
         {
-            a2e_dbg("%s. Conn write poll timeout (no data for write)", a2e_name(A2E_BASE(client)));
+            a2e_dbg("%s. Conn write poll timeout (write is not possible)", a2e_name(A2E_BASE(client)));
             /* cycle continue */
         }
 
