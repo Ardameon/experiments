@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Load text formating variables
-source ./text_fmt
+source ./text_fmt.sh
 
 log_success()
 {
@@ -171,6 +171,9 @@ parse_args()
                 echo "no tests"
                 NO_TESTS=true;;
 
+            --help)
+                exit_error;;
+
             *)
                 log_err "Invalid argument - \"$1\""
                 exit_error;;
@@ -180,9 +183,10 @@ parse_args()
 }
 
 echo -e "Script arguments($#): $*"
-log_warn "WARNING! This script is not working correctly yet!"
 
-parse_args $*
+log_success "This script is working correctly now!"
+
+parse_args "$@"
 
 if $CLEANALL;
 then
