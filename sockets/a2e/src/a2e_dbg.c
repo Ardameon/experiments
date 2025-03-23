@@ -15,7 +15,7 @@ typedef struct a2e_dbg_cfg_t
 
 static a2e_dbg_cfg_t dbg_cfg;
 
-char log_buf[LOG_STR_LEN_MAX + 1];
+static char log_buf[LOG_STR_LEN_MAX + 1];
 
 void a2e_log(const char *format, ...)
 {
@@ -29,6 +29,9 @@ void a2e_log(const char *format, ...)
 
         if (len < 0)
             goto _exit;
+
+        if (len >= LOG_STR_LEN_MAX)
+            len = LOG_STR_LEN_MAX - 1;
 
         if (dbg_cfg.log_func)
         {

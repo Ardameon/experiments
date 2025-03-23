@@ -1,8 +1,13 @@
 list(APPEND test_src
     ${CMAKE_CURRENT_LIST_DIR}/../src/a2e_msg.c
+    ${CMAKE_CURRENT_LIST_DIR}/../src/a2e_dbg.c
     )
 
-list(APPEND test_src tests_main.cpp a2e_msg_test.cpp)
+list(APPEND test_src
+    tests_main.cpp
+    a2e_msg_test.cpp
+    a2e_dbg_test.cpp
+    )
 
 file(GLOB a2e_hdrs ${CMAKE_CURRENT_LIST_DIR}/../include/*.h)
 
