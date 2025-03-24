@@ -28,12 +28,26 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Добро пожаловать.md",
+                "file": "general/work/tcpdump.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "tcpdump"
+            }
+          },
+          {
+            "id": "125af306f84a51eb",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "linux/Linux audio.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Добро пожаловать"
+              "title": "Linux audio"
             }
           },
           {
@@ -93,7 +107,7 @@
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       },
       {
         "id": "0c9f959b077f04af",
@@ -106,7 +120,7 @@
             "state": {
               "type": "localgraph",
               "state": {
-                "file": "Добро пожаловать.md",
+                "file": "linux/Linux audio.md",
                 "options": {
                   "collapse-filter": false,
                   "search": "",
@@ -142,7 +156,7 @@
                 }
               },
               "icon": "lucide-git-fork",
-              "title": "Граф Добро пожаловать"
+              "title": "Граф Linux audio"
             }
           }
         ]
@@ -177,7 +191,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "tag:#tcpdump",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -218,7 +232,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Добро пожаловать.md",
+                "file": "linux/Linux audio.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -228,7 +242,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Обратные ссылки для Добро пожаловать"
+              "title": "Обратные ссылки для Linux audio"
             }
           },
           {
@@ -254,7 +268,7 @@
                 "sortOrder": "frequency",
                 "useHierarchy": true,
                 "showSearch": true,
-                "searchQuery": "work"
+                "searchQuery": ""
               },
               "icon": "lucide-tags",
               "title": "Теги"
@@ -293,25 +307,26 @@
       "command-palette:Открыть палитру команд": false
     }
   },
-  "active": "883f4107dec665be",
+  "active": "fbc13cc45dd06ea1",
   "lastOpenFiles": [
-    "git/Git.md",
+    "general/work/tcpdump.md",
+    "linux/Linux audio.md",
     "general/work/Рабочие заметки.md",
     "Добро пожаловать.md",
-    "general/work/firmware scripts.md",
-    "git/git patch.md",
     "git/Git presentation hints.md",
+    "git/Git.md",
+    "git/git patch.md",
     "general/work/syslog.md",
-    "git",
-    "general/work/tcpdump.md",
     "linux/mc/mc.md",
-    "general/work/Uboot.md",
     "linux/Яндекс диск.md",
-    "general/work/ffmpeg.md",
-    "general/work/picocom.md",
-    "linux/mc",
-    "linux/bash/Полезные утилиты командной строки.md",
     "linux/bash/Bash.md",
+    "linux/bash/Полезные утилиты командной строки.md",
+    "general/work/picocom.md",
+    "general/work/ffmpeg.md",
+    "general/work/firmware scripts.md",
+    "general/work/Uboot.md",
+    "git",
+    "linux/mc",
     "linux/bash",
     "linux",
     "general/work",
