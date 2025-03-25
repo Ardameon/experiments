@@ -69,16 +69,16 @@ TEST(array_base, show_strategy)
 
 TEST(array_base, array_strategies)
 {
-    array_base.size_strategy;
-    array_base.size_strategy.size;
-    array_base.fill_strategy;
-    array_base.fill_strategy.fill;
-    array_base.show_strategy;
-    array_base.show_strategy.show;
-    array_base.sort_strategy;
-    array_base.sort_strategy.sort;
-    array_base.find_strategy;
-    array_base.find_strategy.find;
+    (void)array_base.size_strategy;
+    (void)array_base.size_strategy.size;
+    (void)array_base.fill_strategy;
+    (void)array_base.fill_strategy.fill;
+    (void)array_base.show_strategy;
+    (void)array_base.show_strategy.show;
+    (void)array_base.sort_strategy;
+    (void)array_base.sort_strategy.sort;
+    (void)array_base.find_strategy;
+    (void)array_base.find_strategy.find;
 }
 
 TEST(array_base, array_t)
@@ -89,7 +89,7 @@ TEST(array_base, array_t)
     array_sort(&array_base);
     array_find(&array_base, 5);
 
-    array_base.size;
-    array_base.item;
+    (void)array_base.size;
+    (void)array_base.item;
 }
 
