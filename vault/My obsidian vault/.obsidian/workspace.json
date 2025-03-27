@@ -21,8 +21,23 @@
               "icon": "lucide-file",
               "title": "Пишем CMakeLists"
             }
+          },
+          {
+            "id": "2b233af2ed433a2e",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "cmake/Начальная информация.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Начальная информация"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       },
       {
         "id": "0c9f959b077f04af",
@@ -35,7 +50,7 @@
             "state": {
               "type": "localgraph",
               "state": {
-                "file": "cmake/Пишем CMakeLists.md",
+                "file": "cmake/Начальная информация.md",
                 "options": {
                   "collapse-filter": false,
                   "search": "",
@@ -71,7 +86,7 @@
                 }
               },
               "icon": "lucide-git-fork",
-              "title": "Граф Пишем CMakeLists"
+              "title": "Граф Начальная информация"
             }
           }
         ]
@@ -222,11 +237,11 @@
       "command-palette:Открыть палитру команд": false
     }
   },
-  "active": "791d102dad0741c4",
+  "active": "2b233af2ed433a2e",
   "lastOpenFiles": [
-    "cmake/CMake.md",
     "cmake/Пишем CMakeLists.md",
     "cmake/Начальная информация.md",
+    "cmake/CMake.md",
     "toc.md",
     "Добро пожаловать.md",
     "linux/Linux audio.md",
