@@ -59,7 +59,7 @@ command(${Foo})   # unquoted arg replaced by empty string
 command("${Foo}") # quoted arg value is empty string
 ```
 
-К переменным среды операционной системы можно обратиться через нотацию `ENV${VAR}`:
+К переменным среды операционной системы можно обратиться через нотацию `$ENV{VAR}`:
 ```cmake
 message("System path variable: " $ENV{PATH})
 ```
@@ -89,7 +89,7 @@ foo()
 message(${test}) # test will still be 1 here
 ```
 
-Когда нужно поменять значение переменной в вызывающем контексте, в `set` используется опция `PARENT_SCOPE`:
+Когда нужно поменять значение переменной в вызывающем контексте, в `set()` используется опция `PARENT_SCOPE`:
 ```cmake
 function(foo)
   message(${test}) # test is 1 here
@@ -102,7 +102,7 @@ foo()
 message(${test}) # test will now be 2 here
 ```
 
-Переменные в CMake определяются в порядке выполнения команды `set`:
+Переменные в CMake определяются в порядке выполнения команды `set()`:
 ```cmake
 # FOO is undefined
 
@@ -327,8 +327,8 @@ assert(${FOO_LIB} "Unable to find library foo")
 
 ### Продвинутые команды
 
-- [`add_dependencies`](https://cmake.org/cmake/help/latest/command/add_dependencies.html#command:add_dependencies "(in CMake v3.30.3)")
-- [`include_regular_expression`](https://cmake.org/cmake/help/latest/command/include_regular_expression.html#command:include_regular_expression "(in CMake v3.30.3)")
+- [add_dependencies()](https://cmake.org/cmake/help/latest/command/add_dependencies.html#command:add_dependencies "(in CMake v3.30.3)")
+- [include_regular_expression()](https://cmake.org/cmake/help/latest/command/include_regular_expression.html#command:include_regular_expression "(in CMake v3.30.3)")
 
 Общая информация по [ссылке](https://cmake.org/cmake/help/book/mastering-cmake/chapter/Writing%20CMakeLists%20Files.html#advanced-commands)
 

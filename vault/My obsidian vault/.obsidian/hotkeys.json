@@ -28,5 +28,6 @@
       ],
       "key": "ArrowRight"
     }
-  ]
+  ],
+  "editor:delete-paragraph": []
 }
