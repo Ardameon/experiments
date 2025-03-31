@@ -1,5 +1,6 @@
 ## Полная инструкция по развертыванию LDAP-сервера
 
+[Установка openldap на Ubuntu](https://documentation.ubuntu.com/server/how-to/openldap/install-openldap/index.html)
 ### 1. Установка необходимых пакетов
 
 ```bash

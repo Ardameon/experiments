@@ -6,149 +6,64 @@
       {
         "id": "caf05b63378cea43",
         "type": "tabs",
-        "dimension": 67.99363057324841,
+        "dimension": 66.6243654822335,
         "children": [
           {
-            "id": "791d102dad0741c4",
+            "id": "ebb0a36cf1da605d",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "cmake/CMake.md",
+                "file": "ldap/Установка и настройка OpenLDAP сервера на Ubuntu.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "CMake"
+              "title": "Установка и настройка OpenLDAP сервера на Ubuntu"
             }
           },
           {
-            "id": "be9fc71438545c39",
+            "id": "30373a1c8221bd08",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "cmake/Начальная информация.md",
+                "file": "ldap/Общая информация о LDAP.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Общая информация о LDAP"
+            }
+          },
+          {
+            "id": "e38c6c2d1d6849ef",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "git/Git.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Начальная информация"
-            }
-          },
-          {
-            "id": "11b1aa5e9dd70e8e",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "cmake/Пишем CMakeLists.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Пишем CMakeLists"
-            }
-          },
-          {
-            "id": "dd26da14f8fdf2b7",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "ldap/LDAP.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "LDAP"
-            }
-          },
-          {
-            "id": "fb8bcbbcae5e59f3",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Добро пожаловать.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Добро пожаловать"
-            }
-          },
-          {
-            "id": "3a13795841e23ac3",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "отладка/Отладка.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Отладка"
-            }
-          },
-          {
-            "id": "753b8c0a87408753",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "отладка/Отладка.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Отладка"
-            }
-          },
-          {
-            "id": "375da2ae223e1874",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "отладка/Отладка.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Отладка"
-            }
-          },
-          {
-            "id": "03a9b1abbc21dcd6",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "отладка/Профилировщики.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "Профилировщики"
+              "title": "Git"
             }
           }
-        ],
-        "currentTab": 8
+        ]
       },
       {
-        "id": "0c9f959b077f04af",
+        "id": "5404614ee73ccbc3",
         "type": "tabs",
-        "dimension": 32.00636942675159,
+        "dimension": 33.37563451776649,
         "children": [
           {
-            "id": "1857fb81388b5fb2",
+            "id": "82a5e36253445a88",
             "type": "leaf",
             "state": {
               "type": "localgraph",
               "state": {
-                "file": "отладка/Профилировщики.md",
+                "file": "ldap/Установка и настройка OpenLDAP сервера на Ubuntu.md",
                 "options": {
                   "collapse-filter": false,
                   "search": "",
@@ -160,15 +75,7 @@
                   "showAttachments": false,
                   "hideUnresolved": false,
                   "collapse-color-groups": true,
-                  "colorGroups": [
-                    {
-                      "query": "",
-                      "color": {
-                        "a": 1,
-                        "rgb": 14701138
-                      }
-                    }
-                  ],
+                  "colorGroups": [],
                   "collapse-display": true,
                   "showArrow": false,
                   "textFadeMultiplier": 0,
@@ -179,12 +86,12 @@
                   "repelStrength": 10,
                   "linkStrength": 1,
                   "linkDistance": 250,
-                  "scale": 1.0534979423868311,
+                  "scale": 0.6666666666666666,
                   "close": true
                 }
               },
               "icon": "lucide-git-fork",
-              "title": "Граф Профилировщики"
+              "title": "Граф Установка и настройка OpenLDAP сервера на Ubuntu"
             }
           }
         ]
@@ -219,7 +126,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "#ldap",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -335,26 +242,29 @@
       "command-palette:Открыть палитру команд": false
     }
   },
-  "active": "03a9b1abbc21dcd6",
+  "active": "ebb0a36cf1da605d",
   "lastOpenFiles": [
-    "отладка/Отладка.md",
-    "отладка/Flamegraph.md",
-    "отладка/Профилировщики.md",
-    "Добро пожаловать.md",
-    "отладка",
+    "ldap/Пример каталога LDAP.md",
+    "ldap/Общая информация о LDAP.md",
     "ldap/LDAP.md",
     "ldap/Установка и настройка OpenLDAP сервера на Ubuntu.md",
-    "ldap",
-    "cmake/Пишем CMakeLists.md",
-    "cmake/Начальная информация.md",
     "cmake/CMake.md",
+    "cmake/Начальная информация.md",
+    "git/Git.md",
+    "git/Git presentation hints.md",
+    "().md",
+    "Добро пожаловать.md",
+    "cmake/Пишем CMakeLists.md",
+    "отладка/Профилировщики.md",
+    "отладка/Отладка.md",
+    "отладка/Flamegraph.md",
+    "отладка",
+    "ldap",
     "toc.md",
     "linux/Linux audio.md",
     "cmake",
     "general/work/tcpdump.md",
     "general/work/Рабочие заметки.md",
-    "git/Git presentation hints.md",
-    "git/Git.md",
     "git/git patch.md",
     "general/work/syslog.md",
     "linux/mc/mc.md",
@@ -363,15 +273,12 @@
     "linux/bash/Полезные утилиты командной строки.md",
     "general/work/picocom.md",
     "general/work/ffmpeg.md",
-    "general/work/firmware scripts.md",
-    "general/work/Uboot.md",
     "git",
     "linux/mc",
     "linux/bash",
     "linux",
     "general/work",
     "general",
-    "Three laws of motion.md",
     "Без названия 1.canvas",
     "Без названия.canvas"
   ]
