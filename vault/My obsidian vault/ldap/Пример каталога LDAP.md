@@ -37,6 +37,7 @@ classDiagram
     `dc=nl-telecom,dc=com` --> `ou=Administration`
 	`ou=Administration` --> `uid=kozlovsky`
 ```
+Также пример каталога LDAP можно найти по [тут](https://pro-ldap.ru/tr/zytrax/ch5/step4.html)
 ### Base Structure
 ```ldif
 dn: dc=nl-telecom,dc=com

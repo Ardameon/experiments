@@ -14,12 +14,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "ldap/Установка и настройка OpenLDAP сервера на Ubuntu.md",
-                "mode": "source",
+                "file": "ldap/Пример каталога LDAP.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Установка и настройка OpenLDAP сервера на Ubuntu"
+              "title": "Пример каталога LDAP"
             }
           },
           {
@@ -63,7 +63,7 @@
             "state": {
               "type": "localgraph",
               "state": {
-                "file": "ldap/Установка и настройка OpenLDAP сервера на Ubuntu.md",
+                "file": "ldap/Пример каталога LDAP.md",
                 "options": {
                   "collapse-filter": false,
                   "search": "",
@@ -91,7 +91,7 @@
                 }
               },
               "icon": "lucide-git-fork",
-              "title": "Граф Установка и настройка OpenLDAP сервера на Ubuntu"
+              "title": "Граф Пример каталога LDAP"
             }
           }
         ]
@@ -244,10 +244,10 @@
   },
   "active": "ebb0a36cf1da605d",
   "lastOpenFiles": [
-    "ldap/Пример каталога LDAP.md",
     "ldap/Общая информация о LDAP.md",
-    "ldap/LDAP.md",
+    "ldap/Пример каталога LDAP.md",
     "ldap/Установка и настройка OpenLDAP сервера на Ubuntu.md",
+    "ldap/LDAP.md",
     "cmake/CMake.md",
     "cmake/Начальная информация.md",
     "git/Git.md",
