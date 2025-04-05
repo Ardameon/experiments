@@ -5,5 +5,7 @@
 
 1. [[Начальная информация]]
 2. [[Пишем CMakeLists]] 
+3. [[CMake Cache]]
+
 
 #cmake 
