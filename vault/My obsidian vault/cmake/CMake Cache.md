@@ -60,4 +60,6 @@ set(USE_JPEG OFF CACHE BOOL "include jpeg support?" FORCE)
 ```
 
 ---
+[[CMake|Назад]]
+
 #cmake/masteringcmake
