@@ -2,6 +2,9 @@ list(APPEND app_src
     ${PROJECT_SOURCE_DIR}/src/a2e_msg.c
     ${PROJECT_SOURCE_DIR}/src/a2e_common.c
     ${PROJECT_SOURCE_DIR}/src/a2e_dbg.c
+    ${PROJECT_SOURCE_DIR}/src/a2e.c
+    #${PROJECT_SOURCE_DIR}/src/a2e_server.c
+    #${PROJECT_SOURCE_DIR}/src/a2e_client.c
     )
 
 list(APPEND test_src
@@ -9,6 +12,7 @@ list(APPEND test_src
     a2e_msg_test.cpp
     a2e_dbg_test.cpp
     a2e_common_test.cpp
+	a2e_test.cpp
     )
 
 set(CMAKE_BUILD_TYPE Debug)
