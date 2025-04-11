@@ -36,7 +36,7 @@ int main(void)
     for(i = 0; i < reqests_cnt; i++)
     {
         size = MSG_SIZE;
-        buf_tx = malloc(size);
+        buf_tx = (uint8_t *)malloc(size);
 
         memset(buf_tx, i + '0', size);
 

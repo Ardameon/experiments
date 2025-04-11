@@ -246,7 +246,7 @@ static a2e_status_e server_conn_read_start(a2e_server_t *server, uint16_t to_ms)
             server->req_size_exp = msg.len;
             server->req_size_recv = 0;
 
-            server->req = malloc(server->req_size_exp);
+            server->req = (uint8_t *)malloc(server->req_size_exp);
             if (!server->req)
             {
                 status = eA2E_SC_NO_MEM;
@@ -790,7 +790,7 @@ static a2e_status_e server_alloc(a2e_server_t **server)
 
     (*server) = NULL;
 
-    new_srv = calloc(1, sizeof(**server));
+    new_srv = (a2e_server_t *)calloc(1, sizeof(**server));
 
     if (new_srv)
     {

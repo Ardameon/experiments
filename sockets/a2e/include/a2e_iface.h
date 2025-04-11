@@ -25,8 +25,8 @@ typedef struct a2e_strategy_i
     a2e_close_func                 close;
     a2e_request_rx_func            req_rx;
     a2e_request_tx_func            req_tx;
-    a2e_request_complete_wait_func req_cmplt_wait;
     a2e_request_complete_func      req_cmplt;
+    a2e_request_complete_wait_func req_cmplt_wait;
     a2e_response_rx_func           resp_rx;
     a2e_response_tx_func           resp_tx;
     a2e_progress_tx_func           prog_tx;

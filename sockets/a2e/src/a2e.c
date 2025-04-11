@@ -21,7 +21,7 @@ a2e_status_e a2e_init_client(a2e_t **a2e, const a2e_cfg_t *cfg)
 
     if (client_iface.init)
     {
-        status = client_iface.init(a2e, cfg);
+        status = (a2e_status_e)client_iface.init(a2e, cfg);
     }
 
     return status;
@@ -35,7 +35,7 @@ a2e_status_e a2e_init_server(a2e_t **a2e, const a2e_cfg_t *cfg)
 
     if (server_iface.init)
     {
-        status = server_iface.init(a2e, cfg);
+        status = (a2e_status_e)server_iface.init(a2e, cfg);
     }
 
     return status;
@@ -55,7 +55,7 @@ a2e_status_e a2e_request_rx(a2e_t *a2e, uint8_t **rx_buffer, uint32_t *size, uin
 
     if (ext->iface.req_rx)
     {
-        status = ext->iface.req_rx(a2e, rx_buffer, size, to_ms);
+        status = (a2e_status_e)ext->iface.req_rx(a2e, rx_buffer, size, to_ms);
     }
 
 _exit:
@@ -76,7 +76,7 @@ a2e_status_e a2e_request_tx(a2e_t *a2e, uint8_t *tx_buffer, uint32_t size, uint1
 
     if (ext->iface.req_tx)
     {
-        status = ext->iface.req_tx(a2e, tx_buffer, size, to_ms);
+        status = (a2e_status_e)ext->iface.req_tx(a2e, tx_buffer, size, to_ms);
     }
 
 _exit:
@@ -97,7 +97,7 @@ a2e_status_e a2e_request_complete(a2e_t *a2e)
 
     if (ext->iface.req_cmplt)
     {
-        status = ext->iface.req_cmplt(a2e);
+        status = (a2e_status_e)ext->iface.req_cmplt(a2e);
     }
 
 _exit:
@@ -117,7 +117,7 @@ a2e_status_e a2e_request_complete_wait(a2e_t *a2e, uint16_t to_ms)
 
     if (ext->iface.req_cmplt_wait)
     {
-        status = ext->iface.req_cmplt_wait(a2e, to_ms);
+        status = (a2e_status_e)ext->iface.req_cmplt_wait(a2e, to_ms);
     }
 
 _exit:
@@ -138,7 +138,7 @@ a2e_status_e a2e_response_rx(a2e_t *a2e, uint8_t **rx_buffer, uint32_t *size, ui
 
     if (ext->iface.resp_rx)
     {
-        status = ext->iface.resp_rx(a2e, rx_buffer, size, to_ms);
+        status = (a2e_status_e)ext->iface.resp_rx(a2e, rx_buffer, size, to_ms);
     }
 
 _exit:
@@ -159,7 +159,7 @@ a2e_status_e a2e_response_tx(a2e_t *a2e, uint8_t *tx_buffer, uint32_t size, uint
 
     if (ext->iface.resp_tx)
     {
-        status = ext->iface.resp_tx(a2e, tx_buffer, size, to_ms);
+        status = (a2e_status_e)ext->iface.resp_tx(a2e, tx_buffer, size, to_ms);
     }
 
 _exit:
@@ -181,7 +181,7 @@ a2e_status_e a2e_progress_tx(a2e_t *a2e, uint16_t to_ms)
 
     if (ext->iface.prog_tx)
     {
-        status = ext->iface.prog_tx(a2e, to_ms);
+        status = (a2e_status_e)ext->iface.prog_tx(a2e, to_ms);
     }
 
 _exit:
@@ -202,7 +202,7 @@ a2e_status_e a2e_close(a2e_t *a2e)
 
     if (ext->iface.close)
     {
-        status = ext->iface.close(a2e);
+        status = (a2e_status_e)ext->iface.close(a2e);
     }
 
 _exit:
