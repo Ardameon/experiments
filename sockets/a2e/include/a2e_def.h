@@ -48,8 +48,8 @@ typedef enum
 
 typedef struct a2e_cfg_t
 {
-    char name[A2E_NAME_LEN_MAX + 1];
-    char sock_dir[A2E_SOCK_DIR_LEN_MAX + 1];
+    char name[A2E_NAME_LEN_MAX];
+    char sock_dir[A2E_SOCK_DIR_LEN_MAX];
 
     unsigned rw_chunk_size;
     unsigned req_cmplt_wait_tries;

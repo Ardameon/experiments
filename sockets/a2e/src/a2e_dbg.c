@@ -15,7 +15,7 @@ typedef struct a2e_dbg_cfg_t
 
 static a2e_dbg_cfg_t dbg_cfg;
 
-static char log_buf[LOG_STR_LEN_MAX + 1];
+static char log_buf[LOG_STR_LEN_MAX];
 
 void a2e_log(const char *format, ...)
 {
@@ -24,14 +24,14 @@ void a2e_log(const char *format, ...)
         va_list args;
         int len = 0;
         va_start(args, format);
-        len = vsnprintf(log_buf, LOG_STR_LEN_MAX, format, args);
+        len = vsnprintf(log_buf, sizeof(log_buf), format, args);
         va_end(args);
 
         if (len < 0)
             goto _exit;
 
-        if (len >= LOG_STR_LEN_MAX)
-            len = LOG_STR_LEN_MAX - 1;
+        if (len >= sizeof(log_buf))
+            len = sizeof(log_buf) - 1;
 
         if (dbg_cfg.log_func)
         {
