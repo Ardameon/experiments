@@ -2,7 +2,7 @@
 #include "a2e_msg.h"
 
 /* Test group for a2e_msg functions */
-TEST_GROUP(A2EMessageTestGroup)
+TEST_GROUP(a2e_message_test_group)
 {
     a2e_msg_t msg;
 
@@ -20,35 +20,35 @@ TEST_GROUP(A2EMessageTestGroup)
 };
 
 /* Test case 1: Test filling a request message */
-TEST(A2EMessageTestGroup, FillRequestMessageTest)
+TEST(a2e_message_test_group, fill_request_message_test)
 {
-    uint32_t expectedLen = 100;
+    uint32_t expected_len = 100;
 
     /* Call the function to fill the request message */
-    a2e_msg_fill_req(&msg, expectedLen);
+    a2e_msg_fill_req(&msg, expected_len);
 
     /* Verify the message fields */
     CHECK_EQUAL(eA2E_MSG_REQEUST, msg.type);  /* Check the message type */
     CHECK_EQUAL(A2E_MSG_MAGIC, msg.magic);    /* Check the magic number */
-    CHECK_EQUAL(expectedLen, msg.len);        /* Check the length */
+    CHECK_EQUAL(expected_len, msg.len);       /* Check the length */
 }
 
 /* Test case 2: Test filling a response message */
-TEST(A2EMessageTestGroup, FillResponseMessageTest)
+TEST(a2e_message_test_group, fill_response_message_test)
 {
-    uint32_t expectedLen = 200;
+    uint32_t expected_len = 200;
 
     /* Call the function to fill the response message */
-    a2e_msg_fill_rsp(&msg, expectedLen);
+    a2e_msg_fill_rsp(&msg, expected_len);
 
     /* Verify the message fields */
     CHECK_EQUAL(eA2E_MSG_RESPONSE, msg.type);  /* Check the message type */
     CHECK_EQUAL(A2E_MSG_MAGIC, msg.magic);     /* Check the magic number */
-    CHECK_EQUAL(expectedLen, msg.len);         /* Check the length */
+    CHECK_EQUAL(expected_len, msg.len);        /* Check the length */
 }
 
 /* Test case 3: Test filling a progress message */
-TEST(A2EMessageTestGroup, FillProgressMessageTest)
+TEST(a2e_message_test_group, fill_progress_message_test)
 {
     /* Call the function to fill the progress message */
     a2e_msg_fill_prg(&msg);
@@ -60,7 +60,7 @@ TEST(A2EMessageTestGroup, FillProgressMessageTest)
 }
 
 /* Test case 4: Test filling a message with a NULL pointer */
-TEST(A2EMessageTestGroup, FillMessageWithNullPointerTest)
+TEST(a2e_message_test_group, fill_message_with_null_pointer_test)
 {
     /* Call the functions with a NULL pointer */
     a2e_msg_fill_req(NULL, 100);

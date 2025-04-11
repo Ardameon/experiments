@@ -7,7 +7,7 @@
 #define LOG_STR_LEN_MAX 1024
 
 /* Helper function to mock the custom log function */
-void mock_log_func(const char *log_str, int len)
+static void mock_log_func(const char *log_str, int len)
 {
     mock().actualCall("mock_log_func")
           .withStringParameter("log_str", log_str)
@@ -15,7 +15,7 @@ void mock_log_func(const char *log_str, int len)
 }
 
 /* Test group for a2e_dbg functions */
-TEST_GROUP(A2EDbgTestGroup)
+TEST_GROUP(a2e_dbg_test_group)
 {
     void setup()
     {
@@ -32,7 +32,7 @@ TEST_GROUP(A2EDbgTestGroup)
 };
 
 /* Test case 1: Check logging when debug mode is enabled */
-TEST(A2EDbgTestGroup, LogWhenDebugIsEnabled)
+TEST(a2e_dbg_test_group, log_when_debug_is_enabled)
 {
     const char *test_message = "Test debug message";
 
@@ -49,7 +49,7 @@ TEST(A2EDbgTestGroup, LogWhenDebugIsEnabled)
 }
 
 /* Test case 2: Check logging when debug mode is disabled */
-TEST(A2EDbgTestGroup, LogWhenDebugIsDisabled)
+TEST(a2e_dbg_test_group, log_when_debug_is_disabled)
 {
     const char *test_message = "This should not be logged";
 
@@ -66,7 +66,7 @@ TEST(A2EDbgTestGroup, LogWhenDebugIsDisabled)
 }
 
 /* Test case 3: Check custom log function */
-TEST(A2EDbgTestGroup, LogWithCustomLogFunction)
+TEST(a2e_dbg_test_group, log_with_custom_log_function)
 {
     const char *test_message = "Custom log function test";
     int expected_len = strlen(test_message);
@@ -87,7 +87,7 @@ TEST(A2EDbgTestGroup, LogWithCustomLogFunction)
 }
 
 /* Test case 4: Check logging with an empty format */
-TEST(A2EDbgTestGroup, LogWithEmptyFormat)
+TEST(a2e_dbg_test_group, log_with_empty_format)
 {
     /* Mock printf to check the output */
     mock().expectOneCall("mock_log_func")
@@ -102,7 +102,7 @@ TEST(A2EDbgTestGroup, LogWithEmptyFormat)
 }
 
 /* Test case 5: Check logging with a long string */
-TEST(A2EDbgTestGroup, LogWithLongString)
+TEST(a2e_dbg_test_group, log_with_long_string)
 {
     char long_message[LOG_STR_LEN_MAX + 100];
     char long_message_modified[LOG_STR_LEN_MAX + 1];
