@@ -27,3 +27,11 @@ add_executable(tests EXCLUDE_FROM_ALL ${app_src} ${test_src} ${a2e_hdrs})
 
 target_include_directories(tests PUBLIC ${PROJECT_SOURCE_DIR}/include)
 target_link_libraries(tests PRIVATE CppUTest::CppUTest CppUTest::CppUTestExt)
+
+# Enable CTest driver support
+enable_testing()
+add_test(NAME A2E_tests COMMAND tests -c -v)
+
+# invoke ctest after building:
+#
+# ctest --test-dir build/tests/ [--verbose] [--output-on-failure]
