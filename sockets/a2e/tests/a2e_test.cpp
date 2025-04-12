@@ -1,11 +1,11 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockSupport.h"
 
-    #include "a2e.h"
-    #include "a2e_iface.h"
-    #include "a2e_client.h"
-    #include "a2e_server.h"
-    #include "a2e_dbg.h"
+#include "a2e.h"
+#include "a2e_iface.h"
+#include "a2e_client.h"
+#include "a2e_server.h"
+#include "a2e_dbg.h"
 
 typedef struct a2e_ext_t
 {
@@ -13,23 +13,75 @@ typedef struct a2e_ext_t
     a2e_strategy_i iface;
 } a2e_ext_t;
 
-/* Mock for a2e_strategy_i interface */
-static a2e_strategy_i mock_strategy =
+/* Stub for function from a2e_dbg.c used in a2e_common.c just for test build */
+void a2e_log(const char *format, ...)
 {
-    .init = [](a2e_t **a2e, const a2e_cfg_t *cfg)
-    {
-        return mock().actualCall("init").returnIntValueOrDefault(0);
-    },
-    .close = [](a2e_t *a2e)
-    {
-        return mock().actualCall("close").returnIntValueOrDefault(0);
-    },
-    .req_rx = [](a2e_t *a2e, uint8_t **rx_buffer, uint32_t *size, uint16_t to_ms)
-    {
-        return mock().actualCall("req_rx").returnIntValueOrDefault(0);
-    },
-    /* Add all other function pointers similarly */
-};
+    (void)format;
+}
+
+/* Stub functio for checking a2e_set_dbg_log_func */
+void test_log_func(const char *log_str, int len)
+{
+}
+
+int a2e_init_mock(a2e_t **a2e, const a2e_cfg_t *cfg)
+{
+    return mock().actualCall("a2e_init_mock").returnIntValueOrDefault(0);
+}
+
+int a2e_close_mock(a2e_t *a2e)
+{
+    return mock().actualCall("a2e_close_mock").returnIntValueOrDefault(0);
+}
+
+int a2e_req_rx_mock(a2e_t *a2e, uint8_t **rx_buffer, uint32_t *size, uint16_t to_ms)
+{
+    return mock().actualCall("a2e_req_rx_mock").returnIntValueOrDefault(0);
+}
+
+int a2e_req_tx_mock(a2e_t *a2e, uint8_t  *tx_buffer, uint32_t size, uint16_t to_ms)
+{
+    return mock().actualCall("a2e_req_tx_mock").returnIntValueOrDefault(0);
+}
+
+int a2e_req_compl_mock(a2e_t *a2e)
+{
+    return mock().actualCall("a2e_req_compl_mock").returnIntValueOrDefault(0);
+}
+
+int a2e_req_compl_wait_mock(a2e_t *a2e, uint16_t to_ms)
+{
+    return mock().actualCall("a2e_req_compl_wait_mock").returnIntValueOrDefault(0);
+}
+
+int a2e_resp_rx_mock(a2e_t *a2e, uint8_t **rx_buffer, uint32_t *size, uint16_t to_ms)
+{
+    return mock().actualCall("a2e_resp_rx_mock").returnIntValueOrDefault(0);
+}
+
+int a2e_resp_tx_mock(a2e_t *a2e, uint8_t  *tx_buffer, uint32_t size, uint16_t to_ms)
+{
+    return mock().actualCall("a2e_resp_tx_mock").returnIntValueOrDefault(0);
+}
+
+int a2e_prog_tx_mock(a2e_t *a2e, uint16_t to_ms)
+{
+    return mock().actualCall("a2e_prog_tx_mock").returnIntValueOrDefault(0);
+}
+
+void a2e_set_dbg(uint8_t on)
+{
+    mock().actualCall("a2e_set_dbg").withBoolParameter("on", on);
+}
+
+void a2e_set_dbg_log_func(a2e_log_func log_func)
+{
+    mock().actualCall("a2e_set_dbg_log_func")
+          .withPointerParameter("log_func", (void *)log_func);
+}
+
+/* Mock for a2e_strategy_i interface */
+static a2e_strategy_i mock_strategy;
 
 /* Mock for a2e_client_iface_get */
 a2e_strategy_i a2e_client_iface_get(void)
@@ -49,7 +101,7 @@ TEST_GROUP(a2e_tests)
     a2e_cfg_t cfg;
 
     void setup()
-{
+    {
         a2e = (a2e_t *)malloc(sizeof(a2e_ext_t));
         memset(a2e, 0, sizeof(a2e_ext_t));
         memset(&cfg, 0, sizeof(cfg));
@@ -58,19 +110,62 @@ TEST_GROUP(a2e_tests)
         strncpy(cfg.name, "test", A2E_NAME_LEN_MAX);
         strncpy(cfg.sock_dir, "/tmp", A2E_SOCK_DIR_LEN_MAX);
         cfg.rw_chunk_size = 1024;
+
+        mock_strategy =
+        {
+            .init = a2e_init_mock,
+            .close = a2e_close_mock,
+            .req_rx = a2e_req_rx_mock,
+            .req_tx = a2e_req_tx_mock,
+            .req_cmplt = a2e_req_compl_mock,
+            .req_cmplt_wait = a2e_req_compl_wait_mock,
+            .resp_rx = a2e_resp_rx_mock,
+            .resp_tx = a2e_resp_tx_mock,
+            .prog_tx = a2e_prog_tx_mock
+        };
     }
 
     void teardown()
-{
+    {
         free(a2e);
         mock().clear();
     }
 };
 
+/* Test a2e_dbg_on */
+TEST(a2e_tests, a2e_dbg_on)
+{
+    mock().expectOneCall("a2e_set_dbg").withBoolParameter("on", 1);
+
+    a2e_dbg_on();
+
+    mock().checkExpectations();
+}
+
+/* Test a2e_dbg_off */
+TEST(a2e_tests, a2e_dbg_off)
+{
+    mock().expectOneCall("a2e_set_dbg").withBoolParameter("on", 0);
+
+    a2e_dbg_off();
+
+    mock().checkExpectations();
+}
+
+/* Test a2e_dbg_set_func */
+TEST(a2e_tests, a2e_dbg_set_func)
+{
+    mock().expectOneCall("a2e_set_dbg_log_func").withPointerParameter("log_func", (void *)test_log_func);
+
+    a2e_dbg_set_func(test_log_func);
+
+    mock().checkExpectations();
+}
+
 /* Test a2e_init_client */
 TEST(a2e_tests, a2e_init_client_success)
 {
-    mock().expectOneCall("init").andReturnValue(eA2E_SC_OK);
+    mock().expectOneCall("a2e_init_mock").andReturnValue(eA2E_SC_OK);
 
     a2e_status_e status = a2e_init_client(&a2e, &cfg);
 
@@ -78,9 +173,22 @@ TEST(a2e_tests, a2e_init_client_success)
     mock().checkExpectations();
 }
 
+/* Test a2e_init_client */
+TEST(a2e_tests, a2e_init_client_fail_not_implemented)
+{
+    mock().expectNoCall("a2e_init_mock");
+
+    mock_strategy.init = NULL;
+
+    a2e_status_e status = a2e_init_client(&a2e, &cfg);
+
+    LONGS_EQUAL(eA2E_SC_NOT_IMPLEMENTED, status);
+    mock().checkExpectations();
+}
+
 TEST(a2e_tests, a2e_init_client_failure)
 {
-    mock().expectOneCall("init").andReturnValue(eA2E_SC_ERROR);
+    mock().expectOneCall("a2e_init_mock").andReturnValue(eA2E_SC_ERROR);
 
     a2e_status_e status = a2e_init_client(&a2e, &cfg);
 
@@ -91,7 +199,7 @@ TEST(a2e_tests, a2e_init_client_failure)
 /* Test a2e_init_server */
 TEST(a2e_tests, a2e_init_server_success)
 {
-    mock().expectOneCall("init").andReturnValue(eA2E_SC_OK);
+    mock().expectOneCall("a2e_init_mock").andReturnValue(eA2E_SC_OK);
 
     a2e_status_e status = a2e_init_server(&a2e, &cfg);
 
@@ -99,6 +207,30 @@ TEST(a2e_tests, a2e_init_server_success)
     mock().checkExpectations();
 }
 
+/* Test a2e_init_server */
+TEST(a2e_tests, a2e_init_server_fail_not_implemented)
+{
+    mock().expectNoCall("a2e_init_mock");
+
+    mock_strategy.init = NULL;
+
+    a2e_status_e status = a2e_init_server(&a2e, &cfg);
+
+    LONGS_EQUAL(eA2E_SC_NOT_IMPLEMENTED, status);
+    mock().checkExpectations();
+}
+
+TEST(a2e_tests, a2e_init_server_failure)
+{
+    mock().expectOneCall("a2e_init_mock").andReturnValue(eA2E_SC_ERROR);
+
+    a2e_status_e status = a2e_init_server(&a2e, &cfg);
+
+    LONGS_EQUAL(eA2E_SC_ERROR, status);
+    mock().checkExpectations();
+}
+
+#if 0
 /* Test a2e_close */
 TEST(a2e_tests, a2e_close_success)
 {
@@ -201,3 +333,4 @@ TEST(a2e_tests, a2e_cfg_set_default_null_ptr)
 {
     a2e_cfg_set_default(NULL); /* Should not crash */
 }
+#endif

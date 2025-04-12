@@ -1,17 +1,24 @@
-list(APPEND app_src
+list(APPEND app_src_common
     ${PROJECT_SOURCE_DIR}/src/a2e_msg.c
     ${PROJECT_SOURCE_DIR}/src/a2e_common.c
     ${PROJECT_SOURCE_DIR}/src/a2e_dbg.c
-    ${PROJECT_SOURCE_DIR}/src/a2e.c
-    #${PROJECT_SOURCE_DIR}/src/a2e_server.c
-    #${PROJECT_SOURCE_DIR}/src/a2e_client.c
     )
 
-list(APPEND test_src
+list(APPEND test_src_common
     tests_main.cpp
     a2e_msg_test.cpp
     a2e_dbg_test.cpp
     a2e_common_test.cpp
+    )
+
+list(APPEND app_src_a2e
+    ${PROJECT_SOURCE_DIR}/src/a2e_msg.c
+    ${PROJECT_SOURCE_DIR}/src/a2e_common.c
+    ${PROJECT_SOURCE_DIR}/src/a2e.c
+    )
+
+list(APPEND test_src_a2e
+    tests_main.cpp
 	a2e_test.cpp
     )
 
@@ -23,18 +30,37 @@ file(GLOB a2e_hdrs RELATIVE ${CMAKE_CURRENT_LIST_DIR} ${PROJECT_SOURCE_DIR}/incl
 #    message(${filename})
 #endforeach()
 
-set_source_files_properties(${app_src} ${test_src} PROPERTIES LANGUAGE CXX)
+set_source_files_properties(
+    ${app_src_common}
+    ${app_src_a2e}
+    ${test_src_common}
+    ${test_src_a2e}
+    PROPERTIES LANGUAGE CXX)
 
 add_subdirectory(cpputest)
 
-add_executable(tests EXCLUDE_FROM_ALL ${app_src} ${test_src} ${a2e_hdrs})
+add_executable(test_common EXCLUDE_FROM_ALL ${app_src_common} ${test_src_common} ${a2e_hdrs})
+add_executable(test_a2e EXCLUDE_FROM_ALL ${app_src_a2e} ${test_src_a2e} ${a2e_hdrs})
 
-target_include_directories(tests PUBLIC ${PROJECT_SOURCE_DIR}/include)
-target_link_libraries(tests PRIVATE CppUTest::CppUTest CppUTest::CppUTestExt)
+foreach(TEST_TARGET test_common test_a2e)
+    target_include_directories(${TEST_TARGET} PUBLIC ${PROJECT_SOURCE_DIR}/include)
+    target_link_libraries(${TEST_TARGET} PRIVATE CppUTest::CppUTest CppUTest::CppUTestExt)
+endforeach()
+
+# Custom target to build all tests targets
+add_custom_target(tests DEPENDS test_common test_a2e COMMENT "Build all tests")
+
+# to build all tests:
+#
+# make tests
 
 # Enable CTest driver support
 enable_testing()
-add_test(NAME A2E_tests COMMAND tests -c -v)
+
+set(TEST_RUN_PARAM -c -v)
+
+add_test(NAME A2E_test_common COMMAND test_common ${TEST_RUN_PARAM})
+add_test(NAME A2E_test_a2e COMMAND test_a2e ${TEST_RUN_PARAM})
 
 # invoke ctest after building:
 #
