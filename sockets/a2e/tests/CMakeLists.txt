@@ -5,10 +5,10 @@ list(APPEND app_src_common
     )
 
 list(APPEND test_src_common
-    tests_main.cpp
-    a2e_msg_test.cpp
-    a2e_dbg_test.cpp
-    a2e_common_test.cpp
+    test_main.cpp
+    test_a2e_msg.cpp
+    test_a2e_dbg.cpp
+    test_a2e_common.cpp
     )
 
 list(APPEND app_src_a2e
@@ -18,8 +18,8 @@ list(APPEND app_src_a2e
     )
 
 list(APPEND test_src_a2e
-    tests_main.cpp
-	a2e_test.cpp
+    test_main.cpp
+	test_a2e.cpp
     )
 
 list(APPEND app_src_a2e_client
@@ -29,8 +29,8 @@ list(APPEND app_src_a2e_client
     )
 
 list(APPEND test_src_a2e_client
-    tests_main.cpp
-	a2e_client_test.cpp
+    test_main.cpp
+	test_a2e_client.cpp
     )
 
 set(CMAKE_BUILD_TYPE Debug)
