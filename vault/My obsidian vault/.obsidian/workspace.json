@@ -42,12 +42,40 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "cmake/Пишем CMakeLists.md",
+                "file": "git/Git.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Git"
+            }
+          },
+          {
+            "id": "b5d469e1b5a3636f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "ldap/LDAP.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "LDAP"
+            }
+          },
+          {
+            "id": "88035b00239d1922",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "git/Мой gitconfig.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Пишем CMakeLists"
+              "title": "Мой gitconfig"
             }
           },
           {
@@ -79,7 +107,7 @@
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 4
       },
       {
         "id": "5404614ee73ccbc3",
@@ -92,7 +120,7 @@
             "state": {
               "type": "localgraph",
               "state": {
-                "file": "cmake/Пишем CMakeLists.md",
+                "file": "git/Мой gitconfig.md",
                 "options": {
                   "collapse-filter": false,
                   "search": "",
@@ -120,7 +148,7 @@
                 }
               },
               "icon": "lucide-git-fork",
-              "title": "Граф Пишем CMakeLists"
+              "title": "Граф Мой gitconfig"
             }
           }
         ]
@@ -271,34 +299,34 @@
       "command-palette:Открыть палитру команд": false
     }
   },
-  "active": "39ea2f154ed9df03",
+  "active": "88035b00239d1922",
   "lastOpenFiles": [
-    "cmake/CMake Cache.md",
-    "cmake/Пишем CMakeLists.md",
-    "cmake/CMake модули.md",
-    "cmake/Начальная информация.md",
-    "cmake/CMake.md",
-    "ldap/Установка и настройка OpenLDAP сервера на Ubuntu.md",
-    "ldap/Общая информация о LDAP.md",
-    "git/git patch.md",
-    "git/Git.md",
-    "general/work/ffmpeg.md",
-    "general/work/firmware scripts.md",
-    "general/work/picocom.md",
-    "general/work/syslog.md",
     "general/work/Рабочие заметки.md",
     "general/work/Uboot.md",
     "general/work/tcpdump.md",
-    "Добро пожаловать.md",
-    "отладка/Профилировщики.md",
+    "general/work/syslog.md",
+    "general/work/picocom.md",
+    "general/work/firmware scripts.md",
+    "general/work/ffmpeg.md",
+    "cmake/Начальная информация.md",
+    "cmake/CMake модули.md",
+    "cmake/CMake Cache.md",
+    "cmake/CMake.md",
     "отладка/Отладка.md",
     "отладка/Flamegraph.md",
     "linux/Яндекс диск.md",
     "linux/Linux audio.md",
     "linux/mc/mc.md",
-    "linux/bash/Полезные утилиты командной строки.md",
     "linux/bash/Bash.md",
     "ldap/Пример каталога LDAP.md",
+    "ldap/Общая информация о LDAP.md",
+    "git/Мой gitconfig.md",
+    "git/Git presentation hints.md",
+    "git/git patch.md",
+    "git/Git.md",
+    "отладка/Профилировщики.md",
+    "ldap/Установка и настройка OpenLDAP сервера на Ubuntu.md",
+    "ldap/LDAP.md",
     "отладка",
     "ldap",
     "cmake",
