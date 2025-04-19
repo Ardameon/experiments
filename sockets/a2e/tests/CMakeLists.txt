@@ -58,6 +58,7 @@ add_executable(test_a2e_client EXCLUDE_FROM_ALL ${app_src_a2e_client} ${test_src
 foreach(TEST_TARGET test_common test_a2e test_a2e_client)
     target_include_directories(${TEST_TARGET} PUBLIC ${PROJECT_SOURCE_DIR}/include)
     target_link_libraries(${TEST_TARGET} PRIVATE CppUTest::CppUTest CppUTest::CppUTestExt)
+    target_compile_options(${TEST_TARGET} PRIVATE "-DA2E_UTEST")
 endforeach()
 
 # Custom target to build all tests targets

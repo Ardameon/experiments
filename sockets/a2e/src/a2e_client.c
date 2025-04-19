@@ -187,7 +187,11 @@ static a2e_status_e client_alloc(a2e_client_t **client)
 
     (*client) = NULL;
 
+#ifdef A2E_UTEST
+    new_clt = (a2e_client_t *)calloc_mock(1, sizeof(**client));
+#else
     new_clt = (a2e_client_t *)calloc(1, sizeof(**client));
+#endif
 
     if (new_clt)
     {
