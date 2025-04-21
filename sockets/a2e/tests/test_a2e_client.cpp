@@ -124,6 +124,8 @@ TEST_GROUP(a2e_client_test)
     a2e_client_t *p_client;
     a2e_client_t *tmp_client;
     a2e_msg_t msg;
+    uint8_t *rx_buf;
+    uint32_t rx_buf_size;
     struct pollfd fds;
 
     void setup()
@@ -133,6 +135,8 @@ TEST_GROUP(a2e_client_test)
         memset(&msg, 0, sizeof(msg));
         strcpy(cfg.sock_dir, "/testdir");
         msg.magic = A2E_MSG_MAGIC;
+        rx_buf = NULL;
+        rx_buf_size = 0;
     }
 
     void teardown()
@@ -140,6 +144,166 @@ TEST_GROUP(a2e_client_test)
         mock().clear();
     }
 };
+
+TEST(a2e_client_test, client_conn_read_recv_success)
+{
+    fds.revents = POLLIN;
+    client.fd = 999;
+    client.base.cfg.rw_chunk_size = 5;
+    client.rsp_size_exp = 10;
+    client.rsp_size_recv = 4;
+    uint8_t buf[50];
+    client.rsp = buf;
+
+    mock().expectNCalls(1, "poll")
+          .withOutputParameterReturning("fds", &fds, sizeof(fds))
+          .ignoreOtherParameters()
+          .andReturnValue(1);
+
+    mock().expectOneCall("recv")
+          .withIntParameter("sockfd", client.fd)
+          .withOutputParameterReturning("buf", buf, A2E_MIN(client.base.cfg.rw_chunk_size, client.rsp_size_exp - client.rsp_size_recv))
+          .withUnsignedIntParameter("len", A2E_MIN(client.base.cfg.rw_chunk_size, client.rsp_size_exp - client.rsp_size_recv))
+          .withUnsignedIntParameter("flags", 0)
+          .andReturnValue(-1);
+
+    status = client_conn_read(&client, &rx_buf, &rx_buf_size, 1);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_ERROR, status);
+}
+
+TEST(a2e_client_test, client_conn_read_recv_fail)
+{
+    fds.revents = POLLIN;
+    client.fd = 999;
+
+    mock().expectNCalls(1, "poll")
+          .withOutputParameterReturning("fds", &fds, sizeof(fds))
+          .ignoreOtherParameters()
+          .andReturnValue(1);
+
+    mock().expectOneCall("recv")
+          .withIntParameter("sockfd", client.fd)
+          .ignoreOtherParameters()
+          .andReturnValue(-1);
+
+    status = client_conn_read(&client, &rx_buf, &rx_buf_size, 1);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_ERROR, status);
+}
+
+TEST(a2e_client_test, client_conn_read_poll_fail_timeout)
+{
+    errno = EINTR;
+
+    mock().expectNCalls(1, "poll")
+          .withOutputParameterReturning("fds", &fds, sizeof(fds))
+          .ignoreOtherParameters()
+          .andReturnValue(-1);
+
+    status = client_conn_read(&client, &rx_buf, &rx_buf_size, 1);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_TIMEOUT, status);
+}
+
+TEST(a2e_client_test, client_conn_read_poll_fail)
+{
+    errno = !EINTR;
+
+    mock().expectNCalls(1, "poll")
+          .withOutputParameterReturning("fds", &fds, sizeof(fds))
+          .ignoreOtherParameters()
+          .andReturnValue(-1);
+
+    status = client_conn_read(&client, &rx_buf, &rx_buf_size, 1);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_ERROR, status);
+}
+
+TEST(a2e_client_test, client_conn_read_poll_fail_no_POLLIN)
+{
+    fds.revents = 0;
+
+    mock().expectNCalls(1, "poll")
+          .withOutputParameterReturning("fds", &fds, sizeof(fds))
+          .ignoreOtherParameters()
+          .andReturnValue(1);
+
+    status = client_conn_read(&client, &rx_buf, &rx_buf_size, 1);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_ERROR, status);
+}
+
+TEST(a2e_client_test, client_conn_read_poll_fail_POLLHUP)
+{
+    fds.revents = POLLHUP;
+
+    mock().expectNCalls(1, "poll")
+          .withOutputParameterReturning("fds", &fds, sizeof(fds))
+          .ignoreOtherParameters()
+          .andReturnValue(1);
+
+    status = client_conn_read(&client, &rx_buf, &rx_buf_size, 1);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_ERROR, status);
+}
+
+TEST(a2e_client_test, client_conn_read_poll_fail_POLLNVAL)
+{
+    fds.revents = POLLNVAL;
+
+    mock().expectNCalls(1, "poll")
+          .withOutputParameterReturning("fds", &fds, sizeof(fds))
+          .ignoreOtherParameters()
+          .andReturnValue(1);
+
+    status = client_conn_read(&client, &rx_buf, &rx_buf_size, 1);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_ERROR, status);
+}
+
+TEST(a2e_client_test, client_conn_read_poll_fail_POLLERR)
+{
+    fds.revents = POLLERR;
+
+    mock().expectNCalls(1, "poll")
+          .withOutputParameterReturning("fds", &fds, sizeof(fds))
+          .ignoreOtherParameters()
+          .andReturnValue(1);
+
+    status = client_conn_read(&client, &rx_buf, &rx_buf_size, 1);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_ERROR, status);
+}
+
+TEST(a2e_client_test, client_conn_read_poll_timeout)
+{
+    mock().expectNCalls(1, "poll")
+          .withOutputParameterReturning("fds", &fds, sizeof(fds))
+          .ignoreOtherParameters()
+          .andReturnValue(0);
+
+    status = client_conn_read(&client, &rx_buf, &rx_buf_size, 1);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_TIMEOUT, status);
+}
+
+TEST(a2e_client_test, client_conn_read_wrong_param)
+{
+    status = client_conn_read(NULL, NULL, NULL, 1);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_ERROR, status);
+}
 
 TEST(a2e_client_test, client_conn_connect_success)
 {

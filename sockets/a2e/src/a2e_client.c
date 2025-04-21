@@ -439,7 +439,7 @@ static a2e_status_e client_conn_read(a2e_client_t *client, uint8_t **rx_buffer, 
     int poll_to_ms = DEF_A2E_RW_POLL_TIMEOUT_MS;
     uint8_t *rx_buf_ptr;
 
-    if (!client)
+    if (!client || !rx_buffer || !size)
         goto _exit;
 
     start_time = a2e_get_timestamp();
