@@ -70,12 +70,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "git/Мой gitconfig.md",
+                "file": "cmake/CMake Cache.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Мой gitconfig"
+              "title": "CMake Cache"
             }
           },
           {
@@ -120,7 +120,7 @@
             "state": {
               "type": "localgraph",
               "state": {
-                "file": "git/Мой gitconfig.md",
+                "file": "cmake/CMake Cache.md",
                 "options": {
                   "collapse-filter": false,
                   "search": "",
@@ -148,7 +148,7 @@
                 }
               },
               "icon": "lucide-git-fork",
-              "title": "Граф Мой gitconfig"
+              "title": "Граф CMake Cache"
             }
           }
         ]
@@ -301,6 +301,7 @@
   },
   "active": "88035b00239d1922",
   "lastOpenFiles": [
+    "git/Мой gitconfig.md",
     "general/work/Рабочие заметки.md",
     "general/work/Uboot.md",
     "general/work/tcpdump.md",
@@ -320,7 +321,6 @@
     "linux/bash/Bash.md",
     "ldap/Пример каталога LDAP.md",
     "ldap/Общая информация о LDAP.md",
-    "git/Мой gitconfig.md",
     "git/Git presentation hints.md",
     "git/git patch.md",
     "git/Git.md",

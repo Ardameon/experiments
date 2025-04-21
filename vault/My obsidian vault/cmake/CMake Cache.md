@@ -53,10 +53,16 @@
 cmake -DUSE_JPEG=OFF -B BUILD_DIR
 ```
 
-2. `set()` с параметром `FORCE`
+2. `set()` с параметрами `CACHE` и `FORCE`
 
 ```cmake
 set(USE_JPEG OFF CACHE BOOL "include jpeg support?" FORCE)
+```
+
+3. `set_property()` с параметром `CACHE`
+
+```cmake
+set_property(CACHE USE_JPEG PROPERTY VALUE OFF)
 ```
 
 ---
