@@ -5,8 +5,24 @@
 #include "a2e_client.h"
 
 void *calloc_mock(size_t nmemb, size_t size);
+void free_mock(void *ptr);
 
 #include "../src/a2e_client.c"
+
+int shutdown(int sockfd, int how)
+{
+    return mock().actualCall("shutdown")
+                 .withIntParameter("sockfd", sockfd)
+                 .withIntParameter("how", how)
+                 .returnIntValue();
+}
+
+int close(int fd)
+{
+    return mock().actualCall("close")
+                 .withIntParameter("fd", fd)
+                 .returnIntValue();
+}
 
 int poll(struct pollfd *fds, nfds_t nfds, int timeout)
 {
@@ -31,6 +47,13 @@ void *calloc_mock(size_t nmemb, size_t size)
                  .withUnsignedIntParameter("nmemb", nmemb)
                  .withUnsignedIntParameter("size", size)
                  .returnPointerValue();
+}
+
+/* Need to use non-standart name because "free" macro is redefined by CppUTest */
+void free_mock(void *ptr)
+{
+    mock().actualCall("free")
+          .withPointerParameter("ptr", ptr);
 }
 
 int stat(const char *pathname, struct stat *statbuf)
@@ -77,9 +100,45 @@ TEST_GROUP(a2e_client_test)
     }
 };
 
+TEST(a2e_client_test, client_close_func_with_inactive_socket)
+{
+    client.fd = -1;
+
+    mock().expectOneCall("free")
+          .withPointerParameter("ptr", &client);
+
+    status = client_close_func(&client);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_OK, status);
+    CHECK_EQUAL(eA2E_STATE_NULL, client.base.state);
+}
+
+TEST(a2e_client_test, client_close_func_with_active_socket)
+{
+    client.fd = 999;
+
+    mock().expectOneCall("shutdown")
+          .withIntParameter("sockfd", client.fd)
+          .withIntParameter("how", SHUT_RDWR)
+          .andReturnValue(0);
+
+    mock().expectOneCall("close")
+          .withIntParameter("fd", client.fd)
+          .andReturnValue(0);
+
+    mock().expectOneCall("free")
+          .withPointerParameter("ptr", &client);
+
+    status = client_close_func(&client);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_OK, status);
+    CHECK_EQUAL(eA2E_STATE_NULL, client.base.state);
+}
+
 TEST(a2e_client_test, client_init_func_success)
 {
-    p_client = &client;
     struct stat st;
 
     st.st_mode = S_IFDIR;
@@ -101,11 +160,9 @@ TEST(a2e_client_test, client_init_func_success)
     CHECK_EQUAL(eA2E_STATE_IDLE, tmp_client->base.state);
 }
 
-
 TEST(a2e_client_test, client_init_func_start_path_is_not_dir)
 {
     client.base.state = eA2E_STATE_REQ_RX;
-    p_client = &client;
     struct stat st;
 
     st.st_mode = S_IFBLK;
@@ -129,7 +186,6 @@ TEST(a2e_client_test, client_init_func_start_path_is_not_dir)
 TEST(a2e_client_test, client_init_func_start_wrong_path)
 {
     client.base.state = eA2E_STATE_REQ_RX;
-    p_client = &client;
     struct stat st;
 
     st.st_mode = S_IFDIR;
@@ -152,8 +208,6 @@ TEST(a2e_client_test, client_init_func_start_wrong_path)
 
 TEST(a2e_client_test, client_init_func_alloc_fail)
 {
-    p_client = &client;
-
     mock().expectOneCall("calloc")
           .withUnsignedIntParameter("nmemb", 1)
           .withUnsignedIntParameter("size", sizeof(client))

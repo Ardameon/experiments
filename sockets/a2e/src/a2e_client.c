@@ -207,7 +207,11 @@ static a2e_status_e client_alloc(a2e_client_t **client)
 
 static void client_free(a2e_client_t *client)
 {
+#ifdef A2E_UTEST
+    free_mock(client);
+#else
     free(client);
+#endif
 }
 
 
