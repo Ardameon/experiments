@@ -11,6 +11,24 @@ void free_mock(void *ptr);
 
 #include "../src/a2e_client.c"
 
+int socket(int domain, int type, int protocol)
+{
+    return mock().actualCall("socket")
+                 .withIntParameter("domain", domain)
+                 .withIntParameter("type", type)
+                 .withIntParameter("protocol", protocol)
+                 .returnIntValue();
+}
+
+int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen)
+{
+    return mock().actualCall("connect")
+                 .withIntParameter("sockfd", sockfd)
+                 .withPointerParameter("addr", (void *)addr)
+                 .withIntParameter("addrlen", addrlen)
+                 .returnIntValue();
+}
+
 ssize_t recv(int sockfd, void *buf, size_t len, int flags)
 {
     return mock().actualCall("recv")
@@ -123,6 +141,70 @@ TEST_GROUP(a2e_client_test)
     }
 };
 
+TEST(a2e_client_test, client_conn_connect_success)
+{
+    client.fd = -1;
+
+    mock().expectOneCall("socket")
+          .ignoreOtherParameters()
+          .andReturnValue(999);
+
+    mock().expectOneCall("connect")
+          .withIntParameter("sockfd", 999)
+          .ignoreOtherParameters()
+          .andReturnValue(0);
+
+    status = client_conn_connect(&client);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_CONTINUE, status);
+    CHECK_EQUAL(eA2E_STATE_REQ_TX_START, client.base.state);
+}
+
+TEST(a2e_client_test, client_conn_connect_connect_fail)
+{
+    client.fd = -1;
+
+    mock().expectOneCall("socket")
+          .ignoreOtherParameters()
+          .andReturnValue(999);
+
+    mock().expectOneCall("connect")
+          .withIntParameter("sockfd", 999)
+          .ignoreOtherParameters()
+          .andReturnValue(-1);
+
+    status = client_conn_connect(&client);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_ERROR, status);
+}
+
+TEST(a2e_client_test, client_conn_connect_socket_fail)
+{
+    client.fd = -1;
+
+    mock().expectOneCall("socket")
+          .ignoreOtherParameters()
+          .andReturnValue(-2);
+
+    status = client_conn_connect(&client);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_ERROR, status);
+    CHECK_EQUAL(-2, client.fd);
+}
+
+TEST(a2e_client_test, client_conn_connect_wrong_param)
+{
+    client.fd = -1;
+
+    status = client_conn_connect(NULL);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_ERROR, status);
+}
+
 TEST(a2e_client_test, client_close_func_with_inactive_socket)
 {
     client.fd = -1;
@@ -181,6 +263,14 @@ TEST(a2e_client_test, client_init_func_success)
     mock().checkExpectations();
     CHECK_EQUAL(eA2E_SC_OK, status);
     CHECK_EQUAL(eA2E_STATE_IDLE, tmp_client->base.state);
+}
+
+TEST(a2e_client_test, client_init_func_wrong_param)
+{
+    status = client_init_func(NULL, NULL);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_ERROR, status);
 }
 
 TEST(a2e_client_test, client_init_func_path_is_not_dir)
@@ -268,6 +358,14 @@ TEST(a2e_client_test, client_conn_read_start_poll_fail_timeout)
 
     mock().checkExpectations();
     CHECK_EQUAL(eA2E_SC_TIMEOUT, status);
+}
+
+TEST(a2e_client_test, client_conn_read_start_wrong_param)
+{
+    status = client_conn_read_start(NULL, 1);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_ERROR, status);
 }
 
 TEST(a2e_client_test, client_conn_read_start_poll_fail)

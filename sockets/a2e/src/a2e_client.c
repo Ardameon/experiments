@@ -50,6 +50,9 @@ static a2e_status_e client_init_func(a2e_client_t **client, const a2e_cfg_t *cfg
     a2e_client_t *new_clt = NULL;
     a2e_status_e status = eA2E_SC_ERROR;
 
+    if (!client || !cfg)
+        goto _exit;
+
     (*client) = NULL;
 
     status = client_alloc(&new_clt);
@@ -78,14 +81,21 @@ _exit:
 
 static a2e_status_e client_close_func(a2e_client_t *client)
 {
-    client_stop(client);
-    client_free(client);
+    if (client)
+    {
+        client_stop(client);
+        client_free(client);
+    }
+
     return eA2E_SC_OK;
 }
 
 static a2e_status_e client_request_tx_func(a2e_client_t *client, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms)
 {
     a2e_status_e status = eA2E_SC_ERROR;
+
+    if (!client)
+        goto _exit;
 
     switch (A2E_BASE(client)->state)
     {
@@ -106,12 +116,16 @@ static a2e_status_e client_request_tx_func(a2e_client_t *client, uint8_t *tx_buf
             break;
     }
 
+_exit:
     return status;
 }
 
 static a2e_status_e client_request_complete_func(a2e_client_t *client, uint16_t to_ms)
 {
     a2e_status_e status = eA2E_SC_ERROR;
+
+    if (!client)
+        goto _exit;
 
     switch(A2E_BASE(client)->state)
     {
@@ -149,12 +163,16 @@ static a2e_status_e client_request_complete_func(a2e_client_t *client, uint16_t 
             break;
     }
 
+_exit:
     return status;
 }
 
 static a2e_status_e client_response_rx_func(a2e_client_t *client, uint8_t **rx_buffer, uint32_t *size, uint16_t to_ms)
 {
     a2e_status_e status = eA2E_SC_ERROR;
+
+    if (!client)
+        goto _exit;
 
     switch (A2E_BASE(client)->state)
     {
@@ -172,6 +190,7 @@ static a2e_status_e client_response_rx_func(a2e_client_t *client, uint8_t **rx_b
             break;
     }
 
+_exit:
     return status;
 }
 
@@ -221,6 +240,9 @@ static a2e_status_e client_start(a2e_client_t *client)
     a2e_status_e status = eA2E_SC_ERROR;
     int res = -1;
 
+    if (!client)
+        goto _exit;
+
     a2e_log("%s. Client start (unix: '%s')", a2e_name(A2E_BASE(client)), A2E_BASE(client)->cfg.sock_dir);
 
     if (A2E_BASE(client)->state > eA2E_STATE_NULL)
@@ -269,6 +291,9 @@ static a2e_status_e client_conn_connect(a2e_client_t *client)
     struct sockaddr_un raddr = {0};
     int reuse = 1;
 
+    if (!client)
+        goto _exit;
+
     if ((client->fd = socket(AF_UNIX, SOCK_STREAM, 0)) < 0)
     {
         a2e_log("%s. Failed to create socket (%s)", a2e_name(A2E_BASE(client)), strerror(errno));
@@ -304,6 +329,9 @@ static a2e_status_e client_conn_read_start(a2e_client_t *client, uint16_t to_ms)
     unsigned long start_time;
     int poll_to_ms = DEF_A2E_RW_POLL_TIMEOUT_MS;
     a2e_msg_t msg;
+
+    if (!client)
+        goto _exit;
 
     start_time = a2e_get_timestamp();
 
@@ -411,6 +439,9 @@ static a2e_status_e client_conn_read(a2e_client_t *client, uint8_t **rx_buffer, 
     int poll_to_ms = DEF_A2E_RW_POLL_TIMEOUT_MS;
     uint8_t *rx_buf_ptr;
 
+    if (!client)
+        goto _exit;
+
     start_time = a2e_get_timestamp();
 
     fds.fd = client->fd;
@@ -502,6 +533,9 @@ static a2e_status_e client_conn_write_start(a2e_client_t *client, uint8_t *tx_bu
     int poll_to_ms = DEF_A2E_RW_POLL_TIMEOUT_MS;
     a2e_msg_t msg;
 
+    if (!client)
+        goto _exit;
+
     start_time = a2e_get_timestamp();
 
     fds.fd = client->fd;
@@ -584,6 +618,9 @@ static a2e_status_e client_conn_write(a2e_client_t *client, uint8_t *tx_buffer, 
     unsigned long start_time;
     int poll_to_ms = DEF_A2E_RW_POLL_TIMEOUT_MS;
     uint8_t *tx_buf_ptr;
+
+    if (!client)
+        goto _exit;
 
     start_time = a2e_get_timestamp();
 
