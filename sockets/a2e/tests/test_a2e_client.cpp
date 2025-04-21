@@ -3,11 +3,23 @@
 
 #include "a2e_def.h"
 #include "a2e_client.h"
+#include "a2e_msg.h"
 
 void *calloc_mock(size_t nmemb, size_t size);
+void *malloc_mock(size_t size);
 void free_mock(void *ptr);
 
 #include "../src/a2e_client.c"
+
+ssize_t recv(int sockfd, void *buf, size_t len, int flags)
+{
+    return mock().actualCall("recv")
+                 .withIntParameter("sockfd", sockfd)
+                 .withOutputParameter("buf", buf)
+                 .withUnsignedIntParameter("len", len)
+                 .withIntParameter("flags", flags)
+                 .returnIntValue();
+}
 
 int shutdown(int sockfd, int how)
 {
@@ -49,6 +61,14 @@ void *calloc_mock(size_t nmemb, size_t size)
                  .returnPointerValue();
 }
 
+/* Need to use non-standart name because "calloc" macro is redefined by CppUTest */
+void *malloc_mock(size_t size)
+{
+    return mock().actualCall("malloc")
+                 .withUnsignedIntParameter("size", size)
+                 .returnPointerValue();
+}
+
 /* Need to use non-standart name because "free" macro is redefined by CppUTest */
 void free_mock(void *ptr)
 {
@@ -85,13 +105,16 @@ TEST_GROUP(a2e_client_test)
     a2e_client_t client;
     a2e_client_t *p_client;
     a2e_client_t *tmp_client;
+    a2e_msg_t msg;
     struct pollfd fds;
 
     void setup()
     {
         memset(&client, 0, sizeof(client));
         memset(&fds, 0, sizeof(fds));
+        memset(&msg, 0, sizeof(msg));
         strcpy(cfg.sock_dir, "/testdir");
+        msg.magic = A2E_MSG_MAGIC;
     }
 
     void teardown()
@@ -160,7 +183,7 @@ TEST(a2e_client_test, client_init_func_success)
     CHECK_EQUAL(eA2E_STATE_IDLE, tmp_client->base.state);
 }
 
-TEST(a2e_client_test, client_init_func_start_path_is_not_dir)
+TEST(a2e_client_test, client_init_func_path_is_not_dir)
 {
     client.base.state = eA2E_STATE_REQ_RX;
     struct stat st;
@@ -183,7 +206,7 @@ TEST(a2e_client_test, client_init_func_start_path_is_not_dir)
     CHECK_EQUAL(eA2E_SC_ERROR, status);
 }
 
-TEST(a2e_client_test, client_init_func_start_wrong_path)
+TEST(a2e_client_test, client_init_func_wrong_path)
 {
     client.base.state = eA2E_STATE_REQ_RX;
     struct stat st;
@@ -230,6 +253,36 @@ TEST(a2e_client_test, client_conn_read_start_poll_timeout)
 
     mock().checkExpectations();
     CHECK_EQUAL(eA2E_SC_TIMEOUT, status);
+}
+
+TEST(a2e_client_test, client_conn_read_start_poll_fail_timeout)
+{
+    mock().expectNCalls(1, "poll")
+          .withOutputParameterReturning("fds", &fds, sizeof(fds))
+          .ignoreOtherParameters()
+          .andReturnValue(-1);
+
+    errno = EINTR;
+
+    status = client_conn_read_start(&client, 1);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_TIMEOUT, status);
+}
+
+TEST(a2e_client_test, client_conn_read_start_poll_fail)
+{
+    mock().expectNCalls(1, "poll")
+          .withOutputParameterReturning("fds", &fds, sizeof(fds))
+          .ignoreOtherParameters()
+          .andReturnValue(-1);
+
+    errno = !EINTR;
+
+    status = client_conn_read_start(&client, 1);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_ERROR, status);
 }
 
 TEST(a2e_client_test, client_conn_read_start_poll_error_POLLERR)
@@ -290,4 +343,160 @@ TEST(a2e_client_test, client_conn_read_start_poll_no_POLLIN)
 
     mock().checkExpectations();
     CHECK_EQUAL(eA2E_SC_ERROR, status);
+}
+
+TEST(a2e_client_test, client_conn_read_start_recv_fail)
+{
+    fds.revents = POLLIN;
+    client.fd = 999;
+
+    mock().expectNCalls(1, "poll")
+          .withOutputParameterReturning("fds", &fds, sizeof(fds))
+          .ignoreOtherParameters()
+          .andReturnValue(1);
+
+    mock().expectOneCall("recv")
+          .withIntParameter("sockfd", client.fd)
+          .withOutputParameterReturning("buf", &msg, sizeof(msg))
+          .withUnsignedIntParameter("len", sizeof(msg))
+          .withUnsignedIntParameter("flags", 0)
+          .andReturnValue(-1);
+
+    status = client_conn_read_start(&client, 1);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_ERROR, status);
+}
+
+TEST(a2e_client_test, client_conn_read_start_recv_len_less_then_msg)
+{
+    fds.revents = POLLIN;
+    client.fd = 999;
+
+    mock().expectNCalls(1, "poll")
+          .withOutputParameterReturning("fds", &fds, sizeof(fds))
+          .ignoreOtherParameters()
+          .andReturnValue(1);
+
+    mock().expectOneCall("recv")
+          .withIntParameter("sockfd", client.fd)
+          .withOutputParameterReturning("buf", &msg, sizeof(msg))
+          .withUnsignedIntParameter("len", sizeof(msg))
+          .withUnsignedIntParameter("flags", 0)
+          .andReturnValue((int)(sizeof(msg) - 1));
+
+    status = client_conn_read_start(&client, 1);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_ERROR, status);
+}
+
+TEST(a2e_client_test, client_conn_read_start_recv_wrong_magic)
+{
+    fds.revents = POLLIN;
+    client.fd = 999;
+    msg.magic = 999;
+
+    mock().expectNCalls(1, "poll")
+          .withOutputParameterReturning("fds", &fds, sizeof(fds))
+          .ignoreOtherParameters()
+          .andReturnValue(1);
+
+    mock().expectOneCall("recv")
+          .withIntParameter("sockfd", client.fd)
+          .withOutputParameterReturning("buf", &msg, sizeof(msg))
+          .withUnsignedIntParameter("len", sizeof(msg))
+          .withUnsignedIntParameter("flags", 0)
+          .andReturnValue((int)(sizeof(msg)));
+
+    status = client_conn_read_start(&client, 1);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_ERROR, status);
+}
+
+TEST(a2e_client_test, client_conn_read_start_recv_progress)
+{
+    fds.revents = POLLIN;
+    client.fd = 999;
+    msg.type = eA2E_MSG_PROGRESS;
+
+    mock().expectNCalls(1, "poll")
+          .withOutputParameterReturning("fds", &fds, sizeof(fds))
+          .ignoreOtherParameters()
+          .andReturnValue(1);
+
+    mock().expectOneCall("recv")
+          .withIntParameter("sockfd", client.fd)
+          .withOutputParameterReturning("buf", &msg, sizeof(msg))
+          .withUnsignedIntParameter("len", sizeof(msg))
+          .withUnsignedIntParameter("flags", 0)
+          .andReturnValue((int)(sizeof(msg)));
+
+    status = client_conn_read_start(&client, 1);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_IN_PROGRESS, status);
+    CHECK_EQUAL(eA2E_STATE_REQ_PROGRESS, client.base.state);
+}
+
+TEST(a2e_client_test, client_conn_read_start_rsp_malloc_fail)
+{
+    fds.revents = POLLIN;
+    client.fd = 999;
+    msg.len = 5;
+
+    mock().expectNCalls(1, "poll")
+          .withOutputParameterReturning("fds", &fds, sizeof(fds))
+          .ignoreOtherParameters()
+          .andReturnValue(1);
+
+    mock().expectOneCall("recv")
+          .withIntParameter("sockfd", client.fd)
+          .withOutputParameterReturning("buf", &msg, sizeof(msg))
+          .withUnsignedIntParameter("len", sizeof(msg))
+          .withUnsignedIntParameter("flags", 0)
+          .andReturnValue((int)(sizeof(msg)));
+
+    mock().expectOneCall("malloc")
+          .withUnsignedIntParameter("size", msg.len)
+          .andReturnValue((void *)NULL);
+
+    status = client_conn_read_start(&client, 1);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_NO_MEM, status);
+}
+
+TEST(a2e_client_test, client_conn_read_start_success)
+{
+    fds.revents = POLLIN;
+    client.fd = 999;
+    msg.len = 5;
+    uint8_t buf[5];
+
+    mock().expectNCalls(1, "poll")
+          .withOutputParameterReturning("fds", &fds, sizeof(fds))
+          .ignoreOtherParameters()
+          .andReturnValue(1);
+
+    mock().expectOneCall("recv")
+          .withIntParameter("sockfd", client.fd)
+          .withOutputParameterReturning("buf", &msg, sizeof(msg))
+          .withUnsignedIntParameter("len", sizeof(msg))
+          .withUnsignedIntParameter("flags", 0)
+          .andReturnValue((int)(sizeof(msg)));
+
+    mock().expectOneCall("malloc")
+          .withUnsignedIntParameter("size", msg.len)
+          .andReturnValue(&buf);
+
+    status = client_conn_read_start(&client, 1);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_CONTINUE, status);
+    CHECK_EQUAL(eA2E_STATE_RSP_RX, client.base.state);
+    CHECK_EQUAL(buf, client.rsp);
+    CHECK_EQUAL(buf, client.rsp);
+    CHECK_EQUAL(msg.len, client.rsp_size_exp);
 }

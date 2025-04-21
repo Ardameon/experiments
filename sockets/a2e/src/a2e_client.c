@@ -358,7 +358,11 @@ static a2e_status_e client_conn_read_start(a2e_client_t *client, uint16_t to_ms)
             client->rsp_size_exp = msg.len;
             client->rsp_size_recv = 0;
 
+#ifdef A2E_UTEST
+            client->rsp = (uint8_t  *)malloc_mock(client->rsp_size_exp);
+#else
             client->rsp = (uint8_t  *)malloc(client->rsp_size_exp);
+#endif
             if (!client->rsp)
             {
                 status = eA2E_SC_NO_MEM;
