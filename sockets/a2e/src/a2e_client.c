@@ -199,6 +199,7 @@ a2e_strategy_i a2e_client_iface_get(void)
     return client_iface;
 }
 
+#ifndef A2E_UTEST_MEM_MOCK
 static a2e_status_e client_alloc(a2e_client_t **client)
 {
     a2e_client_t *new_clt = NULL;
@@ -206,11 +207,7 @@ static a2e_status_e client_alloc(a2e_client_t **client)
 
     (*client) = NULL;
 
-#ifdef A2E_UTEST
-    new_clt = (a2e_client_t *)calloc_mock(1, sizeof(**client));
-#else
     new_clt = (a2e_client_t *)calloc(1, sizeof(**client));
-#endif
 
     if (new_clt)
     {
@@ -223,15 +220,14 @@ static a2e_status_e client_alloc(a2e_client_t **client)
 
     return status;
 }
+#endif
 
+#ifndef A2E_UTEST_MEM_MOCK
 static void client_free(a2e_client_t *client)
 {
-#ifdef A2E_UTEST
-    free_mock(client);
-#else
     free(client);
-#endif
 }
+#endif
 
 
 static a2e_status_e client_start(a2e_client_t *client)
@@ -386,9 +382,7 @@ static a2e_status_e client_conn_read_start(a2e_client_t *client, uint16_t to_ms)
             client->rsp_size_exp = msg.len;
             client->rsp_size_recv = 0;
 
-#ifdef A2E_UTEST
-            client->rsp = (uint8_t  *)malloc_mock(client->rsp_size_exp);
-#else
+#ifndef A2E_UTEST_MEM_MOCK
             client->rsp = (uint8_t  *)malloc(client->rsp_size_exp);
 #endif
             if (!client->rsp)

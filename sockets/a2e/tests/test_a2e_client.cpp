@@ -102,12 +102,21 @@ int stat(const char *pathname, struct stat *statbuf)
                  .returnIntValue();
 }
 
-static a2e_status_e client_alloc_test(a2e_client_t **client)
+#ifdef A2E_UTEST_MEM_MOCK
+static a2e_status_e client_alloc(a2e_client_t **client)
 {
-    return (a2e_status_e)mock().actualCall("client_alloc_test")
+    return (a2e_status_e)mock().actualCall("client_alloc")
                                .withOutputParameter("client", client)
                                .returnIntValue();
 }
+
+static void client_free(a2e_client_t *client)
+{
+    mock().actualCall("client_free")
+          .withPointerParameter("client", client)
+          .returnIntValue();
+}
+#endif
 
 static a2e_status_e client_start_test(a2e_client_t *client)
 {
@@ -137,6 +146,7 @@ TEST_GROUP(a2e_client_test)
         msg.magic = A2E_MSG_MAGIC;
         rx_buf = NULL;
         rx_buf_size = 0;
+        p_client = &client;
     }
 
     void teardown()
@@ -373,8 +383,8 @@ TEST(a2e_client_test, client_close_func_with_inactive_socket)
 {
     client.fd = -1;
 
-    mock().expectOneCall("free")
-          .withPointerParameter("ptr", &client);
+    mock().expectOneCall("client_free")
+          .withPointerParameter("client", &client);
 
     status = client_close_func(&client);
 
@@ -396,8 +406,8 @@ TEST(a2e_client_test, client_close_func_with_active_socket)
           .withIntParameter("fd", client.fd)
           .andReturnValue(0);
 
-    mock().expectOneCall("free")
-          .withPointerParameter("ptr", &client);
+    mock().expectOneCall("client_free")
+          .withPointerParameter("client", &client);
 
     status = client_close_func(&client);
 
@@ -412,10 +422,9 @@ TEST(a2e_client_test, client_init_func_success)
 
     st.st_mode = S_IFDIR;
 
-    mock().expectOneCall("calloc")
-          .withUnsignedIntParameter("nmemb", 1)
-          .withUnsignedIntParameter("size", sizeof(client))
-          .andReturnValue(&client);
+    mock().expectOneCall("client_alloc")
+          .withOutputParameterReturning("client", &p_client, sizeof(p_client))
+          .andReturnValue(eA2E_SC_OK);
 
     mock().expectOneCall("stat")
           .withOutputParameterReturning("statbuf", &st, sizeof(st))
@@ -444,10 +453,9 @@ TEST(a2e_client_test, client_init_func_path_is_not_dir)
 
     st.st_mode = S_IFBLK;
 
-    mock().expectOneCall("calloc")
-          .withUnsignedIntParameter("nmemb", 1)
-          .withUnsignedIntParameter("size", sizeof(client))
-          .andReturnValue(&client);
+    mock().expectOneCall("client_alloc")
+          .withOutputParameterReturning("client", &p_client, sizeof(p_client))
+          .andReturnValue(eA2E_SC_OK);
 
     mock().expectOneCall("stat")
           .withOutputParameterReturning("statbuf", &st, sizeof(st))
@@ -467,10 +475,9 @@ TEST(a2e_client_test, client_init_func_wrong_path)
 
     st.st_mode = S_IFDIR;
 
-    mock().expectOneCall("calloc")
-          .withUnsignedIntParameter("nmemb", 1)
-          .withUnsignedIntParameter("size", sizeof(client))
-          .andReturnValue(&client);
+    mock().expectOneCall("client_alloc")
+          .withOutputParameterReturning("client", &p_client, sizeof(p_client))
+          .andReturnValue(eA2E_SC_OK);
 
     mock().expectOneCall("stat")
           .withOutputParameterReturning("statbuf", &st, sizeof(st))
@@ -485,10 +492,9 @@ TEST(a2e_client_test, client_init_func_wrong_path)
 
 TEST(a2e_client_test, client_init_func_alloc_fail)
 {
-    mock().expectOneCall("calloc")
-          .withUnsignedIntParameter("nmemb", 1)
-          .withUnsignedIntParameter("size", sizeof(client))
-          .andReturnValue((void *)NULL);
+    mock().expectOneCall("client_alloc")
+          .ignoreOtherParameters()
+          .andReturnValue(eA2E_SC_NO_MEM);
 
     status = client_init_func(&tmp_client, &cfg);
 
@@ -707,6 +713,7 @@ TEST(a2e_client_test, client_conn_read_start_rsp_malloc_fail)
     fds.revents = POLLIN;
     client.fd = 999;
     msg.len = 5;
+    p_client = &client;
 
     mock().expectNCalls(1, "poll")
           .withOutputParameterReturning("fds", &fds, sizeof(fds))
@@ -720,9 +727,7 @@ TEST(a2e_client_test, client_conn_read_start_rsp_malloc_fail)
           .withUnsignedIntParameter("flags", 0)
           .andReturnValue((int)(sizeof(msg)));
 
-    mock().expectOneCall("malloc")
-          .withUnsignedIntParameter("size", msg.len)
-          .andReturnValue((void *)NULL);
+    client.rsp = NULL;
 
     status = client_conn_read_start(&client, 1);
 
@@ -737,6 +742,8 @@ TEST(a2e_client_test, client_conn_read_start_success)
     msg.len = 5;
     uint8_t buf[5];
 
+    client.rsp = buf;
+
     mock().expectNCalls(1, "poll")
           .withOutputParameterReturning("fds", &fds, sizeof(fds))
           .ignoreOtherParameters()
@@ -749,16 +756,11 @@ TEST(a2e_client_test, client_conn_read_start_success)
           .withUnsignedIntParameter("flags", 0)
           .andReturnValue((int)(sizeof(msg)));
 
-    mock().expectOneCall("malloc")
-          .withUnsignedIntParameter("size", msg.len)
-          .andReturnValue(&buf);
-
     status = client_conn_read_start(&client, 1);
 
     mock().checkExpectations();
     CHECK_EQUAL(eA2E_SC_CONTINUE, status);
     CHECK_EQUAL(eA2E_STATE_RSP_RX, client.base.state);
-    CHECK_EQUAL(buf, client.rsp);
     CHECK_EQUAL(buf, client.rsp);
     CHECK_EQUAL(msg.len, client.rsp_size_exp);
 }
