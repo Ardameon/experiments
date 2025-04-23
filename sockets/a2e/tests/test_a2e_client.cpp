@@ -155,15 +155,55 @@ TEST_GROUP(a2e_client_test)
     }
 };
 
-TEST(a2e_client_test, client_conn_read_recv_success)
+TEST(a2e_client_test, client_conn_read_recv_full_with_three_attempts)
 {
+    const char *recv_buf = "111112222233333";
     fds.revents = POLLIN;
     client.fd = 999;
     client.base.cfg.rw_chunk_size = 5;
-    client.rsp_size_exp = 10;
-    client.rsp_size_recv = 4;
-    uint8_t buf[50];
+    client.rsp_size_exp = 15;
+    client.rsp_size_recv = 0;
+    uint8_t buf[50] = {0};
     client.rsp = buf;
+    int recv_len_wanted = A2E_MIN(client.base.cfg.rw_chunk_size, client.rsp_size_exp - client.rsp_size_recv);
+    int recv_len = recv_len_wanted;
+
+    memset(buf, 'a', sizeof(buf));
+
+    mock().expectNCalls(3, "poll")
+          .withOutputParameterReturning("fds", &fds, sizeof(fds))
+          .ignoreOtherParameters()
+          .andReturnValue(1);
+
+    mock().expectNCalls(3, "recv")
+          .withIntParameter("sockfd", client.fd)
+          .withOutputParameterReturning("buf", recv_buf + client.rsp_size_recv, recv_len_wanted)
+          .withUnsignedIntParameter("len", recv_len_wanted)
+          .withUnsignedIntParameter("flags", 0)
+          .andReturnValue((int)A2E_MIN(recv_len_wanted, strlen(recv_buf) + 1));
+
+    status = client_conn_read(&client, &rx_buf, &rx_buf_size, 100);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_OK, status);
+    CHECK_EQUAL(client.rsp_size_exp, client.rsp_size_recv);
+    STRNCMP_EQUAL("111111111111111", (char *)client.rsp, client.rsp_size_recv);
+}
+
+TEST(a2e_client_test, client_conn_read_recv_full_in_second_chunk)
+{
+    const char *recv_buf = "111112222233333";
+    fds.revents = POLLIN;
+    client.fd = 999;
+    client.base.cfg.rw_chunk_size = strlen(recv_buf) + 1;
+    client.rsp_size_exp = 10;
+    client.rsp_size_recv = 5;
+    uint8_t buf[50] = {0};
+    client.rsp = buf;
+    int recv_len_wanted = A2E_MIN(client.base.cfg.rw_chunk_size, client.rsp_size_exp - client.rsp_size_recv);
+    int recv_len = recv_len_wanted;
+
+    memset(buf, 'a', sizeof(buf));
 
     mock().expectNCalls(1, "poll")
           .withOutputParameterReturning("fds", &fds, sizeof(fds))
@@ -172,15 +212,89 @@ TEST(a2e_client_test, client_conn_read_recv_success)
 
     mock().expectOneCall("recv")
           .withIntParameter("sockfd", client.fd)
-          .withOutputParameterReturning("buf", buf, A2E_MIN(client.base.cfg.rw_chunk_size, client.rsp_size_exp - client.rsp_size_recv))
-          .withUnsignedIntParameter("len", A2E_MIN(client.base.cfg.rw_chunk_size, client.rsp_size_exp - client.rsp_size_recv))
+          .withOutputParameterReturning("buf", recv_buf + client.rsp_size_recv, recv_len_wanted)
+          .withUnsignedIntParameter("len", recv_len_wanted)
           .withUnsignedIntParameter("flags", 0)
-          .andReturnValue(-1);
+          .andReturnValue((int)A2E_MIN(recv_len_wanted, strlen(recv_buf) + 1));
 
     status = client_conn_read(&client, &rx_buf, &rx_buf_size, 1);
 
     mock().checkExpectations();
-    CHECK_EQUAL(eA2E_SC_ERROR, status);
+    CHECK_EQUAL(eA2E_SC_OK, status);
+    CHECK_EQUAL(client.rsp_size_exp, client.rsp_size_recv);
+    STRNCMP_EQUAL("aaaaa22222", (char *)client.rsp, client.rsp_size_recv);
+}
+
+TEST(a2e_client_test, client_conn_read_recv_full_in_one_chunk)
+{
+    const char *recv_buf = "111112222233333";
+    fds.revents = POLLIN;
+    client.fd = 999;
+    client.base.cfg.rw_chunk_size = strlen(recv_buf) + 1;
+    client.rsp_size_exp = strlen(recv_buf) + 1;
+    client.rsp_size_recv = 0;
+    uint8_t buf[50] = {0};
+    client.rsp = buf;
+    int recv_len_wanted = A2E_MIN(client.base.cfg.rw_chunk_size, client.rsp_size_exp - client.rsp_size_recv);
+    int recv_len = recv_len_wanted;
+
+    memset(buf, 'a', sizeof(buf));
+
+    mock().expectNCalls(1, "poll")
+          .withOutputParameterReturning("fds", &fds, sizeof(fds))
+          .ignoreOtherParameters()
+          .andReturnValue(1);
+
+    mock().expectOneCall("recv")
+          .withIntParameter("sockfd", client.fd)
+          .withOutputParameterReturning("buf", recv_buf + client.rsp_size_recv, recv_len_wanted)
+          .withUnsignedIntParameter("len", recv_len_wanted)
+          .withUnsignedIntParameter("flags", 0)
+          .andReturnValue((int)A2E_MIN(recv_len_wanted, strlen(recv_buf) + 1));
+
+    status = client_conn_read(&client, &rx_buf, &rx_buf_size, 1);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_OK, status);
+    CHECK_EQUAL(client.base.cfg.rw_chunk_size, client.rsp_size_recv);
+    CHECK_EQUAL(strlen(recv_buf) + 1, client.rsp_size_recv);
+    STRNCMP_EQUAL(recv_buf, (char *)client.rsp, client.rsp_size_recv);
+}
+
+TEST(a2e_client_test, client_conn_read_recv_part_and_timeout)
+{
+    const char *recv_buf = "111112222233333";
+    fds.revents = POLLIN;
+    client.fd = 999;
+    client.base.cfg.rw_chunk_size = 5;
+    client.rsp_size_exp = strlen(recv_buf) + 1;;
+    client.rsp_size_recv = 0;
+    uint8_t buf[50] = {0};
+    client.rsp = buf;
+    int recv_len_wanted = A2E_MIN(client.base.cfg.rw_chunk_size, client.rsp_size_exp - client.rsp_size_recv);
+    int recv_len = recv_len_wanted;
+
+    memset(buf, 'a', sizeof(buf));
+
+    mock().expectNCalls(1, "poll")
+          .withOutputParameterReturning("fds", &fds, sizeof(fds))
+          .ignoreOtherParameters()
+          .andReturnValue(1);
+
+    mock().expectOneCall("recv")
+          .withIntParameter("sockfd", client.fd)
+          .withOutputParameterReturning("buf", recv_buf + client.rsp_size_recv, recv_len_wanted)
+          .withUnsignedIntParameter("len", recv_len_wanted)
+          .withUnsignedIntParameter("flags", 0)
+          .andReturnValue((int)A2E_MIN(recv_len_wanted, strlen(recv_buf) + 1));
+
+    status = client_conn_read(&client, &rx_buf, &rx_buf_size, 1);
+
+    mock().checkExpectations();
+    CHECK_EQUAL(eA2E_SC_CONTINUE_TIMEOUT, status);
+    CHECK_EQUAL(5, client.rsp_size_recv);
+    CHECK_EQUAL(client.base.cfg.rw_chunk_size, client.rsp_size_recv);
+    STRNCMP_EQUAL(recv_buf, (char *)client.rsp, client.rsp_size_recv);
 }
 
 TEST(a2e_client_test, client_conn_read_recv_fail)
