@@ -1,3 +1,11 @@
+/**
+ * @file
+ *
+ * @addtogroup a2e_server
+ *
+ * @{
+ */
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -16,42 +24,77 @@
 #include "a2e_common.h"
 #include "a2e_msg.h"
 
+/**
+ * @name Private functions
+ * @{
+ */
+
+/** @brief A2E-server-instance init */
 static a2e_status_e server_init_func(a2e_server_t **server, const a2e_cfg_t *cfg);
+/** @brief A2E-server-instance close */
 static a2e_status_e server_close_func(a2e_server_t *server);
 
+/** @brief A2E-server-instance request RX */
 static a2e_status_e server_request_rx_func(a2e_server_t *server, uint8_t **rx_buffer, uint32_t *size, uint16_t to_ms);
+/** @brief A2E-server-instance request complete */
 static a2e_status_e server_request_complete_func(a2e_server_t *server);
+/** @brief A2E-server-instance request complete wait */
 static a2e_status_e server_request_complete_wait_func(a2e_server_t *server, uint16_t to_ms);
+/** @brief A2E-server-instance response TX */
 static a2e_status_e server_response_tx_func(a2e_server_t *server, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms);
+/** @brief A2E-server-instance progress TX */
 static a2e_status_e server_progress_tx_func(a2e_server_t *server, uint16_t to_ms);
 
+/** @brief A2E-server-instance alloc */
 static a2e_status_e server_alloc(a2e_server_t **server);
+/** @brief A2E-server-instance free */
 static void         server_free(a2e_server_t *server);
 
+/** @brief A2E-server-instance start */
 static a2e_status_e server_start(a2e_server_t *server);
+/** @brief A2E-server-instance stop */
 static a2e_status_e server_stop(a2e_server_t *server);
 
+/** @brief A2E-server-instance accept connection from peer (client) */
 static a2e_status_e server_conn_accept(a2e_server_t *server, uint16_t to_ms);
+/** @brief A2E-server-instance start read data from RW fd (read received @ref a2e_msg_t "message header" from peer) */
 static a2e_status_e server_conn_read_start(a2e_server_t *server, uint16_t to_ms);
+/** @brief A2E-server-instance read data from RW fd (read opaque data received from peer) */
 static a2e_status_e server_conn_read(a2e_server_t *server, uint8_t **rx_buffer, uint32_t *size, uint16_t to_ms);
+/** @brief A2E-server-instance start write data to RW fd (send @ref a2e_msg_t "message header" to peer) */
 static a2e_status_e server_conn_write_start(a2e_server_t *server, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms);
+/** @brief A2E-server-instance write data to RW fd (send opaque data to peer) */
 static a2e_status_e server_conn_write(a2e_server_t *server, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms);
+/** @brief A2E-server-instance send progress message */
 static a2e_status_e server_conn_progress(a2e_server_t *server, uint16_t to_ms);
 
+/** @brief A2E-server-instance close active reqeust processing proceedure */
 static a2e_status_e server_request_close(a2e_server_t *server);
 
+/** @} */
+
+/** @brief A2E-serever-instance interface object */
 static a2e_strategy_i server_iface =
 {
-    .init           = (a2e_init_func)                  &server_init_func,
-    .close          = (a2e_close_func)                 &server_close_func,
-
-    .req_rx         = (a2e_request_rx_func)            &server_request_rx_func,
-    .req_cmplt      = (a2e_request_complete_func)      &server_request_complete_func,
-    .req_cmplt_wait = (a2e_request_complete_wait_func) &server_request_complete_wait_func,
-    .resp_tx        = (a2e_response_tx_func)           &server_response_tx_func,
-    .prog_tx        = (a2e_progress_tx_func)           &server_progress_tx_func,
+    (a2e_init_func)                  &server_init_func,                   /* init           */
+    (a2e_close_func)                 &server_close_func,                  /* close          */
+    (a2e_request_rx_func)            &server_request_rx_func,             /* req_rx         */
+                                     NULL,                                /* req_tx         */
+    (a2e_request_complete_func)      &server_request_complete_func,       /* req_cmplt      */
+    (a2e_request_complete_wait_func) &server_request_complete_wait_func,  /* req_cmplt_wait */
+                                     NULL,                                /* resp_rx        */
+    (a2e_response_tx_func)           &server_response_tx_func,            /* resp_tx        */
+    (a2e_progress_tx_func)           &server_progress_tx_func,            /* prog_tx        */
 };
 
+/**
+ * @copybrief server_init_func
+ *
+ * @param[out]  server  Pointer to newly allocated and initialized UNIX stream socket server
+ * @param[in]   cfg     Configuration for new client
+ *
+ * @return @ref eA2E_SC_OK on success
+ */
 static a2e_status_e server_init_func(a2e_server_t **server, const a2e_cfg_t *cfg)
 {
     a2e_server_t *new_srv = NULL;
@@ -84,6 +127,13 @@ _exit:
     return status;
 }
 
+/**
+ * @copybrief server_close_func
+ *
+ * @param[in]   server  UNIX stream socket server to close
+ *
+ * @return @ref eA2E_SC_OK on success
+ */
 static a2e_status_e server_close_func(a2e_server_t *server)
 {
     server_stop(server);
@@ -91,6 +141,20 @@ static a2e_status_e server_close_func(a2e_server_t *server)
     return eA2E_SC_OK;
 }
 
+/**
+ * @copybrief server_request_rx_func
+ *
+ * @param[in]   server     UNIX stream socket server to close
+ * @param[out]  rx_buffer  Pointer to buffer with received request
+ * @param[out]  size       Received buffer size
+ * @param[in]   to_ms      Timeout for function call in milliseconds
+ *
+ * @return @ref eA2E_SC_OK on successful request receiving, after that we can handle rx_buffer
+ *        @n @ref eA2E_SC_TIMEOUT on function timeout acquired (can't start or continue receiving session)
+ *        @n @ref eA2E_SC_CONTINUE on successful peer connecting and receiving information about upcoming request
+ *        @n @ref eA2E_SC_CONTINUE_TIMEOUT on function timeout acquired during active receiving session
+ *        @n Other status codes should be interpreted as errors
+ */
 static a2e_status_e server_request_rx_func(a2e_server_t *server, uint8_t **rx_buffer, uint32_t *size, uint16_t to_ms)
 {
     a2e_status_e status = eA2E_SC_ERROR;
@@ -117,6 +181,15 @@ static a2e_status_e server_request_rx_func(a2e_server_t *server, uint8_t **rx_bu
     return status;
 }
 
+/**
+ * @copybrief server_conn_accept
+ *
+ * @param[in]   server     Server
+ * @param[in]   to_ms      Timeout for function call in milliseconds
+ *
+ * @return @ref eA2E_SC_CONTINUE on success
+ *        @n @ref eA2E_SC_TIMEOUT on function timeout acquired (can't accept connection, no data on socket)
+ */
 static a2e_status_e server_conn_accept(a2e_server_t *server, uint16_t to_ms)
 {
     a2e_status_e status = eA2E_SC_ERROR;
@@ -136,8 +209,8 @@ static a2e_status_e server_conn_accept(a2e_server_t *server, uint16_t to_ms)
         res = poll(&fds, 1, to_ms);
         if (res > 0)
         {
-            struct sockaddr_un raddr;
-            socklen_t rlen;
+            struct sockaddr_un raddr = {0};
+            socklen_t rlen = 0;
 
             if (fds.revents & POLLNVAL)
             {
@@ -192,11 +265,24 @@ _exit:
     return status;
 }
 
+/**
+ * @copybrief server_conn_read_start
+ *
+ * @param[in]   server     Server
+ * @param[in]   to_ms      Timeout for function call in milliseconds
+ *
+ * Try to receive @ref a2e_msg_t "request message info" from peer
+ *
+ * @return @ref eA2E_SC_CONTINUE on successful request message info receive
+ *        @n @ref eA2E_SC_TIMEOUT on function timeout acquired (can't start or continue receiving session, no data on socket)
+ *        @n Other status codes should be interpreted as errors
+ */
 static a2e_status_e server_conn_read_start(a2e_server_t *server, uint16_t to_ms)
 {
     a2e_status_e status = eA2E_SC_ERROR;
     struct pollfd fds = {0};
-    int res = 0, recv_len = 0;
+    int res = 0;
+    unsigned long recv_len = 0;
     unsigned long start_time;
     int poll_to_ms = DEF_A2E_RW_POLL_TIMEOUT_MS;
     a2e_msg_t msg;
@@ -286,6 +372,21 @@ _exit:
     return status;
 }
 
+/**
+ * @copybrief server_conn_read
+ *
+ * @param[in]   server     Server
+ * @param[out]  rx_buffer  Pointer to buffer with received request
+ * @param[out]  size       Received buffer size
+ * @param[in]   to_ms      Timeout for function call in milliseconds
+ *
+ * Try to receive request message itself
+ *
+ * @return @ref eA2E_SC_OK on successful and full request receiving
+ *        @n @ref eA2E_SC_TIMEOUT on function timeout acquired (can't start or continue receiving session)
+ *        @n @ref eA2E_SC_CONTINUE_TIMEOUT on function timeout acquired during active receiving session
+ *        @n Other status codes should be interpreted as errors
+ */
 static a2e_status_e server_conn_read(a2e_server_t *server, uint8_t **rx_buffer, uint32_t *size, uint16_t to_ms)
 {
     a2e_status_e status = eA2E_SC_ERROR;
@@ -377,6 +478,20 @@ _exit:
     return status;
 }
 
+/**
+ * @copybrief server_conn_write_start
+ *
+ * @param[in]   server     Server
+ * @param[in]   tx_buffer  Pointer to buffer with response to send
+ * @param[in]   size       Buffer size
+ * @param[in]   to_ms      Timeout for function call in milliseconds
+ *
+ * Try to send @ref a2e_msg_t "response message info" to peer
+ *
+ * @return @ref eA2E_SC_CONTINUE on successful response message info send
+ *        @n @ref eA2E_SC_TIMEOUT on function timeout acquired (can't start or continue sending session, socket is not ready for write)
+ *        @n Other status codes should be interpreted as errors
+ */
 static a2e_status_e server_conn_write_start(a2e_server_t *server, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms)
 {
     a2e_status_e status = eA2E_SC_ERROR;
@@ -460,6 +575,21 @@ _exit:
     return status;
 }
 
+/**
+ * @copybrief server_conn_write
+ *
+ * @param[in]   server     Server
+ * @param[in]   tx_buffer  Pointer to buffer with response to send
+ * @param[in]   size       Buffer size
+ * @param[in]   to_ms      Timeout for function call in milliseconds
+ *
+ * Try to send response message itself
+ *
+ * @return @ref eA2E_SC_OK on successful and full response send
+ *        @n @ref eA2E_SC_TIMEOUT on function timeout acquired (can't start or continue sending session)
+ *        @n @ref eA2E_SC_CONTINUE_TIMEOUT on function timeout acquired during active sending session
+ *        @n Other status codes should be interpreted as errors
+ */
 static a2e_status_e server_conn_write(a2e_server_t *server, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms)
 {
     a2e_status_e status = eA2E_SC_ERROR;
@@ -549,6 +679,18 @@ _exit:
     return status;
 }
 
+/**
+ * @copybrief server_conn_progress
+ *
+ * @param[in]   server     Server
+ * @param[in]   to_ms      Timeout for function call in milliseconds
+ *
+ * Try to send @ref a2e_msg_t "progress message info" to peer
+ *
+ * @return @ref eA2E_SC_OK on successful progress message info send
+ *        @n @ref eA2E_SC_TIMEOUT on function timeout acquired (can't start or continue sending session, socket is not ready for write)
+ *        @n Other status codes should be interpreted as errors
+ */
 static a2e_status_e server_conn_progress(a2e_server_t *server, uint16_t to_ms)
 {
     a2e_status_e status = eA2E_SC_ERROR;
@@ -630,6 +772,15 @@ _exit:
     return status;
 }
 
+/**
+ * @copybrief server_request_complete_func
+ *
+ * Try complete active request from server side if it's possible
+ *
+ * @param[in]   server      Server
+ *
+ * @return @ref eA2E_SC_OK on success
+ */
 static a2e_status_e server_request_complete_func(a2e_server_t *server)
 {
     a2e_status_e status = eA2E_SC_ERROR;
@@ -656,6 +807,17 @@ static a2e_status_e server_request_complete_func(a2e_server_t *server)
     return status;
 }
 
+/**
+ * @copybrief server_request_complete_wait_func
+ *
+ * @param[in]   server      Server
+ * @param[in]   to_ms      Timeout of one wait try in milliseconds
+ *
+ * @return @ref eA2E_SC_OK on successful active request complete received from peer
+ *        @n @ref eA2E_SC_INCOMPLETE_READ there is still data for read in file descriptor (should interpret as error, client is trying to send more then we expect)
+ *        @n @ref eA2E_SC_TIMEOUT on function timeout acquired during waiting of request complete from peer
+ *        @n Other status codes should be interpreted as errors
+ */
 static a2e_status_e server_request_complete_wait_func(a2e_server_t *server, uint16_t to_ms)
 {
     a2e_status_e status = eA2E_SC_ERROR;
@@ -710,6 +872,15 @@ static a2e_status_e server_request_complete_wait_func(a2e_server_t *server, uint
     return status;
 }
 
+/**
+ * @copybrief server_request_close
+ *
+ * Forcely close active request and connection
+ *
+ * @param[in]   server      Server
+ *
+ * @return @ref eA2E_SC_OK on success
+ */
 static a2e_status_e server_request_close(a2e_server_t *server)
 {
 
@@ -723,7 +894,7 @@ static a2e_status_e server_request_close(a2e_server_t *server)
     if (server->req)
     {
         free(server->req);
-        server->req = 0;
+        server->req = NULL;
         server->req_size_exp = 0;
         server->req_size_recv = 0;
         server->req_cmplt_wait_tries = 0;
@@ -736,6 +907,20 @@ static a2e_status_e server_request_close(a2e_server_t *server)
     return eA2E_SC_OK;
 }
 
+/**
+ * @copybrief server_response_tx_func
+ *
+ * @param[in]   server     Server
+ * @param[in]   tx_buffer  Pointer to buffer with response to send
+ * @param[in]   size       Buffer size
+ * @param[in]   to_ms      Timeout for function call in milliseconds
+ *
+ * @return @ref eA2E_SC_OK on successful response sending
+ *        @n @ref eA2E_SC_TIMEOUT on function timeout acquired (can't start or continue sending session)
+ *        @n @ref eA2E_SC_CONTINUE on successful connecting to peer and sending information about upcoming response
+ *        @n @ref eA2E_SC_CONTINUE_TIMEOUT on function timeout acquired during active sending session
+ *        @n Other status codes should be interpreted as errors
+ */
 static a2e_status_e server_response_tx_func(a2e_server_t *server, uint8_t *tx_buffer, uint32_t size, uint16_t to_ms)
 {
     a2e_status_e status = eA2E_SC_ERROR;
@@ -759,6 +944,16 @@ static a2e_status_e server_response_tx_func(a2e_server_t *server, uint8_t *tx_bu
     return status;
 }
 
+/**
+ * @copybrief server_progress_tx_func
+ *
+ * @param[in]   server     Server
+ * @param[in]   to_ms      Timeout for function call in milliseconds
+ *
+ * @return @ref eA2E_SC_OK on successful progress sending
+ *        @n @ref eA2E_SC_TIMEOUT on function timeout acquired (can't start or continue sending session)
+ *        @n Other status codes should be interpreted as errors
+ */
 static a2e_status_e server_progress_tx_func(a2e_server_t *server, uint16_t to_ms)
 {
     a2e_status_e status = eA2E_SC_ERROR;
@@ -778,11 +973,23 @@ static a2e_status_e server_progress_tx_func(a2e_server_t *server, uint16_t to_ms
     return status;
 }
 
+/**
+ * @copybrief a2e_server_iface_get
+ *
+ * @return UNIX stream socket server function interface object
+ */
 a2e_strategy_i a2e_server_iface_get(void)
 {
     return server_iface;
 }
 
+/**
+ * @copybrief server_alloc
+ *
+ * @param[out]   server     Allocated server
+ *
+ * @return @ref eA2E_SC_OK on success
+ */
 static a2e_status_e server_alloc(a2e_server_t **server)
 {
     a2e_server_t *new_srv = NULL;
@@ -804,12 +1011,26 @@ static a2e_status_e server_alloc(a2e_server_t **server)
     return status;
 }
 
+/**
+ * @copybrief server_free
+ *
+ * @param[in]   server     Server to free
+ */
 static void server_free(a2e_server_t *server)
 {
     free(server);
 }
 
 
+/**
+ * @copybrief server_start
+ *
+ * Initialize listen socket and waiting for client connection
+ *
+ * @param[in]   server     Server to start
+ *
+ * @return @ref eA2E_SC_OK on success
+ */
 static a2e_status_e server_start(a2e_server_t *server)
 {
     struct stat st = {0};
@@ -837,7 +1058,7 @@ static a2e_status_e server_start(a2e_server_t *server)
     snprintf(server->sock_path, sizeof(server->sock_path) - 1, "%s/%s", A2E_BASE(server)->cfg.sock_dir, DEF_A2E_SOCK_NAME);
 
     laddr.sun_family = AF_UNIX;
-    strncpy(laddr.sun_path, server->sock_path, sizeof(laddr.sun_path) - 1);
+    strncpy(laddr.sun_path, server->sock_path, sizeof(laddr.sun_path));
 
     unlink(server->sock_path);
 
@@ -871,6 +1092,13 @@ _exit:
 }
 
 
+/**
+ * @copybrief server_stop
+ *
+ * @param[in]   server     Server to stop
+ *
+ * @return @ref eA2E_SC_OK on success
+ */
 static a2e_status_e server_stop(a2e_server_t *server)
 {
     a2e_log("%s. Server stop in state %s", a2e_name(A2E_BASE(server)), a2e_state_str(A2E_BASE(server)->state));
@@ -889,3 +1117,5 @@ static a2e_status_e server_stop(a2e_server_t *server)
 
     return eA2E_SC_OK;
 }
+
+/** @} */

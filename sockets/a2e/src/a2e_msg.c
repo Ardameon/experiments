@@ -1,5 +1,11 @@
 #include "a2e_msg.h"
 
+/**
+ * @copybrief a2e_msg_fill_req
+ *
+ * @param[in]  msg  Message structure to fill
+ * @param[in]  len  Message length
+ */
 void a2e_msg_fill_req(a2e_msg_t *msg, uint32_t len)
 {
     if (msg)
@@ -10,6 +16,12 @@ void a2e_msg_fill_req(a2e_msg_t *msg, uint32_t len)
     }
 }
 
+/**
+ * @copybrief a2e_msg_fill_rsp
+ *
+ * @param[in]  msg  Message structure to fill
+ * @param[in]  len  Message length
+ */
 void a2e_msg_fill_rsp(a2e_msg_t *msg, uint32_t len)
 {
     if (msg)
@@ -20,6 +32,11 @@ void a2e_msg_fill_rsp(a2e_msg_t *msg, uint32_t len)
     }
 }
 
+/**
+ * @copybrief a2e_msg_fill_prg
+ *
+ * @param[in]  msg  Message structure to fill
+ */
 void a2e_msg_fill_prg(a2e_msg_t *msg)
 {
     if (msg)
