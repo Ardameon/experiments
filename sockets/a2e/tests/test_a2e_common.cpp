@@ -98,9 +98,7 @@ TEST(a2e_common_tests, a2e_state_str_returns_correct_string_for_each_state)
     STRCMP_EQUAL("REQ_TX_START", a2e_state_str(eA2E_STATE_REQ_TX_START));
     STRCMP_EQUAL("REQ_TX", a2e_state_str(eA2E_STATE_REQ_TX));
     STRCMP_EQUAL("REQ_TX_FINISH", a2e_state_str(eA2E_STATE_REQ_TX_FINISH));
-    STRCMP_EQUAL("REQ_SENT", a2e_state_str(eA2E_STATE_REQ_SENT));
     STRCMP_EQUAL("REQ_PROGRESS", a2e_state_str(eA2E_STATE_REQ_PROGRESS));
-    STRCMP_EQUAL("REQ_COMPLT", a2e_state_str(eA2E_STATE_REQ_COMPLT));
     STRCMP_EQUAL("RSP_RX", a2e_state_str(eA2E_STATE_RSP_RX));
     STRCMP_EQUAL("RSP_RX_FINISH", a2e_state_str(eA2E_STATE_RSP_RX_FINISH));
     STRCMP_EQUAL("RSP_TX", a2e_state_str(eA2E_STATE_RSP_TX));

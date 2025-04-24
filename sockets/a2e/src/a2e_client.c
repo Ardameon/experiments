@@ -455,8 +455,7 @@ static a2e_status_e client_conn_read_start(a2e_client_t *client, uint16_t to_ms)
 {
     a2e_status_e status = eA2E_SC_ERROR;
     struct pollfd fds = {0};
-    int res = 0;
-    unsigned long recv_len = 0;
+    int res = 0, recv_len = 0;
     unsigned long start_time;
     int poll_to_ms = DEF_A2E_RW_POLL_TIMEOUT_MS;
     a2e_msg_t msg;
