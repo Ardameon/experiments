@@ -58,7 +58,8 @@ add_executable(test_a2e_client EXCLUDE_FROM_ALL ${app_src_a2e_client} ${test_src
 foreach(TEST_TARGET test_common test_a2e test_a2e_client)
     target_include_directories(${TEST_TARGET} PUBLIC ${PROJECT_SOURCE_DIR}/include)
     target_link_libraries(${TEST_TARGET} PRIVATE CppUTest::CppUTest CppUTest::CppUTestExt)
-    target_compile_options(${TEST_TARGET} PRIVATE -DA2E_UTEST -DA2E_UTEST_MEM_MOCK)
+    target_compile_options(${TEST_TARGET} PRIVATE -DA2E_UTEST -DA2E_UTEST_MEM_MOCK --coverage)
+    target_link_options(${TEST_TARGET} PRIVATE -DA2E_UTEST --coverage)
 endforeach()
 
 # Custom target to build all tests targets
@@ -77,6 +78,12 @@ add_test(NAME A2E_test_common COMMAND test_common ${TEST_RUN_PARAM})
 add_test(NAME A2E_test_a2e COMMAND test_a2e ${TEST_RUN_PARAM})
 add_test(NAME A2E_test_a2e_client COMMAND test_a2e_client ${TEST_RUN_PARAM})
 
-# invoke ctest after building:
+# To start tests invoke ctest after building in build-dir:
 #
-# ctest --test-dir build/tests/ [--verbose] [--output-on-failure]
+# ctest [--verbose] [--output-on-failure]
+
+# To create coverage report invoke ctest -T Coverage after tests run
+#
+# ctest -T Coverage
+
+

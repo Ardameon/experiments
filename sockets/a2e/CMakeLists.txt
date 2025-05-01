@@ -21,6 +21,9 @@ add_library(a2e_shared SHARED ${a2e_src} ${a2e_hdr})
 target_include_directories(a2e_shared PUBLIC include)
 set_target_properties(a2e_shared PROPERTIES OUTPUT_NAME a2e)
 
+# include CTest is needed to provide test coverage funtion
+include(CTest)
+enable_testing()
 add_subdirectory(tests)
 
 add_executable(server server.c)
