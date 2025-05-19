@@ -215,6 +215,7 @@ if(<variable|string> IN_LIST <variable>)
 if(EXISTS <path-to-file-or-directory>)
 if(IS_READABLE <path-to-file-or-directory>)
 if(IS_DIRECTORY <path>)
+if(${TEST_TARGET} STREQUAL target_name)
 ```
 
 Подробнее описано в [мануале](https://cmake.org/cmake/help/latest/command/if.html#command:if)

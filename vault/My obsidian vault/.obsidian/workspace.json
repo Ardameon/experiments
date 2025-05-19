@@ -70,12 +70,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "cmake/CMake Cache.md",
+                "file": "cmake/Пишем CMakeLists.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "CMake Cache"
+              "title": "Пишем CMakeLists"
             }
           },
           {
@@ -120,7 +120,7 @@
             "state": {
               "type": "localgraph",
               "state": {
-                "file": "cmake/CMake Cache.md",
+                "file": "cmake/Пишем CMakeLists.md",
                 "options": {
                   "collapse-filter": false,
                   "search": "",
@@ -148,7 +148,7 @@
                 }
               },
               "icon": "lucide-git-fork",
-              "title": "Граф CMake Cache"
+              "title": "Граф Пишем CMakeLists"
             }
           }
         ]
@@ -301,6 +301,8 @@
   },
   "active": "88035b00239d1922",
   "lastOpenFiles": [
+    "cmake/CMake.md",
+    "cmake/CMake Cache.md",
     "git/Мой gitconfig.md",
     "general/work/Рабочие заметки.md",
     "general/work/Uboot.md",
@@ -311,8 +313,6 @@
     "general/work/ffmpeg.md",
     "cmake/Начальная информация.md",
     "cmake/CMake модули.md",
-    "cmake/CMake Cache.md",
-    "cmake/CMake.md",
     "отладка/Отладка.md",
     "отладка/Flamegraph.md",
     "linux/Яндекс диск.md",
