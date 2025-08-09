@@ -56,12 +56,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "отладка/Sanitizers.md",
+                "file": "linux/Linux audio.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Sanitizers"
+              "title": "Linux audio"
             }
           },
           {
@@ -106,7 +106,6 @@
             "state": {
               "type": "localgraph",
               "state": {
-                "file": "отладка/Sanitizers.md",
                 "options": {
                   "collapse-filter": false,
                   "search": "",
@@ -134,7 +133,7 @@
                 }
               },
               "icon": "lucide-git-fork",
-              "title": "Граф Sanitizers"
+              "title": "Граф"
             }
           }
         ]
@@ -285,34 +284,36 @@
       "command-palette:Открыть палитру команд": false
     }
   },
-  "active": "a375018f70e903a1",
+  "active": "fbc13cc45dd06ea1",
   "lastOpenFiles": [
-    "отладка/Отладка.md",
-    "отладка/Профилировщики.md",
-    "отладка/Sanitizers.md",
-    "отладка/Flamegraph.md",
-    "git/Git.md",
+    "Без названия.md",
+    "linux/Linux audio.md",
+    "linux/Удаление пакета Ubuntu с unmet dependency.md",
+    "Vim/Полезные команды Vim.md",
+    "тестирование",
+    "Vim/Удаление служебных файлов VIM из репозитория Git.md",
+    "Vim/VIM.md",
+    "cmake/CMake Cache.md",
+    "cmake/CMake модули.md",
     "cmake/Начальная информация.md",
     "cmake/Пишем CMakeLists.md",
+    "Добро пожаловать.md",
     "cmake/CMake.md",
-    "cmake/CMake Cache.md",
+    "git/Git.md",
+    "git/git patch.md",
+    "git/Git presentation hints.md",
+    "Vim",
+    "linux/mc/mc.md",
+    "отладка/Sanitizers.md",
+    "отладка/Отладка.md",
+    "отладка/Профилировщики.md",
+    "отладка/Flamegraph.md",
     "linux/bash/Bash.md",
-    "linux/bash/Удаление служебных файлов VIM из репозитория Git.md",
     "linux/bash/Полезные утилиты командной строки.md",
     "general/work/picocom.md",
     "general/work/firmware scripts.md",
     "general/work/syslog.md",
     "general/work/tcpdump.md",
-    "linux/Удаление пакета Ubuntu с unmet dependency.md",
-    "general/work/ffmpeg.md",
-    "general/work/Рабочие заметки.md",
-    "linux/Linux audio.md",
-    "linux/Яндекс диск.md",
-    "linux/mc/mc.md",
-    "git/Git presentation hints.md",
-    "git/git patch.md",
-    "git/Мой gitconfig.md",
-    "Добро пожаловать.md",
     "отладка",
     "ldap",
     "cmake",
@@ -321,7 +322,6 @@
     "linux/bash",
     "linux",
     "general/work",
-    "general",
     "Без названия 1.canvas",
     "Без названия.canvas"
   ]

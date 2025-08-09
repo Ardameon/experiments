@@ -3,4 +3,4 @@
 > rm `git st | grep ".swp\|.orig" | tr -d "\n"`
 >```
 
-#git/hints #bash/utils #linux 
+#git/hints #bash/utils #linux #vim
