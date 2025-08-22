@@ -379,6 +379,7 @@ Plug 'mattn/vim-lsp-settings'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'jeetsukumaran/vim-markology'
+Plug 'm-pilia/vim-ccls'
 call plug#end()
 
 let mapleader = " "
