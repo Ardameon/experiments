@@ -800,10 +800,15 @@ iabbrev dddc /** @} */
 ""iabbrev dddgw /** @weakgroup <uniq_key> @{*//** @}*/
 
 "Termdebug
-"To start termdebug in vim do (see :help :Termdebug)
-"
-" :packadd termdebug
-" :Termdebug
-"
 nnoremap <Down> :Over<CR>
 nnoremap <leader><Down> :Step<CR>
+
+"vim-ccls settings"
+
+nnoremap <leader>o :CclsCallers<CR>
+nnoremap <leader>O :CclsCallees<CR>
+nnoremap <leader>F :CclsCallHierarchy<CR>
+
+let g:ccls_size = 20
+let g:ccls_position = 'botright'
+let g:ccls_orientation = 'horizontal'
