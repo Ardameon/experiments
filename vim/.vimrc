@@ -567,7 +567,7 @@ let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
 let g:fzf_tags_command = 'ctags -R --c-kinds=+pxl'
 let g:fzf_preview_window = ['up,60%', 'ctrl-/']
 
-set cursorline
+"set cursorline
 set relativenumber
 set nobackup
 set writebackup
@@ -680,7 +680,8 @@ let g:lsp_diagnostics_float_cursor = 1
 "let g:lsp_preview_max_height = 6
 "let g:lsp_hover_ui = 'preview'
 
-let g:asyncomplete_popup_delay = 200
+let g:asyncomplete_popup_delay = 300
+let g:asyncomplete_min_chars = 3
 
 highlight Pmenu ctermfg=0 ctermbg=177 guibg=NONE
 highlight SignColumn ctermfg=red ctermbg=234 guibg=NONE
