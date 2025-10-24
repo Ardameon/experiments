@@ -70,12 +70,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Vim/Полезные команды Vim.md",
+                "file": "cmake/Начальная информация.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Полезные команды Vim"
+              "title": "Начальная информация"
             }
           },
           {
@@ -120,7 +120,7 @@
             "state": {
               "type": "localgraph",
               "state": {
-                "file": "Vim/Полезные команды Vim.md",
+                "file": "cmake/Начальная информация.md",
                 "options": {
                   "collapse-filter": false,
                   "search": "",
@@ -148,7 +148,7 @@
                 }
               },
               "icon": "lucide-git-fork",
-              "title": "Граф Полезные команды Vim"
+              "title": "Граф Начальная информация"
             }
           }
         ]
@@ -183,7 +183,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "tag:voi",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -302,10 +302,21 @@
   },
   "active": "727ad76dcc4fa9a1",
   "lastOpenFiles": [
-    "Vim/VIM.md",
-    "linux/Linux audio.md",
+    "cmake/CMake.md",
     "cmake/CMake Cache.md",
+    "cmake/Пишем CMakeLists.md",
+    "cmake/Начальная информация.md",
+    "general/work/h323/H323 CheatSheet.md",
+    "general/work/firmware scripts.md",
+    "general/work/picocom.md",
     "general/work/ffmpeg.md",
+    "git/Git presentation hints.md",
+    "git/Git.md",
+    "Vim/Полезные команды Vim.md",
+    "Vim/VIM.md",
+    "git/git patch.md",
+    "general/work/h323",
+    "linux/Linux audio.md",
     "general/work/Рабочие заметки.md",
     "отладка/Sanitizers.md",
     "linux/mc/mc.md",
@@ -315,21 +326,11 @@
     "отладка/Отладка.md",
     "отладка/Профилировщики.md",
     "Vim/Удаление служебных файлов VIM из репозитория Git.md",
-    "Vim/Полезные команды Vim.md",
     "linux/Яндекс диск.md",
     "linux/bash/Полезные утилиты командной строки.md",
-    "git/Git presentation hints.md",
-    "git/git patch.md",
-    "cmake/Начальная информация.md",
-    "cmake/CMake.md",
     "Без названия.md",
-    "linux/Удаление пакета Ubuntu с unmet dependency.md",
     "тестирование",
-    "cmake/CMake модули.md",
-    "cmake/Пишем CMakeLists.md",
-    "git/Git.md",
     "Vim",
-    "linux/bash/Bash.md",
     "отладка",
     "ldap",
     "cmake",
@@ -337,7 +338,6 @@
     "linux/mc",
     "linux/bash",
     "linux",
-    "general/work",
     "Без названия 1.canvas",
     "Без названия.canvas"
   ]
