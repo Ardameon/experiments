@@ -7,11 +7,19 @@
 ### AddressSanitizer
 
 Сборка с AdressSanitizer:
+
+> [!warning]- Порядок указания файла  в строке компиляции может быть важен
+> Если видишь ошибку вроде 
+> ```bash
+> /mnt/sdd1 # ./main ./main: /lib//libm.so.6: version `GLIBC_2.23' not found (required by ./main)
+> ```
+> То попробуй изменить место файла исходников так, чтобы флаги санитайзера были перед ним
+
 ```bash
-gcc overflow.c -fsanitize=address -static-libasan -g
+gcc user_after_free.c -fsanitize=address -static-libasan -g
 ```
 ```bash
-gcc overflow.c -fsanitize=address -static-libasan -fno-omit-frame-pointer -g 
+gcc user_after_free.c -fsanitize=address -static-libasan -fno-omit-frame-pointer -g 
 ```
 
 > [!example]- Пример кода с использованием освобождённой памяти
