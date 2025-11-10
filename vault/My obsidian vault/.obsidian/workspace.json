@@ -70,12 +70,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "cmake/Пишем CMakeLists.md",
+                "file": "Vim/Полезные команды Vim.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Пишем CMakeLists"
+              "title": "Полезные команды Vim"
             }
           },
           {
@@ -120,7 +120,7 @@
             "state": {
               "type": "localgraph",
               "state": {
-                "file": "cmake/Пишем CMakeLists.md",
+                "file": "Vim/Полезные команды Vim.md",
                 "options": {
                   "collapse-filter": false,
                   "search": "",
@@ -148,7 +148,7 @@
                 }
               },
               "icon": "lucide-git-fork",
-              "title": "Граф Пишем CMakeLists"
+              "title": "Граф Полезные команды Vim"
             }
           }
         ]
@@ -302,16 +302,19 @@
   },
   "active": "84fb3ac117e19749",
   "lastOpenFiles": [
-    "cmake/CMake.md",
-    "cmake/CMake Cache.md",
-    "cmake/Пишем CMakeLists.md",
-    "Vim/Полезные команды Vim.md",
     "Vim/VIM.md",
-    "cmake/CMake модули.md",
-    "cmake/Начальная информация.md",
     "general/work/pjsip/Работа TCP-транспорта.md",
     "general/work/h323/ooh323c.md",
     "general/work/h323/H323 CheatSheet.md",
+    "Добро пожаловать.md",
+    "linux/Linux audio.md",
+    "general/work/Рабочие заметки.md",
+    "cmake/Пишем CMakeLists.md",
+    "Vim/Полезные команды Vim.md",
+    "cmake/CMake.md",
+    "cmake/CMake Cache.md",
+    "cmake/CMake модули.md",
+    "cmake/Начальная информация.md",
     "отладка/Sanitizers.md",
     "отладка/Flamegraph.md",
     "отладка/Отладка.md",
@@ -326,10 +329,7 @@
     "git/Git.md",
     "git/git patch.md",
     "general/work/h323",
-    "linux/Linux audio.md",
-    "general/work/Рабочие заметки.md",
     "linux/mc/mc.md",
-    "git/Мой gitconfig.md",
     "тестирование",
     "Vim",
     "отладка",
