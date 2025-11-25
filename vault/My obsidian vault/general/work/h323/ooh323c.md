@@ -4,7 +4,7 @@
 ooMonitorChannels()
 ```
 
->[!note]- Список сокетов, которые мониторятся
+>[!example]- Список сокетов, которые мониторятся
 >```c
 >/* RAS socket of GK client (UDP)*/
 >gH323ep.gkClient->rasSocket
@@ -24,7 +24,7 @@ ooMonitorChannels()
 >call->h245listener
 >```
 
->[!note]- Функции манипуляции с основными сокетами
+>[!example]- Функции манипуляции с основными сокетами
 >```c
 >ooGkClientCreateChannel()
 >ooCreateH323Listener()
@@ -33,13 +33,58 @@ ooMonitorChannels()
 >ooCreateH225Connection()
 >ooAcceptH225Connection()
 >ooH2250Receive()
+>ooSendH225Msg()
 >ooCreateH245Connection()
 >ooAcceptH245Connection()
 >ooH245Receive()
 >```
 
->[!note]- Функции декодирования и обработки Q.931
+>[!example]- Функции декодирования и обработки Q.931
 >```c
 >ooQ931Decode()
 >ooHandleH2250Message()
 >```
+
+> [!note] Обработка входящего вызова
+```c
+/* Accepting new TCP-connection and call cration */
+ooAcceptH225Connection()
+ ooGenerateCallToken()
+ ooCreateCall()
+ ooSocketGetIpAndPort()
+```
+```c
+/* Handle incoming H.225.0 SETUP message */
+ooH2250Receive()
+ ooSocketRecv()
+ initializePrintHandler()
+ setEventHandler()
+ ooQ931Decode()
+ finishPrint()
+ removeEventHandler()
+ ooHandleH2250Message()
+  ooSendCallProceeding()
+  ooH323CallAdmitted()
+   /* Notify application layer with callback */
+   gH323ep.h323Callbacks.onIncomingCall()
+  
+```
+> [!note] Отправка сообщений
+```c
+/* Preparing new Q.931 message and store it to out queue */
+ooSendCallProceeding()
+ new_Q931_UUIE()
+ ooSendH225Msg()
+  ooEncodeH225Message()
+  dListAppend(call->pH225Channel->outQueue)
+```
+```c
+/* Get message from out queue and send it */
+ooMonitorChannels()
+ ooProcessFDSETsAndTimers()
+  if(call->pH225Channel->outQueue.count>0)
+   ooSendMsg(call, OOQ931MSG)
+    dListRemove(&(call->pH225Channel->outQueue), p_msgNode)
+	ooSocketSend()
+```
+
