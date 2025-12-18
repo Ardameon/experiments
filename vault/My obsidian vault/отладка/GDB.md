@@ -11,5 +11,10 @@
 > set print array on
 > ```
 
+> [!question] Как сделать неограниченный вывод массивов?
+> ```dbg
+> set print elements unlimited
+> ```
+
 --- 
 #debug/gdb
