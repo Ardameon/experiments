@@ -441,6 +441,9 @@ highlight DiffChange ctermfg=15 cterm=bold term=bold ctermbg=8
 highlight DiffDelete ctermfg=15 cterm=bold term=bold ctermbg=9
 highlight DiffText ctermfg=15 cterm=bold term=bold ctermbg=124
 
+"set colorcolumn=121
+"highlight ColorColumn term=reverse ctermbg=110
+
 "nnoremap <S-k> 5k
 "nnoremap <S-j> 5j
 "vnoremap <S-k> 5k
@@ -604,7 +607,9 @@ nnoremap <F3> :ts<CR>
 "$ ctags --c-kinds=+p -R *
 
 "autoremove trailing whitespaces aftr saving file
-autocmd BufWritePre * :%s/\s\+$//e
+"autocmd BufWritePre * :%s/\s\+$//e
+
+command! RemTrailWS :%s/\s\+$//e
 
 " Determines whether to use spaces or tabs on the current buffer.
 function TabsOrSpaces()
