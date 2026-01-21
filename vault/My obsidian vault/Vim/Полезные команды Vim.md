@@ -4,6 +4,7 @@
 4. [[#Построчный поиск с занесением результатов в регистр]]
 5.  [[#Diff]]
 6. [[#Очистка регистра]]
+7. [[#Поиск с исключением/учётом префикса]]
 
 ---
 ### Сохранение без применения autocmd
@@ -62,6 +63,33 @@
 >[!question] Требуется очистить регистр `p` от содержимого: 
 >```vim
 >:let @p = ''
+>```
+
+---
+### Поиск с исключением/учётом префикса
+
+>[!question] Требуется найти все вхождения `sip`, исключая `pjsip`: 
+>```vim
+>"'sip_example'      - match
+>"'pjsip_example'    - no match
+>"'tt_pjsip_example' - no match
+>/\(pj\)\@<!sip
+>```
+
+>[!question] Требуется найти все вхождения `sip`, с перфиксом `pj`: 
+>```vim
+>"'sip_example'      - no match
+>"'pjsip_example'    - match
+>"'tt_pjsip_example' - match
+>/\(\<pj\)\@<=sip 
+>```
+
+>[!question] Требуется найти все вхождения `sip`, только в виде `pjsip`: 
+>```vim
+>"'sip_example'      - no match
+>"'pjsip_example'    - match
+>"'tt_pjsip_example' - no match
+>/\(\<pj\)\@<=sip 
 >```
 
 ---

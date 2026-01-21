@@ -85,7 +85,7 @@
               "type": "markdown",
               "state": {
                 "file": "Vim/Полезные команды Vim.md",
-                "mode": "preview",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
@@ -289,10 +289,11 @@
   "active": "ef12a6478f1e2a1f",
   "lastOpenFiles": [
     "Vim/VIM.md",
+    "linux/Удаление пакета Ubuntu с unmet dependency.md",
+    "Vim/Полезные команды Vim.md",
     "Добро пожаловать.md",
     "linux/Linux audio.md",
     "general/work/Рабочие заметки.md",
-    "Vim/Полезные команды Vim.md",
     "Vim/Удаление служебных файлов VIM из репозитория Git.md",
     "general/work/pjsip/Работа TCP-транспорта.md",
     "отладка/GDB.md",
@@ -314,7 +315,6 @@
     "general/work/syslog.md",
     "general/work/picocom.md",
     "general/work/firmware scripts.md",
-    "general/work/ffmpeg.md",
     "general/work/pjsip",
     "general/work/h323",
     "тестирование",
