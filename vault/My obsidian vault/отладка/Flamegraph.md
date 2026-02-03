@@ -46,4 +46,6 @@ flamegraph.pl out.folded > out.svg
 6. Получаем сам флеймграф - `out.svg`. Открываем его в браузере, наслаждаемся. 
 
 ---
+[[Отладка|Назад]]
+
 #debug/profiling #flamegraph #perf

@@ -10,4 +10,4 @@
 5. [[Инсталляция собранных файлов]]
 
 
-#cmake 
+#cmake #cmake/masteringcmake
