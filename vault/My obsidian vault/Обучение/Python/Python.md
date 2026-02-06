@@ -3,4 +3,4 @@
 ---
 [[Обучение|Назад]]
 
-#study #python 
+#study/python #python 

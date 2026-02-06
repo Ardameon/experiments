@@ -37,16 +37,6 @@
             }
           },
           {
-            "id": "309a5fc191a210d2",
-            "type": "leaf",
-            "state": {
-              "type": "empty",
-              "state": {},
-              "icon": "lucide-file",
-              "title": "Новая вкладка"
-            }
-          },
-          {
             "id": "84fb3ac117e19749",
             "type": "leaf",
             "state": {
@@ -89,21 +79,77 @@
             }
           },
           {
-            "id": "d08d2a7565b20052",
+            "id": "b8eecef07cc6956f",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Обучение/cmake/CMake модули.md",
+                "file": "Обучение/Python/Head First Book/Head First Python.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "CMake модули"
+              "title": "Head First Python"
+            }
+          },
+          {
+            "id": "cfe5766a10541d13",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Обучение/Python/Head First Book/Chapter 1 - Basics.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Chapter 1 - Basics"
+            }
+          },
+          {
+            "id": "7935f55381b5f6c0",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Обучение/Python/Head First Book/Chapter 1 - Basics.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Chapter 1 - Basics"
+            }
+          },
+          {
+            "id": "7d539e3ea6be7c21",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Обучение/Python/Head First Book/Head First Python.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Head First Python"
+            }
+          },
+          {
+            "id": "818fb8fb6b9d0d09",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Обучение/Python/Head First Book/Head First Python.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Head First Python"
             }
           }
         ],
-        "currentTab": 5
+        "currentTab": 9
       },
       {
         "id": "5404614ee73ccbc3",
@@ -116,7 +162,7 @@
             "state": {
               "type": "localgraph",
               "state": {
-                "file": "Обучение/Обучение.md",
+                "file": "Обучение/Python/Head First Book/Head First Python.md",
                 "options": {
                   "collapse-filter": false,
                   "search": "",
@@ -144,7 +190,7 @@
                 }
               },
               "icon": "lucide-git-fork",
-              "title": "Граф Обучение"
+              "title": "Граф Head First Python"
             }
           }
         ]
@@ -287,6 +333,7 @@
   },
   "left-ribbon": {
     "hiddenItems": {
+      "bases:Создать новую базу": false,
       "switcher:Меню быстрого перехода": false,
       "graph:Граф": false,
       "canvas:Создать новый холст": false,
@@ -295,8 +342,25 @@
       "command-palette:Открыть палитру команд": false
     }
   },
-  "active": "09be6819102f94ff",
+  "active": "818fb8fb6b9d0d09",
   "lastOpenFiles": [
+    "Обучение/Python/Python.md",
+    "Обучение/Python/Head First Book/Head First Python.md",
+    "Обучение/Python/Head First Book/Chapter 1 - Basics.md",
+    "Обучение/cmake/Пишем CMakeLists.md",
+    "Обучение/cmake/CMake.md",
+    "Обучение/cmake/CMake модули.md",
+    "Обучение/cmake/Начальная информация.md",
+    "linux/Linux audio.md",
+    "linux/Яндекс диск.md",
+    "linux/Удаление пакета Ubuntu с unmet dependency.md",
+    "linux/mc/mc.md",
+    "linux/bash/Bash.md",
+    "linux/bash/Полезные утилиты командной строки.md",
+    "Vim/Удаление служебных файлов VIM из репозитория Git.md",
+    "Vim/VIM.md",
+    "Vim/Полезные команды Vim.md",
+    "Обучение/Обучение.md",
     "Добро пожаловать.md",
     "отладка/Отладка.md",
     "отладка/Flamegraph.md",
@@ -305,27 +369,10 @@
     "отладка/GDB.md",
     "general/work/pjsip/Работа TCP-транспорта.md",
     "general/work/tcpdump.md",
-    "linux/Яндекс диск.md",
-    "linux/mc/mc.md",
-    "Обучение/Python/Python.md",
-    "Обучение/Обучение.md",
-    "Обучение/Python/Head First Book/Head First Python.md",
-    "Обучение/cmake/CMake.md",
-    "Обучение/cmake/CMake модули.md",
     "general/work/h323/ooh323c.md",
-    "Обучение/cmake/CMake Cache.md",
-    "Обучение/cmake/Пишем CMakeLists.md",
     "Обучение/Python/Head First Book",
     "Обучение/Python",
-    "Обучение/cmake/Начальная информация.md",
     "Обучение",
-    "linux/bash/Bash.md",
-    "linux/bash/Полезные утилиты командной строки.md",
-    "linux/Linux audio.md",
-    "linux/Удаление пакета Ubuntu с unmet dependency.md",
-    "general/work/Рабочие заметки.md",
-    "2025-11-18.md",
-    "Vim/Полезные команды Vim.md",
     "Без названия.base",
     "general/work/pjsip",
     "general/work/h323",
