@@ -140,12 +140,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Обучение/Python/Head First Book/Head First Python.md",
+                "file": "Vim/Полезные команды Vim.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Head First Python"
+              "title": "Полезные команды Vim"
             }
           }
         ],
@@ -162,7 +162,7 @@
             "state": {
               "type": "localgraph",
               "state": {
-                "file": "Обучение/Python/Head First Book/Head First Python.md",
+                "file": "Vim/Полезные команды Vim.md",
                 "options": {
                   "collapse-filter": false,
                   "search": "",
@@ -190,7 +190,7 @@
                 }
               },
               "icon": "lucide-git-fork",
-              "title": "Граф Head First Python"
+              "title": "Граф Полезные команды Vim"
             }
           }
         ]
@@ -344,8 +344,9 @@
   },
   "active": "818fb8fb6b9d0d09",
   "lastOpenFiles": [
-    "Обучение/Python/Python.md",
+    "Vim/VIM.md",
     "Обучение/Python/Head First Book/Head First Python.md",
+    "Обучение/Python/Python.md",
     "Обучение/Python/Head First Book/Chapter 1 - Basics.md",
     "Обучение/cmake/Пишем CMakeLists.md",
     "Обучение/cmake/CMake.md",
@@ -358,7 +359,6 @@
     "linux/bash/Bash.md",
     "linux/bash/Полезные утилиты командной строки.md",
     "Vim/Удаление служебных файлов VIM из репозитория Git.md",
-    "Vim/VIM.md",
     "Vim/Полезные команды Vim.md",
     "Обучение/Обучение.md",
     "Добро пожаловать.md",
