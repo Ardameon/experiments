@@ -5,3 +5,8 @@
 # 1. Разбей её на слова (метод .split())
 # 2. Подсчитай количество слов (len())
 # 3. Выведи каждое слово с его длиной: "word: длина"
+
+s = "Python is awesome and powerful"
+
+for word in s.split():
+    print(word, ": ", len(word), sep='')
