@@ -98,12 +98,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Обучение/Python/Head First Book/Chapter 2 - Lists.md",
+                "file": "linux/VirtualBox.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Chapter 2 - Lists"
+              "title": "VirtualBox"
             }
           }
         ],
@@ -120,7 +120,7 @@
             "state": {
               "type": "localgraph",
               "state": {
-                "file": "Обучение/Python/Head First Book/Chapter 2 - Lists.md",
+                "file": "linux/VirtualBox.md",
                 "options": {
                   "collapse-filter": false,
                   "search": "",
@@ -148,7 +148,7 @@
                 }
               },
               "icon": "lucide-git-fork",
-              "title": "Граф Chapter 2 - Lists"
+              "title": "Граф VirtualBox"
             }
           }
         ]
@@ -183,7 +183,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "flamegra",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -302,8 +302,15 @@
   },
   "active": "7d539e3ea6be7c21",
   "lastOpenFiles": [
-    "Обучение/Python/Head First Book/Chapter 1 - Basics.md",
+    "general/work/Рабочие заметки.md",
+    "general/work/tcpdump.md",
+    "general/work/ffmpeg.md",
+    "linux/VirtualBox.md",
+    "linux/Удаление пакета Ubuntu с unmet dependency.md",
+    "linux/Linux audio.md",
+    "linux/Яндекс диск.md",
     "Обучение/Python/Head First Book/Chapter 2 - Lists.md",
+    "Обучение/Python/Head First Book/Chapter 1 - Basics.md",
     "Обучение/Python/Head First Book/Head First Python.md",
     "Обучение/Python/Python.md",
     "Без названия.md",
@@ -313,9 +320,6 @@
     "Обучение/cmake/CMake.md",
     "Обучение/cmake/CMake модули.md",
     "Обучение/cmake/Начальная информация.md",
-    "linux/Linux audio.md",
-    "linux/Яндекс диск.md",
-    "linux/Удаление пакета Ubuntu с unmet dependency.md",
     "linux/mc/mc.md",
     "linux/bash/Bash.md",
     "linux/bash/Полезные утилиты командной строки.md",
@@ -324,10 +328,6 @@
     "Добро пожаловать.md",
     "отладка/Отладка.md",
     "отладка/Flamegraph.md",
-    "отладка/Профилировщики.md",
-    "отладка/Sanitizers.md",
-    "отладка/GDB.md",
-    "general/work/pjsip/Работа TCP-транспорта.md",
     "Обучение/Python/Head First Book",
     "Обучение/Python",
     "Обучение",
